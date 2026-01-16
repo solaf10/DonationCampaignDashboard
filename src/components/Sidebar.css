@@ -1,0 +1,117 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: var(--main-color);
+  border-radius: 15px 0px 0px 15px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .logo {
+    text-align: center;
+    padding: 40px 0px 40px;
+  }
+  li {
+    a {
+      padding: 10px 20px 10px 0px;
+      margin-bottom: 5px;
+      color: white;
+      border-radius: 0px 99px 99px 0px;
+      transition: 0.5s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      .link-icon {
+        path {
+          fill: white;
+          stroke: transparent;
+        }
+      }
+    }
+    a:not(.active):hover,
+    .sidebar-accordion:not(.open):hover button {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .sidebar-accordion {
+      color: white;
+      transition: 0.5s;
+      .icon {
+        color: white;
+      }
+      button {
+        margin-bottom: 5px;
+        width: 100%;
+        justify-content: flex-start;
+        gap: 3px;
+        border-radius: 0px 99px 99px 0px;
+      }
+      .accordion-title {
+        padding: 10px 20px 10px 0px;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .MuiAccordionDetails-root {
+        padding: 0px;
+        padding-right: 16px;
+        a.active {
+          background-color: transparent;
+          color: white;
+          font-weight: bold;
+        }
+        a:hover {
+          background-color: transparent;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+  li .active,
+  .sidebar-accordion.open button {
+    /* margin-bottom: 10px; */
+    background-color: var(--bg-color);
+    color: var(--main-color);
+    .icon {
+      color: var(--main-color);
+    }
+    .link-icon {
+      path {
+        fill: var(--main-color);
+        stroke: transparent;
+      }
+    }
+  }
+  .log-out {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    transition: 0.5s;
+    cursor: pointer;
+    .log-out-icon {
+      transition: 0.5s;
+    }
+  }
+  .log-out:hover {
+    color: var(--main-color);
+    background-color: var(--bg-color);
+    .log-out-icon {
+      path {
+        fill: var(--main-color);
+      }
+    }
+  }
+}
