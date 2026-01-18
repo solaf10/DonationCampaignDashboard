@@ -17,11 +17,14 @@
   }
   li {
     a {
+      display: block;
+      position: relative;
+      height: 60px;
       padding: 10px 20px 10px 0px;
       margin-bottom: 5px;
       color: white;
       border-radius: 0px 99px 99px 0px;
-      transition: 0.5s;
+      /* transition: 0.5s; */
       display: flex;
       align-items: center;
       gap: 5px;
@@ -32,22 +35,60 @@
         }
       }
     }
-    a:not(.active):hover,
+    > a.active::before,
+    .sidebar-accordion.open button::before,
+    > a:hover::before,
+    .sidebar-accordion:not(.open):hover button::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: -50px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: transparent;
+      box-shadow: -35px 35px 0px 10px var(--bg-color);
+      pointer-events: none;
+      z-index: -1;
+    }
+    > a.active::after,
+    .sidebar-accordion.open button::after,
+    > a:hover::after,
+    .sidebar-accordion:not(.open):hover button::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -50px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: transparent;
+      box-shadow: -35px -35px 0px 10px var(--bg-color);
+      pointer-events: none;
+      z-index: -1;
+    }
+    /* a:not(.active):hover,
     .sidebar-accordion:not(.open):hover button {
       background-color: rgba(255, 255, 255, 0.2);
-    }
+    } */
     .sidebar-accordion {
       color: white;
-      transition: 0.5s;
+      /* transition: 0.5s; */
       .icon {
         color: white;
+        margin-left: 10px;
+      }
+      a {
+        transition: 0.5s;
       }
       button {
+        height: 60px;
         margin-bottom: 5px;
         width: 100%;
         justify-content: flex-start;
         gap: 3px;
         border-radius: 0px 99px 99px 0px;
+        transition: background-color 0s;
       }
       .accordion-title {
         padding: 10px 20px 10px 0px;
@@ -59,7 +100,8 @@
       .MuiAccordionDetails-root {
         padding: 0px;
         padding-right: 16px;
-        a.active {
+        a.active,
+        a:not(.active):hover {
           background-color: transparent;
           color: white;
           font-weight: bold;
@@ -72,7 +114,9 @@
     }
   }
   li .active,
-  .sidebar-accordion.open button {
+  .sidebar-accordion.open button,
+  a:not(.active):hover,
+  .sidebar-accordion:not(.open):hover button {
     /* margin-bottom: 10px; */
     background-color: var(--bg-color);
     color: var(--main-color);
@@ -114,4 +158,18 @@
       }
     }
   }
+}
+/* Chrome, Edge, Safari */
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+.sidebar {
+  scrollbar-width: none;
+}
+
+/* IE & old Edge */
+.sidebar {
+  -ms-overflow-style: none;
 }

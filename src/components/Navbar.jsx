@@ -9,8 +9,8 @@ const Navbar = () => {
         <div className='admin-info'>
           <img src='/admin.jpg' alt='admin' />
           <div className='text'>
-            <p className='name'>سلاف الفارس</p>
-            <p className='role'>ادمين</p>
+            <p className='name'>بتول عبدالهادي</p>
+            <p className='role'>مسؤول</p>
           </div>
         </div>
         <div className='actions'>

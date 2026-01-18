@@ -13,6 +13,37 @@ const Sidebar = () => {
   const [locationExpanded, setLocationExpended] = useState(false);
   const [donatorsExpanded, setDonatorsExpended] = useState(false);
   const location = useLocation();
+
+  /* useEffect(() => {
+    const sidebar = sidebarRef.current;
+    if (!sidebar) return;
+
+    const handleMouseEnter = () => {
+      activeLinksRef.current = Array.from(sidebar.querySelectorAll('a.active'));
+
+      openAccordionsRef.current = Array.from(
+        sidebar.querySelectorAll('.sidebar-accordion.open')
+      );
+
+      activeLinksRef.current.forEach((el) => el.classList.remove('active'));
+
+      openAccordionsRef.current.forEach((el) => el.classList.remove('open'));
+    };
+
+    const handleMouseLeave = () => {
+      activeLinksRef.current.forEach((el) => el.classList.add('active'));
+
+      openAccordionsRef.current.forEach((el) => el.classList.add('open'));
+    };
+
+    sidebar.addEventListener('mouseenter', handleMouseEnter);
+    sidebar.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      sidebar.removeEventListener('mouseenter', handleMouseEnter);
+      sidebar.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []); */
   return (
     <div className='sidebar'>
       <div className='holder'>

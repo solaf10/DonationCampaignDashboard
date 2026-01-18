@@ -3,8 +3,9 @@ nav {
   display: flex;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  /* box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px; */
-  /* box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px; */
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   .container {
     display: flex;
     justify-content: space-between;
@@ -36,7 +37,7 @@ nav {
         position: relative;
         .icon {
           position: absolute;
-          left: 15px;
+          right: 15px;
           top: 50%;
           transform: translateY(-50%);
           font-size: 14px;
@@ -45,7 +46,7 @@ nav {
           padding: 5px 15px;
           border: 1px solid var(--border-color);
           border-radius: 99px;
-          padding-left: 30px;
+          padding-right: 35px;
           width: 220px;
           transition: width 0.3s;
         }
