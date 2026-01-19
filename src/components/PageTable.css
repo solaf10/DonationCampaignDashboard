@@ -1,0 +1,67 @@
+.table-holder {
+  /* الحاوية */
+  .MuiPaper-root.MuiPaper-elevation {
+    background-color: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(1, 74, 91, 0.08);
+    overflow: hidden;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  /* رأس الجدول */
+  .MuiTableHead-root {
+    background-color: var(--border-color);
+  }
+
+  .MuiTableHead-root .MuiTableCell-root {
+    font-weight: 700;
+    color: white;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--border-color);
+  }
+
+  /* خلايا الجدول */
+  .MuiTableBody-root .MuiTableCell-root {
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #eef1f1;
+  }
+
+  /* الصفوف */
+  .MuiTableRow-root {
+    transition: background-color 0.2s ease;
+  }
+
+  /* الصف الزوجي */
+  .MuiTableBody-root .MuiTableRow-root:nth-of-type(even) {
+    background-color: #f9fafb;
+  }
+
+  /* Hover للصف */
+  .MuiTableBody-root .MuiTableRow-root:hover {
+    background-color: rgba(1, 74, 91, 0.05);
+  }
+
+  /* Pagination */
+  .MuiTablePagination-root {
+    direction: rtl;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .MuiTablePagination-selectLabel,
+  .MuiTablePagination-displayedRows {
+    color: var(--secondary-color);
+    font-size: 13px;
+  }
+
+  /* أيقونات الباجينيشن */
+  .MuiTablePagination-actions button {
+    color: var(--main-color);
+  }
+
+  /* زر Disabled */
+  .Mui-disabled {
+    opacity: 0.4;
+  }
+}

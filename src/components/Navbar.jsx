@@ -1,5 +1,5 @@
 import './Navbar.css';
-import PageContainer from './Container';
+import PageContainer from './PageContainer';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const Navbar = () => {

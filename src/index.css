@@ -1,9 +1,14 @@
 :root {
   --main-color: #014a5b;
+  --secondary-color: #8c9ea0;
   --bg-color: #f0f3f3;
   --border-color: #d1d5db;
   --sidebar-width: 230px;
+  --button-font: 15px;
+  --main-title-font: 36px;
+  --body-text: 16px;
 }
+
 * {
   padding: 0px;
   margin: 0px;
@@ -17,8 +22,53 @@ ul {
   padding: 0px;
   list-style: none;
 }
+button {
+  border: none;
+}
 body {
   direction: rtl;
   text-align: right;
   background-color: var(--bg-color);
+}
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  h1 {
+    font-size: var(--main-title-font);
+  }
+  p {
+    font-size: var(--body-text);
+    color: #7a7a7a;
+  }
+}
+.btn {
+  width: fit-content;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--button-font);
+  border-radius: 10px;
+  color: white;
+  border: none;
+  transition: var(--main-trans);
+  background-color: var(--main-color);
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.btn:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+/* .btn:hover {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6),
+    0 0 25px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+} */
+
+.content-holder {
+  padding-bottom: 32px;
 }

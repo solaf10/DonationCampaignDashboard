@@ -1,8 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Auth from '../pages/Auth';
-import Locations from '../pages/Locations';
 import Root from '../Root';
 import Dashboard from '../pages/Dashboard';
+import Governments from '../pages/Governments';
+import Cities from '../pages/Cities';
+import Areas from '../pages/Areas';
 
 export const router = createBrowserRouter([
   {
@@ -28,9 +30,11 @@ export const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: 'locations/:type',
-        element: <Locations />,
+        path: 'governments',
+        element: <Governments />,
       },
+      { path: 'cities', element: <Cities /> },
+      { path: 'areas', element: <Areas /> },
     ],
   },
 ]);

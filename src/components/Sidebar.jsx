@@ -13,6 +13,10 @@ const Sidebar = () => {
   const [locationExpanded, setLocationExpended] = useState(false);
   const [donatorsExpanded, setDonatorsExpended] = useState(false);
   const location = useLocation();
+  const isLocation =
+    location.pathname.includes('governments') ||
+    location.pathname.includes('cities') ||
+    location.pathname.includes('areas');
 
   /* useEffect(() => {
     const sidebar = sidebarRef.current;
@@ -78,9 +82,7 @@ const Sidebar = () => {
               expanded={locationExpanded}
               onChange={(_, isExpanded) => setLocationExpended(isExpanded)}
               className={
-                location.pathname.includes('locations')
-                  ? 'open sidebar-accordion'
-                  : 'sidebar-accordion'
+                isLocation ? 'open sidebar-accordion' : 'sidebar-accordion'
               }
               disableGutters
               elevation={0}
@@ -120,17 +122,17 @@ const Sidebar = () => {
 
               <AccordionDetails sx={{ px: 2, py: 1 }}>
                 <Typography variant='body2'>
-                  <NavLink to='/content/locations/government'>
+                  <NavLink to='/content/governments'>
                     <span>المحافظات</span>
                   </NavLink>
                 </Typography>
                 <Typography variant='body2'>
-                  <NavLink to='/content/locations/cities'>
+                  <NavLink to='/content/cities'>
                     <span>المدن</span>
                   </NavLink>
                 </Typography>
                 <Typography variant='body2'>
-                  <NavLink to='/content/locations/areas'>
+                  <NavLink to='/content/areas'>
                     <span>المناطق</span>
                   </NavLink>
                 </Typography>
@@ -220,17 +222,17 @@ const Sidebar = () => {
 
               <AccordionDetails sx={{ px: 2, py: 1 }}>
                 <Typography variant='body2'>
-                  <NavLink to='/content/locations/government'>
+                  <NavLink to='/content/governments'>
                     <span>المحافظات</span>
                   </NavLink>
                 </Typography>
                 <Typography variant='body2'>
-                  <NavLink to='/content/locations/cities'>
+                  <NavLink to='/content/cities'>
                     <span>المدن</span>
                   </NavLink>
                 </Typography>
                 <Typography variant='body2'>
-                  <NavLink to='/content/locations/areas'>
+                  <NavLink to='/content/areas'>
                     <span>المناطق</span>
                   </NavLink>
                 </Typography>

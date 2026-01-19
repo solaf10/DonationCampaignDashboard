@@ -81,6 +81,9 @@
       a {
         transition: 0.5s;
       }
+      a {
+        height: fit-content;
+      }
       button {
         height: 60px;
         margin-bottom: 5px;
