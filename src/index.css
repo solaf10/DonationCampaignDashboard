@@ -72,3 +72,13 @@ body {
 .content-holder {
   padding-bottom: 32px;
 }
+/* new */
+body {
+  background-color: var(--main-color);
+}
+.content-holder {
+  min-height: 97vh;
+  margin: 10px 0px 10px 10px;
+  background-color: var(--bg-color);
+  border-radius: 15px;
+}

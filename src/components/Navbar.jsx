@@ -1,3 +1,4 @@
+import { Badge } from '@mui/material';
 import './Navbar.css';
 import PageContainer from './PageContainer';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -20,9 +21,21 @@ const Navbar = () => {
             <input type='text' />
           </div>
           <div className='notifications'>
-            <button>
+            <Badge
+              className='notification-badge'
+              badgeContent={1}
+              max={99}
+              sx={{
+                '& .MuiBadge-badge': {
+                  backgroundColor: '#9b2c2c',
+                  color: '#fff',
+                  fontFamily: 'Cairo',
+                  fontSize: '11px',
+                },
+              }}
+            >
               <NotificationsIcon className='icon' />
-            </button>
+            </Badge>
           </div>
         </div>
       </PageContainer>

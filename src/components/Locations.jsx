@@ -10,6 +10,7 @@ const Locations = ({
   rows,
   className,
   children,
+  handleOpen,
 }) => {
   return (
     <div className={'locations ' + className}>
@@ -19,7 +20,7 @@ const Locations = ({
             <h1>إدارة الموقع(المكان)</h1>
             <p>{subtitle}</p>
           </div>
-          <button className='btn'>
+          <button onClick={handleOpen} className='btn'>
             <span>إضافة {buttonTitle}</span>
             <AddRoundedIcon />
           </button>

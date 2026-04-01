@@ -1,10 +1,13 @@
 import {
   FormControl,
   InputLabel,
+  MenuItem,
   NativeSelect,
   TextField,
 } from '@mui/material';
 import Locations from '../components/Locations';
+import { useState } from 'react';
+import ControlLocationModal from './ControlLocationModal';
 
 const columns = [
   { id: 'name', label: 'الاسم', minWidth: 170 },
@@ -26,133 +29,143 @@ const rows = [
 ];
 
 const Areas = () => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <Locations
-      subtitle='المناطق'
-      buttonTitle='منطقة'
-      columns={columns}
-      rows={rows}
-      className='areas'
-    >
-      <div className='input-holder'>
-        <TextField
-          id='standard-basic'
-          label='ابحث في المناطق'
-          variant='standard'
-          sx={{
-            width: '400px',
-            '& .MuiInput-underline:before': {
-              borderBottomColor: '#ccc', // اللون الافتراضي للخط قبل الفوكاس
-            },
-            '& .MuiInput-underline:hover:before': {
-              borderBottomColor: 'var(--secondary-color)', // لون عند hover
-            },
-            '& .MuiInput-underline:after': {
-              borderBottomColor: 'var(--secondary-color)', // اللون عند focus
-            },
-            '& .MuiInputBase-input': {
-              color: '#333', // لون النص
-            },
-            '& .MuiInputLabel-root': {
-              color: '#8c9ea0', // لون اللابل
-            },
-            '& .MuiInputLabel-root.Mui-focused': {
-              color: 'var(--main-color)', // لون اللابل عند focus
-            },
-          }}
-        />
-        <FormControl
-          sx={{
-            minWidth: '100px',
-            '& .MuiInput-underline:before': {
-              borderBottomColor: '#ccc', // الخط قبل الفوكاس
-            },
-            '& .MuiInput-underline:hover:before': {
-              borderBottomColor: 'var(--secondary-color)', // عند hover
-            },
-            '& .MuiInput-underline:after': {
-              borderBottomColor: 'var(--secondary-color)', // عند focus
-            },
-            '& .MuiInputBase-input': {
-              color: '#333', // لون النص داخل select
-              fontFamily: 'Cairo',
-            },
-            '& .MuiInputLabel-root': {
-              color: '#8c9ea0', // لون اللابل
-              fontFamily: 'Cairo',
-            },
-            '& .MuiInputLabel-root.Mui-focused': {
-              color: 'var(--main-color)', // لون اللابل عند focus
-            },
-            '& .MuiSelect-select': {
-              padding: '8px 0', // تباعد النص داخل select
-            },
-          }}
-        >
-          <InputLabel variant='standard' htmlFor='governments-filter'>
-            المحافظة
-          </InputLabel>
-          <NativeSelect
-            defaultValue=''
-            inputProps={{
-              name: 'government',
-              id: 'governments-filter',
+    <>
+      <Locations
+        subtitle='المناطق'
+        buttonTitle='منطقة'
+        columns={columns}
+        rows={rows}
+        className='areas'
+        handleOpen={() => setIsOpen(true)}
+      >
+        <div className='input-holder'>
+          <TextField
+            id='standard-basic'
+            label='ابحث في المناطق'
+            variant='standard'
+            sx={{
+              width: '400px',
+              '& .MuiInput-underline:before': {
+                borderBottomColor: '#ccc', // اللون الافتراضي للخط قبل الفوكاس
+              },
+              '& .MuiInput-underline:hover:before': {
+                borderBottomColor: 'var(--secondary-color)', // لون عند hover
+              },
+              '& .MuiInput-underline:after': {
+                borderBottomColor: 'var(--secondary-color)', // اللون عند focus
+              },
+              '& .MuiInputBase-input': {
+                color: '#333', // لون النص
+              },
+              '& .MuiInputLabel-root': {
+                color: '#8c9ea0', // لون اللابل
+              },
+              '& .MuiInputLabel-root.Mui-focused': {
+                color: 'var(--main-color)', // لون اللابل عند focus
+              },
+            }}
+          />
+          <FormControl
+            sx={{
+              minWidth: '100px',
+              '& .MuiInput-underline:before': {
+                borderBottomColor: '#ccc', // الخط قبل الفوكاس
+              },
+              '& .MuiInput-underline:hover:before': {
+                borderBottomColor: 'var(--secondary-color)', // عند hover
+              },
+              '& .MuiInput-underline:after': {
+                borderBottomColor: 'var(--secondary-color)', // عند focus
+              },
+              '& .MuiInputBase-input': {
+                color: '#333', // لون النص داخل select
+                fontFamily: 'Cairo',
+              },
+              '& .MuiInputLabel-root': {
+                color: '#8c9ea0', // لون اللابل
+                fontFamily: 'Cairo',
+              },
+              '& .MuiInputLabel-root.Mui-focused': {
+                color: 'var(--main-color)', // لون اللابل عند focus
+              },
+              '& .MuiSelect-select': {
+                padding: '8px 0', // تباعد النص داخل select
+              },
             }}
           >
-            <option value='' disabled style={{ display: 'none' }}></option>
-            <option value='all'>الكل</option>
-            <option value='homs'>حمص</option>
-            <option value='hama'>حماة</option>
-          </NativeSelect>
-        </FormControl>
-        <FormControl
-          sx={{
-            minWidth: '100px',
-            '& .MuiInput-underline:before': {
-              borderBottomColor: '#ccc', // الخط قبل الفوكاس
-            },
-            '& .MuiInput-underline:hover:before': {
-              borderBottomColor: 'var(--secondary-color)', // عند hover
-            },
-            '& .MuiInput-underline:after': {
-              borderBottomColor: 'var(--secondary-color)', // عند focus
-            },
-            '& .MuiInputBase-input': {
-              color: '#333', // لون النص داخل select
-              fontFamily: 'Cairo',
-            },
-            '& .MuiInputLabel-root': {
-              color: '#8c9ea0', // لون اللابل
-              fontFamily: 'Cairo',
-            },
-            '& .MuiInputLabel-root.Mui-focused': {
-              color: 'var(--main-color)', // لون اللابل عند focus
-            },
-            '& .MuiSelect-select': {
-              padding: '8px 0', // تباعد النص داخل select
-            },
-          }}
-        >
-          <InputLabel variant='standard' htmlFor='cities-filter'>
-            المدينة
-          </InputLabel>
-          <NativeSelect
-            defaultValue=''
-            inputProps={{
-              name: 'city',
-              id: 'cities-filter',
+            <InputLabel variant='standard' htmlFor='governments-filter'>
+              المحافظة
+            </InputLabel>
+            <NativeSelect
+              defaultValue=''
+              inputProps={{
+                name: 'government',
+                id: 'governments-filter',
+              }}
+            >
+              <option value='' disabled style={{ display: 'none' }}></option>
+              <option value='all'>الكل</option>
+              <option value='homs'>حمص</option>
+              <option value='hama'>حماة</option>
+            </NativeSelect>
+          </FormControl>
+          <FormControl
+            sx={{
+              minWidth: '100px',
+              '& .MuiInput-underline:before': {
+                borderBottomColor: '#ccc', // الخط قبل الفوكاس
+              },
+              '& .MuiInput-underline:hover:before': {
+                borderBottomColor: 'var(--secondary-color)', // عند hover
+              },
+              '& .MuiInput-underline:after': {
+                borderBottomColor: 'var(--secondary-color)', // عند focus
+              },
+              '& .MuiInputBase-input': {
+                color: '#333', // لون النص داخل select
+                fontFamily: 'Cairo',
+              },
+              '& .MuiInputLabel-root': {
+                color: '#8c9ea0', // لون اللابل
+                fontFamily: 'Cairo',
+              },
+              '& .MuiInputLabel-root.Mui-focused': {
+                color: 'var(--main-color)', // لون اللابل عند focus
+              },
+              '& .MuiSelect-select': {
+                padding: '8px 0', // تباعد النص داخل select
+              },
             }}
           >
-            <option value='' disabled style={{ display: 'none' }}></option>
-            <option value='all'>الكل</option>
-            <option value='Alhamra'>الحمراء</option>
-            <option value='Alghuta'>الغوطة</option>
-          </NativeSelect>
-        </FormControl>
-      </div>
+            <InputLabel variant='standard' htmlFor='cities-filter'>
+              المدينة
+            </InputLabel>
+            <NativeSelect
+              defaultValue=''
+              inputProps={{
+                name: 'city',
+                id: 'cities-filter',
+              }}
+            >
+              <option value='' disabled style={{ display: 'none' }}></option>
+              <option value='all'>الكل</option>
+              <option value='Alhamra'>الحمراء</option>
+              <option value='Alghuta'>الغوطة</option>
+            </NativeSelect>
+          </FormControl>
+        </div>
 
-      <p>عدد المناطق: {rows.length}</p>
-    </Locations>
+        <p>عدد المناطق: {rows.length}</p>
+      </Locations>
+      <ControlLocationModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        title='إضافة محافظة'
+        locationType='area'
+      />
+    </>
   );
 };
 

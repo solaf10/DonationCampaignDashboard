@@ -1,5 +1,7 @@
 import { TextField } from '@mui/material';
 import Locations from '../components/Locations';
+import { useState } from 'react';
+import ControlLocationModal from './ControlLocationModal';
 
 const columns = [
   { id: 'name', label: 'الاسم', minWidth: 170 },
@@ -21,42 +23,52 @@ const rows = [
 ];
 
 const Governments = () => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <Locations
-      subtitle='المحافظات'
-      buttonTitle='محافظة'
-      columns={columns}
-      rows={rows}
-      className='governments'
-    >
-      <TextField
-        id='standard-basic'
-        label='ابحث'
-        variant='standard'
-        sx={{
-          width: '400px',
-          '& .MuiInput-underline:before': {
-            borderBottomColor: '#ccc', // اللون الافتراضي للخط قبل الفوكاس
-          },
-          '& .MuiInput-underline:hover:before': {
-            borderBottomColor: 'var(--secondary-color)', // لون عند hover
-          },
-          '& .MuiInput-underline:after': {
-            borderBottomColor: 'var(--secondary-color)', // اللون عند focus
-          },
-          '& .MuiInputBase-input': {
-            color: '#333', // لون النص
-          },
-          '& .MuiInputLabel-root': {
-            color: '#8c9ea0', // لون اللابل
-          },
-          '& .MuiInputLabel-root.Mui-focused': {
-            color: 'var(--main-color)', // لون اللابل عند focus
-          },
-        }}
+    <>
+      <Locations
+        subtitle='المحافظات'
+        buttonTitle='محافظة'
+        columns={columns}
+        rows={rows}
+        className='governments'
+        handleOpen={() => setIsOpen(true)}
+      >
+        <TextField
+          id='standard-basic'
+          label='ابحث في المحافظات'
+          variant='standard'
+          sx={{
+            width: '400px',
+            '& .MuiInput-underline:before': {
+              borderBottomColor: '#ccc', // اللون الافتراضي للخط قبل الفوكاس
+            },
+            '& .MuiInput-underline:hover:before': {
+              borderBottomColor: 'var(--secondary-color)', // لون عند hover
+            },
+            '& .MuiInput-underline:after': {
+              borderBottomColor: 'var(--secondary-color)', // اللون عند focus
+            },
+            '& .MuiInputBase-input': {
+              color: '#333', // لون النص
+            },
+            '& .MuiInputLabel-root': {
+              color: '#8c9ea0', // لون اللابل
+            },
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: 'var(--main-color)', // لون اللابل عند focus
+            },
+          }}
+        />
+        <p>عدد المحافظات: {rows.length}</p>
+      </Locations>
+      <ControlLocationModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        title='إضافة محافظة'
+        locationType='government'
       />
-      <p>عدد المحافظات: {rows.length}</p>
-    </Locations>
+    </>
   );
 };
 

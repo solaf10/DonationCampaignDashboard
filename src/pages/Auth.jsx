@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const Auth = () => {
   return (
-    <div>
+    <div style={{ background: 'white' }}>
       <Link to='/content/dashboard'>Go to Dashboard</Link>
     </div>
   );
