@@ -15,21 +15,24 @@ const columns = [
   { id: 'status', label: 'الحالة', minWidth: 100 },
 ];
 
-const rows = [
-  { name: 'حملة رمضان', type: 'تبرعات', status: 'نشطة' },
-  { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
-  { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
-  { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
-  { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
-  { name: 'حملة  جديدةرمضان', type: 'تبرعات', status: 'نشطة' },
-  { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
-  { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
-  { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
-  { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
-];
-
 const Areas = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const rows = [
+    {
+      name: 'حملة رمضان',
+      type: 'تبرعات',
+      status: <button onClick={() => setIsOpen(true)}>edit</button>,
+    },
+    { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
+    { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
+    { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
+    { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
+    { name: 'حملة  جديدةرمضان', type: 'تبرعات', status: 'نشطة' },
+    { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
+    { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
+    { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
+    { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
+  ];
   return (
     <>
       <Locations
@@ -38,7 +41,6 @@ const Areas = () => {
         columns={columns}
         rows={rows}
         className='areas'
-        handleOpen={() => setIsOpen(true)}
       >
         <div className='input-holder'>
           <TextField
@@ -162,8 +164,9 @@ const Areas = () => {
       <ControlLocationModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        title='إضافة محافظة'
-        locationType='area'
+        title='تعديل المنطقة'
+        locationType='areas'
+        isEdit={true}
       />
     </>
   );

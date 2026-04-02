@@ -97,7 +97,12 @@ export default function CustomInput({
             {children}
           </Select>
         ) : (
-          <Input sx={{ minHeight: '48px' }} placeholder='ادخل قيمة' />
+          <Input
+            sx={{ minHeight: '48px' }}
+            placeholder='ادخل قيمة'
+            value={value}
+            onChange={handleChange}
+          />
         )}
       </FormControl>
       {/* 🔹 Helper text */}

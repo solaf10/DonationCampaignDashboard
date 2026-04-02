@@ -5,8 +5,6 @@ import {
   TextField,
 } from '@mui/material';
 import Locations from '../components/Locations';
-import ControlLocationModal from './ControlLocationModal';
-import { useState } from 'react';
 
 const columns = [
   { id: 'name', label: 'الاسم', minWidth: 170 },
@@ -28,97 +26,87 @@ const rows = [
 ];
 
 const Cities = () => {
-  const [isOpen, setIsOpen] = useState(false);
   return (
-    <>
-      <Locations
-        subtitle='المدن'
-        buttonTitle='مدينة'
-        columns={columns}
-        rows={rows}
-        className='cities'
-        handleOpen={() => setIsOpen(true)}
-      >
-        <div className='input-holder'>
-          <TextField
-            id='standard-basic'
-            label='ابحث في المدن'
-            variant='standard'
-            sx={{
-              width: '400px',
-              '& .MuiInput-underline:before': {
-                borderBottomColor: '#ccc', // اللون الافتراضي للخط قبل الفوكاس
-              },
-              '& .MuiInput-underline:hover:before': {
-                borderBottomColor: 'var(--secondary-color)', // لون عند hover
-              },
-              '& .MuiInput-underline:after': {
-                borderBottomColor: 'var(--secondary-color)', // اللون عند focus
-              },
-              '& .MuiInputBase-input': {
-                color: '#333', // لون النص
-              },
-              '& .MuiInputLabel-root': {
-                color: '#8c9ea0', // لون اللابل
-              },
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: 'var(--main-color)', // لون اللابل عند focus
-              },
-            }}
-          />
-          <FormControl
-            sx={{
-              minWidth: '100px',
-              '& .MuiInput-underline:before': {
-                borderBottomColor: '#ccc', // الخط قبل الفوكاس
-              },
-              '& .MuiInput-underline:hover:before': {
-                borderBottomColor: 'var(--secondary-color)', // عند hover
-              },
-              '& .MuiInput-underline:after': {
-                borderBottomColor: 'var(--secondary-color)', // عند focus
-              },
-              '& .MuiInputBase-input': {
-                color: '#333', // لون النص داخل select
-              },
-              '& .MuiInputLabel-root': {
-                color: '#8c9ea0', // لون اللابل
-              },
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: 'var(--main-color)', // لون اللابل عند focus
-              },
-              '& .MuiSelect-select': {
-                padding: '8px 0', // تباعد النص داخل select
-              },
+    <Locations
+      subtitle='المدن'
+      buttonTitle='مدينة'
+      columns={columns}
+      rows={rows}
+      className='cities'
+    >
+      <div className='input-holder'>
+        <TextField
+          id='standard-basic'
+          label='ابحث في المدن'
+          variant='standard'
+          sx={{
+            width: '400px',
+            '& .MuiInput-underline:before': {
+              borderBottomColor: '#ccc', // اللون الافتراضي للخط قبل الفوكاس
+            },
+            '& .MuiInput-underline:hover:before': {
+              borderBottomColor: 'var(--secondary-color)', // لون عند hover
+            },
+            '& .MuiInput-underline:after': {
+              borderBottomColor: 'var(--secondary-color)', // اللون عند focus
+            },
+            '& .MuiInputBase-input': {
+              color: '#333', // لون النص
+            },
+            '& .MuiInputLabel-root': {
+              color: '#8c9ea0', // لون اللابل
+            },
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: 'var(--main-color)', // لون اللابل عند focus
+            },
+          }}
+        />
+        <FormControl
+          sx={{
+            minWidth: '100px',
+            '& .MuiInput-underline:before': {
+              borderBottomColor: '#ccc', // الخط قبل الفوكاس
+            },
+            '& .MuiInput-underline:hover:before': {
+              borderBottomColor: 'var(--secondary-color)', // عند hover
+            },
+            '& .MuiInput-underline:after': {
+              borderBottomColor: 'var(--secondary-color)', // عند focus
+            },
+            '& .MuiInputBase-input': {
+              color: '#333', // لون النص داخل select
+            },
+            '& .MuiInputLabel-root': {
+              color: '#8c9ea0', // لون اللابل
+            },
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: 'var(--main-color)', // لون اللابل عند focus
+            },
+            '& .MuiSelect-select': {
+              padding: '8px 0', // تباعد النص داخل select
+            },
+          }}
+        >
+          <InputLabel variant='standard' htmlFor='governments-filter'>
+            المحافظة
+          </InputLabel>
+          <NativeSelect
+            defaultValue=''
+            inputProps={{
+              name: 'government',
+              id: 'governments-filter',
             }}
           >
-            <InputLabel variant='standard' htmlFor='governments-filter'>
-              المحافظة
-            </InputLabel>
-            <NativeSelect
-              defaultValue=''
-              inputProps={{
-                name: 'government',
-                id: 'governments-filter',
-              }}
-            >
-              <option value='' disabled style={{ display: 'none' }}></option>
-              <option value='all'>الكل</option>
-              <option value='homs'>حمص</option>
-              <option value='hama'>حماة</option>
-            </NativeSelect>
-          </FormControl>
-        </div>
+            <option value='' disabled style={{ display: 'none' }}></option>
+            <option value='all'>الكل</option>
+            <option value='homs'>حمص</option>
+            <option value='hama'>حماة</option>
+          </NativeSelect>
+        </FormControl>
+      </div>
 
-        <p>عدد المدن: {rows.length}</p>
-      </Locations>
-      <ControlLocationModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        title='إضافة مدينة'
-        locationType='city'
-      />
-    </>
+      <p>عدد المدن: {rows.length}</p>
+    </Locations>
   );
 };
 

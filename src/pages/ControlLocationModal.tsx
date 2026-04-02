@@ -3,19 +3,32 @@ import CustomModal from '../components/CustomModal';
 import CustomInput from '../components/locations/CustomInput';
 import { MenuItem } from '@mui/material';
 
-const ControlLocationModal = ({ isOpen, setIsOpen, title, locationType }) => {
+const ControlLocationModal = ({
+  isOpen,
+  setIsOpen,
+  title,
+  locationType,
+  isEdit,
+}) => {
   const [government, setGovernment] = useState('');
   const [city, setCity] = useState('');
   const [area, setArea] = useState('');
+
+  isEdit &&
+    useEffect(() => {
+      setGovernment('homs');
+      setCity('homs');
+      setArea('homs');
+    }, []);
   return (
     <CustomModal
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       modalTitle={title}
-      submitBtnTitle='إضافة'
+      submitBtnTitle={isEdit ? 'تعديل' : 'إضافة'}
     >
       <CustomInput
-        inputType={locationType === 'government' ? 'input' : 'select'}
+        inputType={locationType === 'governments' ? 'input' : 'select'}
         isDisabled={false}
         helperText={null}
         label='المحافظة'
@@ -25,9 +38,9 @@ const ControlLocationModal = ({ isOpen, setIsOpen, title, locationType }) => {
         <MenuItem value='homs'>حمص</MenuItem>
         <MenuItem value='hama'>حماة</MenuItem>
       </CustomInput>
-      {locationType != 'government' && (
+      {locationType != 'governments' && (
         <CustomInput
-          inputType={locationType === 'city' ? 'input' : 'select'}
+          inputType={locationType === 'cities' ? 'input' : 'select'}
           isDisabled={government === ''}
           helperText='يتم تفعيل هذا الحقل بعد اختيار المحافظة'
           label='المدينة'
@@ -38,17 +51,16 @@ const ControlLocationModal = ({ isOpen, setIsOpen, title, locationType }) => {
           <MenuItem value='hama'>حماة</MenuItem>
         </CustomInput>
       )}
-      {locationType == 'area' && (
+      {locationType == 'areas' && (
         <CustomInput
-          inputType={locationType === 'area' ? 'input' : 'select'}
+          inputType={locationType === 'areas' ? 'input' : 'select'}
           isDisabled={city === ''}
           helperText='يتم تفعيل هذا الحقل بعد اختيار المدينة'
           label='المنطقة'
           value={area}
           setValue={setArea}
         >
-          <MenuItem value='homs'>حمص</MenuItem>
-          <MenuItem value='hama'>حماة</MenuItem>
+          nothing
         </CustomInput>
       )}
     </CustomModal>
