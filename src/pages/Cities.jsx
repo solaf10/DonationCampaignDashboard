@@ -4,12 +4,14 @@ import {
   NativeSelect,
   TextField,
 } from '@mui/material';
-import Locations from '../components/Locations';
+import ContentWithTable from '../components/ContentWithTable';
+import CustomInput from '../components/locations/CustomInput';
 
 const columns = [
-  { id: 'name', label: 'الاسم', minWidth: 170 },
-  { id: 'type', label: 'النوع', minWidth: 100 },
-  { id: 'status', label: 'الحالة', minWidth: 100 },
+  { id: 'name', label: 'الاسم' },
+  { id: 'type', label: 'النوع' },
+  { id: 'status', label: 'الحالة' },
+  { id: 'actions', label: '' },
 ];
 
 const rows = [
@@ -27,7 +29,8 @@ const rows = [
 
 const Cities = () => {
   return (
-    <Locations
+    <ContentWithTable
+      pageTitle='إدارة الموقع(المكان)'
       subtitle='المدن'
       buttonTitle='مدينة'
       columns={columns}
@@ -35,32 +38,19 @@ const Cities = () => {
       className='cities'
     >
       <div className='input-holder'>
-        <TextField
-          id='standard-basic'
-          label='ابحث في المدن'
-          variant='standard'
-          sx={{
+        <CustomInput
+          inputType='textField'
+          placeholder='ابحث في المدن'
+          styles={{
             width: '400px',
-            '& .MuiInput-underline:before': {
-              borderBottomColor: '#ccc', // اللون الافتراضي للخط قبل الفوكاس
-            },
-            '& .MuiInput-underline:hover:before': {
-              borderBottomColor: 'var(--secondary-color)', // لون عند hover
-            },
-            '& .MuiInput-underline:after': {
-              borderBottomColor: 'var(--secondary-color)', // اللون عند focus
-            },
-            '& .MuiInputBase-input': {
-              color: '#333', // لون النص
-            },
-            '& .MuiInputLabel-root': {
-              color: '#8c9ea0', // لون اللابل
-            },
+            height: 'auto',
             '& .MuiInputLabel-root.Mui-focused': {
               color: 'var(--main-color)', // لون اللابل عند focus
             },
           }}
-        />
+        >
+          nothing
+        </CustomInput>
         <FormControl
           sx={{
             minWidth: '100px',
@@ -106,7 +96,7 @@ const Cities = () => {
       </div>
 
       <p>عدد المدن: {rows.length}</p>
-    </Locations>
+    </ContentWithTable>
   );
 };
 

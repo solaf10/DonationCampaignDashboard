@@ -6,14 +6,19 @@ import {
   TableHead,
   TableRow,
   Paper,
+  IconButton,
 } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
 import CustomPagination from './CustomPagination';
 import './PageTable.css';
+import { useNavigate } from 'react-router-dom';
 
-const PageTable = ({ columns, rows }) => {
+const PageTable = ({ columns, rows, pageLink }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const navigate = useNavigate();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -22,6 +27,10 @@ const PageTable = ({ columns, rows }) => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const handleOpenMenu = (e) => {
+    e.stopPropagation();
   };
   return (
     <div className='table-holder'>
@@ -48,10 +57,29 @@ const PageTable = ({ columns, rows }) => {
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => (
-                  <TableRow hover key={index}>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.type}</TableCell>
-                    <TableCell>{row.status}</TableCell>
+                  <TableRow
+                    hover
+                    key={index}
+                    onClick={() =>
+                      pageLink ? navigate(pageLink + `/${index + 1}`) : null
+                    }
+                    style={{ cursor: pageLink ? 'pointer' : 'unset' }}
+                  >
+                    {columns.map((column) => {
+                      if (column.id === 'actions') {
+                        return (
+                          <TableCell onClick={handleOpenMenu} key={column.id}>
+                            <IconButton>
+                              <MoreVertIcon />
+                            </IconButton>
+                          </TableCell>
+                        );
+                      }
+
+                      return (
+                        <TableCell key={column.id}>{row[column.id]}</TableCell>
+                      );
+                    })}
                   </TableRow>
                 ))}
             </TableBody>

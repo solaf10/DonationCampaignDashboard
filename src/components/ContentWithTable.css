@@ -1,4 +1,4 @@
-.locations {
+.table-content {
   .title {
     .btn {
       gap: 8px;
@@ -31,10 +31,39 @@
     }
   }
 }
-/* .governments,
-.cities {
+.campaigns {
   .filters-holder {
-    
+    align-items: center;
+    padding-bottom: 15px;
+    .input-holder {
+      flex-direction: column;
+      align-items: end;
+      gap: 4px;
+      p {
+        color: #888;
+      }
+    }
+  }
+  .filter-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 2px solid #d1d5db;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.5s;
+    backdrop-filter: blur(4px);
+    .icon {
+      color: #374151;
+      font-size: 18px;
+      transition: 0.5s;
+    }
   }
 }
- */
+
+.filter-btn:hover .icon {
+  transform: scale(1.1);
+}

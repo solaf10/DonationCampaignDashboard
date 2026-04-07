@@ -26,6 +26,9 @@
     color: #014a5b;
   }
 
+  .MuiTableCell-root {
+    text-align: center;
+  }
   /* خلايا الجدول */
   .MuiTableBody-root .MuiTableCell-root {
     font-size: 14px;

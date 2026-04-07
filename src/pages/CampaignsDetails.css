@@ -1,0 +1,46 @@
+.campaign-details {
+  .title {
+    .btns {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      .button {
+        height: 40px;
+        padding: 0px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: transparent;
+        border: 1px solid #e5e7eb;
+        color: #1f1f1f;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        .icon {
+          font-size: 16px;
+        }
+      }
+      .button.delete {
+        color: #cc4a4a;
+        border: none;
+        background-color: #fdf2f2;
+      }
+    }
+  }
+  .box {
+    padding: 16px;
+    background-color: white;
+    border-radius: 8px;
+  }
+  .desc {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    .icon {
+      margin-top: 5px;
+      width: 25px;
+      height: 25px;
+    }
+  }
+}

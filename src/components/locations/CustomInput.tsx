@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   FormControl,
   Select,
-  MenuItem,
   FormHelperText,
   Typography,
   TextField,
@@ -14,16 +13,17 @@ export default function CustomInput({
   isDisabled,
   helperText,
   children,
-  value,
-  setValue,
   inputType,
+  placeholder,
+  styles,
 }) {
+  const [value, setValue] = useState('');
   const handleChange = (e) => {
     setValue(e.target.value);
   };
 
   return (
-    <div style={{ width: '100%' }}>
+    <div>
       {/* 🔹 LABEL */}
       <Typography
         sx={{
@@ -96,12 +96,21 @@ export default function CustomInput({
           >
             {children}
           </Select>
-        ) : (
+        ) : inputType == 'input' ? (
           <Input
             sx={{ minHeight: '48px' }}
             placeholder='ادخل قيمة'
             value={value}
             onChange={handleChange}
+          />
+        ) : (
+          <TextField
+            id='standard-basic'
+            label={placeholder ? placeholder : 'ادخل قيمة'}
+            variant='standard'
+            value={value}
+            onChange={handleChange}
+            sx={styles}
           />
         )}
       </FormControl>

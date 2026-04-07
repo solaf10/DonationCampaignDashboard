@@ -5,6 +5,10 @@ import Dashboard from '../pages/Dashboard';
 import Governments from '../pages/Governments';
 import Cities from '../pages/Cities';
 import Areas from '../pages/Areas';
+import Campaigns from '../pages/Campaigns';
+import AddCampaign from '../pages/AddCampaign';
+import EditCampaign from '../pages/EditCampaign';
+import CampaignsDetails from '../pages/CampaignsDetails';
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +39,10 @@ export const router = createBrowserRouter([
       },
       { path: 'cities', element: <Cities /> },
       { path: 'areas', element: <Areas /> },
+      { path: 'campaigns', element: <Campaigns /> },
+      { path: 'campaigns/:id', element: <CampaignsDetails /> },
+      { path: 'campaigns/add', element: <AddCampaign /> },
+      { path: 'campaigns/edit/:id', element: <EditCampaign /> },
     ],
   },
 ]);
