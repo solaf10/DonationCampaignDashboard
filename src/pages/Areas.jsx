@@ -3,6 +3,9 @@ import ContentWithTable from '../components/ContentWithTable';
 import { useState } from 'react';
 import ControlLocationModal from './ControlLocationModal';
 import CustomInput from '../components/locations/CustomInput';
+import { AddRounded } from '@mui/icons-material';
+import Title from '../components/Title';
+import PageContainer from '../components/PageContainer';
 
 const columns = [
   { id: 'name', label: 'الاسم' },
@@ -13,6 +16,7 @@ const columns = [
 
 const Areas = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const rows = [
     {
       name: 'حملة رمضان',
@@ -30,11 +34,16 @@ const Areas = () => {
     { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
   ];
   return (
-    <>
+    <PageContainer>
+      <Title pageTitle='إدارة الموقع(المكان)' subtitle='المناطق'>
+        <button onClick={() => setIsAddModalOpen(true)} className='btn'>
+          <span>إضافة منطقة</span>
+          <AddRounded />
+        </button>
+      </Title>
       <ContentWithTable
-        pageTitle='إدارة الموقع(المكان)'
-        subtitle='المناطق'
-        buttonTitle='منطقة'
+        isOpen={isAddModalOpen}
+        setIsOpen={setIsAddModalOpen}
         columns={columns}
         rows={rows}
         className='areas'
@@ -152,7 +161,7 @@ const Areas = () => {
         locationType='areas'
         isEdit={true}
       />
-    </>
+    </PageContainer>
   );
 };
 

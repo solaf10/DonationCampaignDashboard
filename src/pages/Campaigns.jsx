@@ -3,6 +3,10 @@ import { useState } from 'react';
 import ControlLocationModal from './ControlLocationModal';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomInput from '../components/locations/CustomInput';
+import PageContainer from '../components/PageContainer';
+import Title from '../components/Title';
+import { AddRounded } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
@@ -53,10 +57,14 @@ const Campaigns = () => {
     },
   ];
   return (
-    <>
+    <PageContainer>
+      <Title pageTitle='إدارة الحملات'>
+        <Link to='/content/campaigns/add' className='btn'>
+          <span>إضافة حملة</span>
+          <AddRounded />
+        </Link>
+      </Title>
       <ContentWithTable
-        pageTitle='إدارة الحملات'
-        buttonTitle='حملة'
         columns={columns}
         rows={rows}
         className='campaigns'
@@ -91,7 +99,7 @@ const Campaigns = () => {
         locationType='areas'
         isEdit={true}
       />
-    </>
+    </PageContainer>
   );
 };
 

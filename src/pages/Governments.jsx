@@ -1,6 +1,10 @@
 import { TextField } from '@mui/material';
 import ContentWithTable from '../components/ContentWithTable';
 import CustomInput from '../components/locations/CustomInput';
+import PageContainer from '../components/PageContainer';
+import Title from '../components/Title';
+import { AddRounded } from '@mui/icons-material';
+import { useState } from 'react';
 
 const columns = [
   { id: 'name', label: 'الاسم' },
@@ -23,30 +27,38 @@ const rows = [
 ];
 
 const Governments = () => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   return (
-    <ContentWithTable
-      pageTitle='إدارة الموقع(المكان)'
-      subtitle='المحافظات'
-      buttonTitle='محافظة'
-      columns={columns}
-      rows={rows}
-      className='governments'
-    >
-      <CustomInput
-        inputType='textField'
-        placeholder='ابحث في المحافظات'
-        styles={{
-          width: '400px',
-          height: 'auto',
-          '& .MuiInputLabel-root.Mui-focused': {
-            color: 'var(--main-color)', // لون اللابل عند focus
-          },
-        }}
+    <PageContainer>
+      <Title pageTitle='إدارة الموقع(المكان)' subtitle='المحافظات'>
+        <button onClick={() => setIsAddModalOpen(true)} className='btn'>
+          <span>إضافة محافظة</span>
+          <AddRounded />
+        </button>
+      </Title>
+      <ContentWithTable
+        isOpen={isAddModalOpen}
+        setIsOpen={setIsAddModalOpen}
+        columns={columns}
+        rows={rows}
+        className='governments'
       >
-        nothing
-      </CustomInput>
-      <p>عدد المحافظات: {rows.length}</p>
-    </ContentWithTable>
+        <CustomInput
+          inputType='textField'
+          placeholder='ابحث في المحافظات'
+          styles={{
+            width: '400px',
+            height: 'auto',
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: 'var(--main-color)', // لون اللابل عند focus
+            },
+          }}
+        >
+          nothing
+        </CustomInput>
+        <p>عدد المحافظات: {rows.length}</p>
+      </ContentWithTable>
+    </PageContainer>
   );
 };
 

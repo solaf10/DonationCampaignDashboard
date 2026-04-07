@@ -32,8 +32,6 @@ const ControlLocationModal = ({
         isDisabled={false}
         helperText={null}
         label='المحافظة'
-        value={government}
-        setValue={setGovernment}
       >
         <MenuItem value='homs'>حمص</MenuItem>
         <MenuItem value='hama'>حماة</MenuItem>
@@ -44,8 +42,6 @@ const ControlLocationModal = ({
           isDisabled={government === ''}
           helperText='يتم تفعيل هذا الحقل بعد اختيار المحافظة'
           label='المدينة'
-          value={city}
-          setValue={setCity}
         >
           <MenuItem value='homs'>حمص</MenuItem>
           <MenuItem value='hama'>حماة</MenuItem>
@@ -57,8 +53,6 @@ const ControlLocationModal = ({
           isDisabled={city === ''}
           helperText='يتم تفعيل هذا الحقل بعد اختيار المدينة'
           label='المنطقة'
-          value={area}
-          setValue={setArea}
         >
           nothing
         </CustomInput>
