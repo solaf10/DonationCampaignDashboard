@@ -5,6 +5,6 @@
   cursor: not-allowed !important;
 }
 .form-holder {
-  height: '325px';
-  overflow-y: 'auto';
+  height: 342px;
+  overflow-y: auto;
 }

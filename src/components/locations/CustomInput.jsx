@@ -172,7 +172,7 @@ export default function CustomInput({
         ) : inputType == 'input' ? (
           <Input
             sx={{ minHeight: '48px' }}
-            placeholder='ادخل قيمة'
+            placeholder={placeholder ?? 'ادخل قيمة'}
             value={value}
             onChange={handleChange}
           />

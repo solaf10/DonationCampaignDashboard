@@ -78,7 +78,7 @@ export default function StepperForm({ icons, submitBtnTitle, children }) {
       <Box
         sx={{
           flex: 1,
-          minHeight: '100%',
+          height: '425px',
           backgroundColor: '#fff',
           borderRadius: '14px',
           padding: 3,
@@ -88,7 +88,7 @@ export default function StepperForm({ icons, submitBtnTitle, children }) {
         <form
           onSubmit={handleSubmit}
           style={{
-            height: '380px',
+            height: '100%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -96,24 +96,22 @@ export default function StepperForm({ icons, submitBtnTitle, children }) {
         >
           {children}
 
-          <Box sx={{ display: 'flex', gap: 1, marginTop: 3 }}>
-            <Button
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{
-                color: '#4B4B4B',
-              }}
-            >
-              رجوع
-            </Button>
-
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 1,
+              pt: 2,
+              borderTop: '1px solid #e1eaea',
+            }}
+          >
             {activeStep === steps.length - 1 ? (
               <Button
                 variant='contained'
                 asChild
                 sx={{
-                  backgroundColor: 'var(--main-color)',
-                  borderRadius: '99px',
+                  backgroundColor: '#014a5b',
+                  borderRadius: '8px',
+                  padding: '8px 24px',
                 }}
               >
                 <input
@@ -132,13 +130,26 @@ export default function StepperForm({ icons, submitBtnTitle, children }) {
                 variant='contained'
                 onClick={handleNext}
                 sx={{
-                  backgroundColor: 'var(--main-color)',
-                  borderRadius: '99px',
+                  backgroundColor: '#014a5b',
+                  borderRadius: '8px',
+                  padding: '8px 24px',
                 }}
               >
                 التالي
               </Button>
             )}
+            <Button
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{
+                borderRadius: '8px',
+                padding: '8px 24px',
+                border: 'none',
+                color: '#8c9ea0',
+              }}
+            >
+              رجوع
+            </Button>
           </Box>
         </form>
       </Box>

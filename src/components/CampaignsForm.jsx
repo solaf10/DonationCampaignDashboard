@@ -106,6 +106,8 @@ const CampaignsForm = () => {
     </Grid>
   );
 
+  const projectsForm = <div>hi</div>;
+
   const paymentForm = (
     <div className='form-holder'>
       <CustomInput
