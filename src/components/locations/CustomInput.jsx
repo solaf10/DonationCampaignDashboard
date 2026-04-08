@@ -8,6 +8,7 @@ import {
   InputLabel,
   NativeSelect,
 } from '@mui/material';
+import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 
 export default function CustomInput({
   label,
@@ -19,19 +20,76 @@ export default function CustomInput({
   styles,
   value,
   setValue,
+  labelStyles,
 }) {
   const handleChange = (e) => {
     setValue(e.target.value);
   };
   const inputsStyles = {
     /* 🔹 underline default */
+    '& .MuiInputBase-input': {
+      color: '#333',
+    },
     '& .MuiInput-underline:before': {
       borderBottomColor: '#ccc',
     },
-    '& .MuiInput-underline:hover:before': {
+    '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
       borderBottomColor: 'var(--secondary-color)',
     },
     '& .MuiInput-underline:after': {
+      borderBottomColor: 'var(--secondary-color)',
+    },
+
+    /* 🔹 النص داخل select */
+    '& .MuiSelect-select': {
+      color: '#333',
+      fontFamily: 'Cairo',
+      padding: '8px 0',
+    },
+
+    /* 🔴 Disabled fix */
+    '& .Mui-disabled': {
+      backgroundColor: '#F5F6F8',
+      cursor: 'not-allowed',
+    },
+
+    '& .Mui-disabled:before': {
+      borderBottomColor: '#DADDE3',
+      borderBottomStyle: 'solid', // ❌ منع المنقط
+    },
+
+    '& .Mui-disabled:after': {
+      borderBottomColor: '#DADDE3',
+      borderBottomStyle: 'solid',
+    },
+
+    '& .MuiSelect-select.Mui-disabled': {
+      color: '#9AA0A6',
+      WebkitTextFillColor: '#9AA0A6', // مهم جداً
+    },
+    // nativeSelect?
+    '& .MuiInputLabel-root': {
+      color: '#8c9ea0', // لون اللابل
+      fontFamily: 'Cairo',
+    },
+    '& .MuiInputLabel-root.Mui-focused': {
+      color: 'var(--main-color)', // لون اللابل عند focus
+    },
+    ...styles,
+  };
+  const pickerStyles = {
+    /* 🔹 underline default */
+    '& .MuiPickersInputBase-root': {
+      minHeight: '48px',
+      color: '#333',
+    },
+    '& .MuiPickersInputBase-root:before': {
+      borderBottomColor: '#ccc',
+    },
+    '& .MuiPickersInputBase-root:hover:not(.Mui-disabled):before': {
+      borderBottomColor: 'var(--secondary-color)',
+    },
+    '& .MuiPickersInputBase-root:after': {
       borderBottomColor: 'var(--secondary-color)',
     },
 
@@ -83,6 +141,7 @@ export default function CustomInput({
             color: '#4B5563',
             fontFamily: 'Cairo',
             fontSize: '14px',
+            ...labelStyles,
           }}
         >
           {label}
@@ -160,6 +219,34 @@ export default function CustomInput({
               {children}
             </NativeSelect>
           </>
+        ) : inputType === 'date' ? (
+          <DatePicker
+            value={value}
+            onChange={(newValue) => setValue(newValue)}
+            slotProps={{
+              textField: {
+                variant: 'standard',
+                fullWidth: true,
+                placeholder: 'يوم/شهر/سنة',
+                sx: pickerStyles,
+              },
+            }}
+            format='YYYY/MM/DD'
+          />
+        ) : inputType === 'time' ? (
+          <TimePicker
+            value={value}
+            onChange={(newValue) => setValue(newValue)}
+            slotProps={{
+              textField: {
+                variant: 'standard',
+                fullWidth: true,
+                placeholder,
+                sx: pickerStyles,
+              },
+            }}
+            format='HH:mm'
+          />
         ) : (
           <TextField
             id='standard-basic'
@@ -171,7 +258,7 @@ export default function CustomInput({
         )}
       </FormControl>
       {/* 🔹 Helper text */}
-      {isDisabled && (
+      {helperText && (
         <FormHelperText sx={{ color: '#9AA0A6' }}>{helperText}</FormHelperText>
       )}
     </div>

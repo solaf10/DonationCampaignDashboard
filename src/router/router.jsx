@@ -9,6 +9,7 @@ import Campaigns from '../pages/Campaigns';
 import AddCampaign from '../pages/AddCampaign';
 import EditCampaign from '../pages/EditCampaign';
 import CampaignsDetails from '../pages/CampaignsDetails';
+import ActiveStepProvider from '../contexts/ActiveStepContext';
 
 export const router = createBrowserRouter([
   {
@@ -41,7 +42,14 @@ export const router = createBrowserRouter([
       { path: 'areas', element: <Areas /> },
       { path: 'campaigns', element: <Campaigns /> },
       { path: 'campaigns/:id', element: <CampaignsDetails /> },
-      { path: 'campaigns/add', element: <AddCampaign /> },
+      {
+        path: 'campaigns/add',
+        element: (
+          <ActiveStepProvider>
+            <AddCampaign />
+          </ActiveStepProvider>
+        ),
+      },
       { path: 'campaigns/edit/:id', element: <EditCampaign /> },
     ],
   },

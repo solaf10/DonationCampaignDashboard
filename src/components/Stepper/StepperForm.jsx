@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Stepper,
   Step,
@@ -9,6 +8,8 @@ import {
 } from '@mui/material';
 import StepperIcon from './StepperIcon';
 import './StepperForm.css';
+import CustomInput from '../locations/CustomInput';
+import { useActiveStep } from '../../contexts/ActiveStepContext';
 
 const steps = [
   'المعلومات الأساسية',
@@ -17,8 +18,8 @@ const steps = [
   'المشاريع المرتبطة',
 ];
 
-export default function StepperForm({ icons, submitBtnTitle }) {
-  const [activeStep, setActiveStep] = useState(0);
+export default function StepperForm({ icons, submitBtnTitle, children }) {
+  const { activeStep, setActiveStep } = useActiveStep();
 
   const handleNext = () => {
     setActiveStep((prev) => prev + 1);
@@ -77,19 +78,25 @@ export default function StepperForm({ icons, submitBtnTitle }) {
       <Box
         sx={{
           flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
+          minHeight: '100%',
           backgroundColor: '#fff',
           borderRadius: '14px',
           padding: 3,
           boxShadow: '0 4px 12px rgba(1,74,91,0.08)',
         }}
       >
-        <Typography mb={2}>محتوى الخطوة {activeStep + 1}</Typography>
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            height: '380px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          {children}
 
-        <form onSubmit={handleSubmit}>
-          <Box sx={{ display: 'flex', gap: 1 }}>
+          <Box sx={{ display: 'flex', gap: 1, marginTop: 3 }}>
             <Button
               disabled={activeStep === 0}
               onClick={handleBack}

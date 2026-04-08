@@ -1,20 +1,8 @@
-import {
-  CalendarMonthOutlined,
-  FactCheckOutlined,
-  FolderOutlined,
-  RequestQuoteOutlined,
-} from '@mui/icons-material';
 import PageContainer from '../components/PageContainer';
-import StepperForm from '../components/Stepper/StepperForm';
 import Title from '../components/Title';
+import CampaignsForm from '../components/CampaignsForm';
 
 const AddCampaign = () => {
-  const icons = {
-    1: <FolderOutlined fontSize='small' />,
-    2: <CalendarMonthOutlined fontSize='small' />,
-    3: <RequestQuoteOutlined fontSize='small' />,
-    4: <FactCheckOutlined fontSize='small' />,
-  };
   return (
     <PageContainer>
       <Title
@@ -23,7 +11,7 @@ const AddCampaign = () => {
       >
         {null}
       </Title>
-      <StepperForm icons={icons} submitBtnTitle='إضافة الحملة' />
+      <CampaignsForm />
     </PageContainer>
   );
 };

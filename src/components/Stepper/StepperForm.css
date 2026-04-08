@@ -4,3 +4,7 @@
 .muirtl-jxdn7c-MuiButtonBase-root-MuiButton-root.Mui-disabled {
   cursor: not-allowed !important;
 }
+.form-holder {
+  height: '325px';
+  overflow-y: 'auto';
+}
