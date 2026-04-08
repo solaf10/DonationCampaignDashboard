@@ -23,7 +23,7 @@ const AddCampaign = () => {
       >
         {null}
       </Title>
-      <StepperForm icons={icons} />
+      <StepperForm icons={icons} submitBtnTitle='إضافة الحملة' />
     </PageContainer>
   );
 };

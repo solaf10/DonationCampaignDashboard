@@ -19,6 +19,7 @@ const columns = [
 
 const Campaigns = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchedKey, setSearchedKey] = useState('');
   const rows = [
     {
       name: 'حملة رمضان',
@@ -64,12 +65,14 @@ const Campaigns = () => {
           <AddRounded />
         </Link>
       </Title>
+      {/* filter & table */}
       <ContentWithTable
         columns={columns}
         rows={rows}
         className='campaigns'
         pageLink='/content/campaigns'
       >
+        {/* filter holder */}
         <div className='input-holder'>
           <CustomInput
             inputType='textField'
@@ -81,17 +84,20 @@ const Campaigns = () => {
                 color: 'var(--main-color)', // لون اللابل عند focus
               },
             }}
+            value={searchedKey}
+            setValue={setSearchedKey}
           >
             nothing
           </CustomInput>
 
           <p style={{ fontSize: '14px' }}>عدد الحملات: {rows.length}</p>
         </div>
-
+        {/* filter Model btn */}
         <button className='filter-btn'>
           <FilterAltIcon className='icon' />
         </button>
       </ContentWithTable>
+      {/* Edit Modal */}
       <ControlLocationModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}

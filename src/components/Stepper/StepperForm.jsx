@@ -17,7 +17,7 @@ const steps = [
   'المشاريع المرتبطة',
 ];
 
-export default function StepperForm({ icons }) {
+export default function StepperForm({ icons, submitBtnTitle }) {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -26,6 +26,11 @@ export default function StepperForm({ icons }) {
 
   const handleBack = () => {
     setActiveStep((prev) => prev - 1);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(12);
   };
 
   return (
@@ -83,27 +88,52 @@ export default function StepperForm({ icons }) {
       >
         <Typography mb={2}>محتوى الخطوة {activeStep + 1}</Typography>
 
-        {/* هون بتحطي الفورم لكل خطوة */}
+        <form onSubmit={handleSubmit}>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{
+                color: '#4B4B4B',
+              }}
+            >
+              رجوع
+            </Button>
 
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <Button
-            disabled={activeStep === 0}
-            onClick={handleBack}
-            sx={{
-              color: '#4B4B4B',
-            }}
-          >
-            رجوع
-          </Button>
-
-          <Button
-            variant='contained'
-            onClick={handleNext}
-            sx={{ backgroundColor: 'var(--main-color)', borderRadius: '99px' }}
-          >
-            التالي
-          </Button>
-        </Box>
+            {activeStep === steps.length - 1 ? (
+              <Button
+                variant='contained'
+                asChild
+                sx={{
+                  backgroundColor: 'var(--main-color)',
+                  borderRadius: '99px',
+                }}
+              >
+                <input
+                  type='submit'
+                  value={submitBtnTitle}
+                  style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    fontSize: 'inherit',
+                    color: 'inherit',
+                  }}
+                />
+              </Button>
+            ) : (
+              <Button
+                variant='contained'
+                onClick={handleNext}
+                sx={{
+                  backgroundColor: 'var(--main-color)',
+                  borderRadius: '99px',
+                }}
+              >
+                التالي
+              </Button>
+            )}
+          </Box>
+        </form>
       </Box>
     </Box>
   );

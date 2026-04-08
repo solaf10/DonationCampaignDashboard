@@ -1,3 +1,6 @@
 .MuiStepConnector-root.MuiStepConnector-vertical {
   margin-right: 20px;
 }
+.muirtl-jxdn7c-MuiButtonBase-root-MuiButton-root.Mui-disabled {
+  cursor: not-allowed !important;
+}

@@ -1,4 +1,3 @@
-import { TextField } from '@mui/material';
 import ContentWithTable from '../components/ContentWithTable';
 import CustomInput from '../components/locations/CustomInput';
 import PageContainer from '../components/PageContainer';
@@ -27,6 +26,7 @@ const rows = [
 ];
 
 const Governments = () => {
+  const [government, setGovernment] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   return (
     <PageContainer>
@@ -36,6 +36,7 @@ const Governments = () => {
           <AddRounded />
         </button>
       </Title>
+      {/* Filter & Table */}
       <ContentWithTable
         isOpen={isAddModalOpen}
         setIsOpen={setIsAddModalOpen}
@@ -53,6 +54,8 @@ const Governments = () => {
               color: 'var(--main-color)', // لون اللابل عند focus
             },
           }}
+          value={government}
+          setValue={setGovernment}
         >
           nothing
         </CustomInput>

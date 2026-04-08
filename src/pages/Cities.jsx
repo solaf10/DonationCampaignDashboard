@@ -1,9 +1,3 @@
-import {
-  FormControl,
-  InputLabel,
-  NativeSelect,
-  TextField,
-} from '@mui/material';
 import ContentWithTable from '../components/ContentWithTable';
 import CustomInput from '../components/locations/CustomInput';
 import PageContainer from '../components/PageContainer';
@@ -32,7 +26,10 @@ const rows = [
 ];
 
 const Cities = () => {
+  const [city, setCity] = useState('');
+  const [government, setGovernment] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const nativeSelectStyles = { minWidth: '100px' };
   return (
     <PageContainer>
       <Title pageTitle='إدارة الموقع(المكان)' subtitle='المدن'>
@@ -41,6 +38,7 @@ const Cities = () => {
           <AddRounded />
         </button>
       </Title>
+      {/* Fitler & table */}
       <ContentWithTable
         isOpen={isAddModalOpen}
         setIsOpen={setIsAddModalOpen}
@@ -48,6 +46,7 @@ const Cities = () => {
         rows={rows}
         className='cities'
       >
+        {/* filter holder */}
         <div className='input-holder'>
           <CustomInput
             inputType='textField'
@@ -59,51 +58,23 @@ const Cities = () => {
                 color: 'var(--main-color)', // لون اللابل عند focus
               },
             }}
+            value={city}
+            setValue={setCity}
           >
             nothing
           </CustomInput>
-          <FormControl
-            sx={{
-              minWidth: '100px',
-              '& .MuiInput-underline:before': {
-                borderBottomColor: '#ccc', // الخط قبل الفوكاس
-              },
-              '& .MuiInput-underline:hover:before': {
-                borderBottomColor: 'var(--secondary-color)', // عند hover
-              },
-              '& .MuiInput-underline:after': {
-                borderBottomColor: 'var(--secondary-color)', // عند focus
-              },
-              '& .MuiInputBase-input': {
-                color: '#333', // لون النص داخل select
-              },
-              '& .MuiInputLabel-root': {
-                color: '#8c9ea0', // لون اللابل
-              },
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: 'var(--main-color)', // لون اللابل عند focus
-              },
-              '& .MuiSelect-select': {
-                padding: '8px 0', // تباعد النص داخل select
-              },
-            }}
+          <CustomInput
+            label='المحافظة'
+            inputType='nativeSelect'
+            styles={nativeSelectStyles}
+            value={government}
+            setValue={setGovernment}
           >
-            <InputLabel variant='standard' htmlFor='governments-filter'>
-              المحافظة
-            </InputLabel>
-            <NativeSelect
-              defaultValue=''
-              inputProps={{
-                name: 'government',
-                id: 'governments-filter',
-              }}
-            >
-              <option value='' disabled style={{ display: 'none' }}></option>
-              <option value='all'>الكل</option>
-              <option value='homs'>حمص</option>
-              <option value='hama'>حماة</option>
-            </NativeSelect>
-          </FormControl>
+            <option value='' disabled style={{ display: 'none' }}></option>
+            <option value='all'>الكل</option>
+            <option value='Alhamra'>حمص</option>
+            <option value='Alghuta'>حماة</option>
+          </CustomInput>
         </div>
 
         <p>عدد المدن: {rows.length}</p>
