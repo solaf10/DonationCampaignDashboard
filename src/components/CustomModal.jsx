@@ -1,27 +1,29 @@
 import { Modal, Box, Typography, Button, IconButton } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 420,
-  bgcolor: 'white',
-  borderRadius: '14px',
-  boxShadow: '0 8px 24px rgba(1, 74, 91, 0.15)',
-  display: 'flex',
-  flexDirection: 'column',
-  fontFamily: 'Cairo',
-};
-
 export default function CustomModal({
   setIsOpen,
   isOpen,
   modalTitle,
   children,
   submitBtnTitle,
+  styles,
 }) {
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 420,
+    bgcolor: 'white',
+    borderRadius: '14px',
+    boxShadow: '0 8px 24px rgba(1, 74, 91, 0.15)',
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: 'Cairo',
+    ...styles,
+  };
+
   const handleClose = () => setIsOpen(false);
 
   return (

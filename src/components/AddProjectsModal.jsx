@@ -10,19 +10,23 @@ import { Link } from 'react-router-dom';
 const projects = [
   {
     id: 1,
-    name: 'مشروع التخرج الذكي',
+    name: 'مشروع التخرج',
+    location: 'حمص-الحمراء',
   },
   {
     id: 2,
     name: 'تعليم إلكتروني',
+    location: 'حمص-الحميدية',
   },
   {
     id: 3,
     name: 'متجر إلكتروني',
+    location: 'دمشق-الحميدية',
   },
   {
     id: 4,
     name: 'تطبيق حجوزات',
+    location: 'حماة-ابن رشد',
   },
 ];
 
@@ -74,6 +78,7 @@ const AddProjectsModal = () => {
           onClick={() => handleSelectProject(project)}
         >
           <h4 className='name'>{project.name}</h4>
+          <p className='location'>{project.location}</p>
         </div>
       ))
     ) : (
@@ -86,6 +91,7 @@ const AddProjectsModal = () => {
       setIsOpen={handleClose}
       modalTitle='إضافة مشاريع مرتبطة'
       submitBtnTitle='إضافة'
+      styles={{ width: '600px' }}
     >
       <CustomInput
         inputType='input'
