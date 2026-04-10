@@ -118,6 +118,7 @@ export default function StepperForm({
                     padding: '8px 24px',
                     cursor: 'pointer',
                   }}
+                  className='btn'
                 >
                   <input
                     type='submit'
@@ -140,6 +141,7 @@ export default function StepperForm({
                     borderRadius: '8px',
                     padding: '8px 24px',
                   }}
+                  className='btn'
                 >
                   التالي
                 </Button>

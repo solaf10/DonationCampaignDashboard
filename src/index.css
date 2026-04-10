@@ -59,8 +59,16 @@ body {
   cursor: pointer;
   transition: box-shadow 0.3s, transform 0.3s;
 }
+.back-btn {
+  border-radius: 8px;
+  padding: 8px 24px;
+  border: none;
+  color: #6b7280;
+  text-transform: none;
+  font-weight: 500;
+}
 .btn:hover,
-button:hover {
+.back-btn:hover {
   opacity: 0.9;
   transform: translateY(-1px);
   transition: 0.2s;

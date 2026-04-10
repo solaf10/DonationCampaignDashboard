@@ -65,6 +65,7 @@ export default function SuccessMessageDialog({ isOpen, setIsOpen }) {
               fontWeight: 600,
             }}
             onClick={handleAddProjects}
+            className='btn'
           >
             إضافة مشاريع الآن
           </Button>
@@ -79,6 +80,7 @@ export default function SuccessMessageDialog({ isOpen, setIsOpen }) {
               textTransform: 'none',
               fontWeight: 500,
             }}
+            className='back-btn'
           >
             لاحقًا
           </Button>

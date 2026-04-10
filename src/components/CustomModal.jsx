@@ -80,6 +80,7 @@ export default function CustomModal({
               borderRadius: '8px',
               padding: '8px 24px',
             }}
+            className='btn'
           >
             {submitBtnTitle}
           </Button>
@@ -92,6 +93,7 @@ export default function CustomModal({
               border: 'none',
               color: '#8c9ea0',
             }}
+            className='back-btn'
           >
             إلغاء
           </Button>
