@@ -59,6 +59,7 @@ export default function CustomModal({
             flexDirection: 'column',
             gap: '20px',
           }}
+          className='modal-content-holder'
         >
           {children}
         </Box>

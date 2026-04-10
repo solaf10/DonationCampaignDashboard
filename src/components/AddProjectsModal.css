@@ -105,3 +105,6 @@
 
   letter-spacing: 0.2px;
 }
+.modal-content-holder {
+  max-height: 450px !important;
+}
