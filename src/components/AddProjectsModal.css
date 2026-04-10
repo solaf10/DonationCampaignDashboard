@@ -1,0 +1,103 @@
+.project-section {
+  .project-title {
+    font-weight: 400;
+    color: #374151;
+    margin-bottom: 8px;
+    font-family: Cairo;
+    font-size: 16px;
+  }
+  .cards-holder {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    .project-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: white;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .project-card:hover {
+      border-color: var(--secondary-color);
+      box-shadow: 0 4px 12px rgba(140, 158, 160, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .project-card.selected {
+      border-color: var(--secondary-color);
+      background: rgba(140, 158, 160, 0.08);
+      box-shadow: 0 4px 12px rgba(140, 158, 160, 0.15);
+    }
+    .name {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .desc {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+  }
+}
+/* Empty project */
+.empty-projects-min {
+  width: 100%;
+  padding: 1.5rem 1rem;
+  text-align: center;
+
+  border: 1px dashed #e5e7eb;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* النص */
+.empty-projects-min .empty-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #8c9ea0;
+  margin: 0;
+}
+
+/* الزر */
+.empty-projects-action {
+  background: transparent;
+  border: none;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #014a5b;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.empty-projects-action:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+/* empty search results */
+.empty-text {
+  width: 100%;
+  padding: 1.5rem 1rem;
+  text-align: center;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #8c9ea0;
+
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  letter-spacing: 0.2px;
+}

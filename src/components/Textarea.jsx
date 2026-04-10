@@ -13,7 +13,7 @@ const Textarea = ({
     fontFamily: 'Cairo',
     /* 🔹 شكل الحقل */
     '& .MuiOutlinedInput-root': {
-      borderRadius: '12px',
+      borderRadius: '8px',
       backgroundColor: '#fff',
 
       '& fieldset': {
@@ -69,7 +69,7 @@ const Textarea = ({
         <TextField
           placeholder={placeholder}
           multiline
-          rows={6}
+          rows={5}
           variant='outlined'
           fullWidth
           value={value}

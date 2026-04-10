@@ -59,9 +59,7 @@ const ControlLocationModal = ({
           label='المنطقة'
           value={area}
           setValue={setArea}
-        >
-          nothing
-        </CustomInput>
+        />
       )}
     </CustomModal>
   );

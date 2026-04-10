@@ -20,7 +20,6 @@ export default function CustomInput({
   styles,
   value,
   setValue,
-  labelStyles,
 }) {
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -75,6 +74,12 @@ export default function CustomInput({
     '& .MuiInputLabel-root.Mui-focused': {
       color: 'var(--main-color)', // لون اللابل عند focus
     },
+    // placeholder
+    '& .MuiInputBase-input::placeholder': {
+      fontSize: '14px', // 👈 حجم الخط
+      color: '#9AA0A6',
+      opacity: 1, // مهم لأن MUI بيخفف الشفافية
+    },
     ...styles,
   };
   const pickerStyles = {
@@ -128,6 +133,12 @@ export default function CustomInput({
     '& .MuiInputLabel-root.Mui-focused': {
       color: 'var(--main-color)', // لون اللابل عند focus
     },
+    // placeholder
+    '& .MuiInputBase-input::placeholder': {
+      fontSize: '14px', // 👈 حجم الخط
+      color: '#9AA0A6',
+      opacity: 1, // مهم لأن MUI بيخفف الشفافية
+    },
     ...styles,
   };
 
@@ -138,10 +149,9 @@ export default function CustomInput({
         <Typography
           sx={{
             mb: 1,
-            color: '#4B5563',
             fontFamily: 'Cairo',
-            fontSize: '14px',
-            ...labelStyles,
+            fontSize: '16px',
+            color: '#374151',
           }}
         >
           {label}
@@ -162,7 +172,11 @@ export default function CustomInput({
             displayEmpty
             renderValue={(selected) => {
               if (!selected) {
-                return <span style={{ color: '#9AA0A6' }}>اختر {label}</span>;
+                return (
+                  <span style={{ color: '#9AA0A6', fontSize: '14px' }}>
+                    اختر {label}
+                  </span>
+                );
               }
               return selected;
             }}

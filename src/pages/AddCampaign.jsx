@@ -8,9 +8,7 @@ const AddCampaign = () => {
       <Title
         pageTitle='إضافة حملة جديدة'
         subtitle='أكمل الخطوات التالية لإضافة حملة جديدة'
-      >
-        {null}
-      </Title>
+      />
       <CampaignsForm />
     </PageContainer>
   );

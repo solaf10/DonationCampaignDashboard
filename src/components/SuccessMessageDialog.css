@@ -1,0 +1,20 @@
+.success-dialog .MuiPaper-root.MuiPaper-elevation {
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  width: 500px;
+  /* desc */
+  h2 {
+    padding: 0px;
+  }
+  .MuiDialogContent-root {
+    padding: 0px;
+    margin-top: 8px;
+    margin-bottom: 24px;
+    overflow: visible;
+  }
+  .MuiDialogActions-root {
+    padding: 0px;
+    justify-content: center;
+  }
+}

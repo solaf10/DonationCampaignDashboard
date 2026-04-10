@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import modalControllerReducer from './slices/ModalContollerSlice';
 
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    modalController: modalControllerReducer,
+  },
 });
 
 export default store;
