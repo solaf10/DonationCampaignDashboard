@@ -6,7 +6,7 @@ const Root = () => {
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
-      <div className='content-holder'>
+      <div className='content-holder' >
         <Navbar />
         <Outlet />
       </div>

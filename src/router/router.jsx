@@ -10,6 +10,7 @@ import AddCampaign from '../pages/AddCampaign';
 import EditCampaign from '../pages/EditCampaign';
 import CampaignsDetails from '../pages/CampaignsDetails';
 import ActiveStepProvider from '../contexts/ActiveStepContext';
+import Projects from '../pages/Projects';
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,7 @@ export const router = createBrowserRouter([
         path: 'governments',
         element: <Governments />,
       },
+      { path: 'projects', element: <Projects/> },
       { path: 'cities', element: <Cities /> },
       { path: 'areas', element: <Areas /> },
       { path: 'campaigns', element: <Campaigns /> },
@@ -51,6 +53,7 @@ export const router = createBrowserRouter([
         ),
       },
       { path: 'campaigns/edit/:id', element: <EditCampaign /> },
+      
     ],
   },
 ]);
