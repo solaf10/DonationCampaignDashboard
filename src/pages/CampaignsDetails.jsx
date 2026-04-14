@@ -79,7 +79,7 @@ const CampaignsDetails = () => {
       </div>
     );
   const remainingDays = 3;
-  const status = 'ongoing';
+  const status = 'upcoming';
   return (
     <div className='campaign-details'>
       <PageContainer>
