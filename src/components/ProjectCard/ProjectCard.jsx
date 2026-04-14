@@ -41,9 +41,9 @@ export default function ProjectCard({ project }) {
         image={project.image || "https://via.placeholder.com/300"}
         alt="project"
         sx={{
-               aspectRatio: "16/11",       
-               width: "100%",     
-                objectFit: "cover"  
+              aspectRatio: "16/11",       
+              width: "100%",     
+              objectFit: "cover"  
   }}
       />
 
@@ -65,7 +65,7 @@ export default function ProjectCard({ project }) {
   fontWeight="bold"
   sx={{
     mb: 0.5,
-    minHeight: 42,
+    minHeight: 32,
     textAlign: "center", 
     display: "-webkit-box",
     WebkitLineClamp: 2,
@@ -117,7 +117,7 @@ export default function ProjectCard({ project }) {
       
        
        
-      <Box sx={{  pt: 2, borderTop: "1px solid #eee", direction: 'rtl' }}>
+      <Box sx={{  pt: 1, borderTop: "1px solid #eee", direction: 'rtl' }}>
           <LinearProgress
             variant="determinate"
     

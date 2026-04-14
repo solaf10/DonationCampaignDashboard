@@ -1,14 +1,14 @@
-import React from 'react';
-import { Grid, Box } from '@mui/material';
+import React, { useState } from 'react';
+import { Grid, Box, Container, TextField, IconButton, InputAdornment } from '@mui/material';
+
 import ProjectCard from '../components/ProjectCard/ProjectCard';
 import Title from '../components/Title';
-import { Container } from "@mui/material";
-import { TextField, IconButton } from "@mui/material";
+import FilterDrawer from '../components/FilterDrawer';
+
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { InputAdornment } from "@mui/material";
+
 const projectsData = [
- 
   {
     title: "مشروع ترميم المنازل",
     category: "القطاع الإنساني",
@@ -57,97 +57,107 @@ const projectsData = [
     progress: 30,
     image: "../../public/orphans.jpg"
   },
-  {
-    title: "تأمين مواقف ثابتة للنقل الداخلي ",
-    category: "القطاع الخدمي",
-    price: "4000.00",
-    location: "حمص",
-    progress: 30,
-    image: "../../public/مواقف-ذكية.webp"
-  },
-  
+  { title: "تأمين مواقف ثابتة للنقل الداخلي ",
+     category: "القطاع الخدمي", 
+     price: "4000.00", 
+     location: "حمص",
+      progress: 30,
+       image: "../../public/مواقف-ذكية.webp" },
 ];
 
 export default function Projects() {
+
+  
+  const [openFilter, setOpenFilter] = useState(false);
+
   return (
     <Container maxWidth="lg" sx={{ px: 2 }}>
-        <Title pageTitle='إدارة المشاريع' >
-        <button  className='btn'>
+
+      
+      <Title pageTitle='إدارة المشاريع'>
+        <button className='btn'>
           <span> + إضافة مشروع</span>
-         
         </button>
       </Title>
-       <Box
-      sx={{
-        width: "100%",
-        border: "1px solid #e0e0e0",
-        borderRadius: 3,
-        display: "flex",
-        alignItems: "center",
-        overflow: "hidden",
-        backgroundColor: "#f9f9f9",
-        mb: 3.5
-      }}
-    >
-      {/* زر الفلترة */}
-     
 
-      {/* حقل البحث */}
-     <TextField
-  fullWidth
-  placeholder="ابحث حسب الاسم"
-  variant="standard"
-  InputProps={{
-    disableUnderline: true,
-    startAdornment: (
-      <InputAdornment position="start">
-        <SearchIcon sx={{ color: "gray" }} />
-      </InputAdornment>
-    )
-  }}
-  sx={{
-    px: 2,
-  
-  }}
-/>
-       <IconButton
+     
+      <Box
         sx={{
-          backgroundColor: "#eeeeee",
-          borderRadius: 2,
-          m: 1
+          width: "100%",
+          border: "1px solid #e0e0e0",
+          borderRadius: 3,
+          display: "flex",
+          alignItems: "center",
+          backgroundColor: "#f9f9f9",
+          mb: 3.5
         }}
       >
-        <FilterListIcon />
-      </IconButton>
-    </Box>
-    <Box 
-      sx={{ 
-                    
-        width: "100%",      
-        direction: "ltr",
-         justifyContent: "center" ,
-         alignItems: "center"    ,
-        
-      }}
-    >
-      <Grid 
-        container 
-        spacing={4}          
-        alignItems="stretch"  
-        sx={{ m: 0, width: "100%" }} 
+
+        {/*  البحث */}
+        <TextField
+          fullWidth
+          placeholder="ابحث حسب الاسم"
+          variant="standard"
+          InputProps={{
+            disableUnderline: true,
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: "gray" }} />
+              </InputAdornment>
+            )
+          }}
+          sx={{ px: 2 }}
+        />
+
+        {/*  زر الفلترة */}
+        <IconButton
+          onClick={() => setOpenFilter(true)} 
+          sx={{
+            backgroundColor: "#eeeeee",
+            borderRadius: 2,
+            m: 1
+          }}
+        >
+          <FilterListIcon />
+        </IconButton>
+      </Box>
+
+      
+      <FilterDrawer
+        open={openFilter}
+        onClose={() => setOpenFilter(false)} 
+      />
+
+   
+      <Box
+        sx={{
+          width: "100%",
+          direction: "ltr",
+          display: "flex",
+          justifyContent: "center"
+        }}
       >
-        {projectsData.map((project, index) => (
-          <Grid 
-            item 
-            md={4}    
-            key={index} 
-            sx={{ display: "flex" }} 
-          >
-            <ProjectCard project={project} />
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+        <Grid
+          container
+          spacing={4}
+          alignItems="stretch"
+          sx={{ width: "100%" }}
+        >
+          {projectsData.map((project, index) => (
+            <Grid
+              item
+              xs={12}   
+              sm={6}    
+              md={4}    
+              key={index}
+              sx={{ display: "flex" }}
+            >
+              <ProjectCard project={project} />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
     </Container>
   );
 }
