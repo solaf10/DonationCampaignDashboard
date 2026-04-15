@@ -53,7 +53,7 @@ export const router = createBrowserRouter([
       },
       { path: "campaigns/edit/:id", element: <EditCampaign /> },
       {
-        path: "project/add",
+        path: "projects/add",
         element: (
           <ActiveStepProvider>
             <AddProject />
