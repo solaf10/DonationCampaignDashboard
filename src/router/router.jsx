@@ -1,19 +1,20 @@
-import { createBrowserRouter } from 'react-router-dom';
-import Auth from '../pages/Auth';
-import Root from '../Root';
-import Dashboard from '../pages/Dashboard';
-import Governments from '../pages/Governments';
-import Cities from '../pages/Cities';
-import Areas from '../pages/Areas';
-import Campaigns from '../pages/Campaigns';
-import AddCampaign from '../pages/AddCampaign';
-import EditCampaign from '../pages/EditCampaign';
-import CampaignsDetails from '../pages/CampaignsDetails';
-import ActiveStepProvider from '../contexts/ActiveStepContext';
+import { createBrowserRouter } from "react-router-dom";
+import Auth from "../pages/Auth";
+import Root from "../Root";
+import Dashboard from "../pages/Dashboard";
+import Governments from "../pages/Governments";
+import Cities from "../pages/Cities";
+import Areas from "../pages/Areas";
+import Campaigns from "../pages/Campaigns";
+import AddCampaign from "../pages/AddCampaign";
+import EditCampaign from "../pages/EditCampaign";
+import CampaignsDetails from "../pages/CampaignsDetails";
+import ActiveStepProvider from "../contexts/ActiveStepContext";
+import AddProject from "../pages/AddProject";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Auth />,
     /* children: [
       {
@@ -27,30 +28,38 @@ export const router = createBrowserRouter([
     ], */
   },
   {
-    path: '/content',
+    path: "/content",
     element: <Root />,
     children: [
       {
-        path: 'dashboard',
+        path: "dashboard",
         element: <Dashboard />,
       },
       {
-        path: 'governments',
+        path: "governments",
         element: <Governments />,
       },
-      { path: 'cities', element: <Cities /> },
-      { path: 'areas', element: <Areas /> },
-      { path: 'campaigns', element: <Campaigns /> },
-      { path: 'campaigns/:id', element: <CampaignsDetails /> },
+      { path: "cities", element: <Cities /> },
+      { path: "areas", element: <Areas /> },
+      { path: "campaigns", element: <Campaigns /> },
+      { path: "campaigns/:id", element: <CampaignsDetails /> },
       {
-        path: 'campaigns/add',
+        path: "campaigns/add",
         element: (
           <ActiveStepProvider>
             <AddCampaign />
           </ActiveStepProvider>
         ),
       },
-      { path: 'campaigns/edit/:id', element: <EditCampaign /> },
+      { path: "campaigns/edit/:id", element: <EditCampaign /> },
+      {
+        path: "project/add",
+        element: (
+          <ActiveStepProvider>
+            <AddProject />
+          </ActiveStepProvider>
+        ),
+      },
     ],
   },
 ]);
