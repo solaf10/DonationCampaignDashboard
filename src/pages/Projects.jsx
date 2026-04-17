@@ -74,15 +74,20 @@ const projectsData = [
   },
 ];
 
-export default function Projects() {
+export default function Projects({ isTrash = false }) {
   const [openFilter, setOpenFilter] = useState(false);
 
   return (
     <Container maxWidth='lg' sx={{ px: 2 }}>
-      <Title pageTitle='إدارة المشاريع'>
-        <button className='btn'>
-          <span> + إضافة مشروع</span>
-        </button>
+      <Title
+        pageTitle={isTrash ? 'سلة مهملات المشاريع' : 'إدارة المشاريع'}
+        subtitle={isTrash ? 'يمكنك استعادة أو حذف العناصر نهائياً' : null}
+      >
+        {!isTrash && (
+          <button className='btn'>
+            <span> + إضافة مشروع</span>
+          </button>
+        )}
       </Title>
 
       <Box
@@ -146,7 +151,7 @@ export default function Projects() {
               key={index}
               sx={{ display: 'flex' }}
             >
-              <ProjectCard project={project} />
+              <ProjectCard project={project} isTrash={isTrash} />
             </Grid>
           ))}
         </Grid>

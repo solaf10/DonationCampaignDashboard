@@ -10,7 +10,7 @@ const columns = [
   { id: 'name', label: 'الاسم' },
   { id: 'type', label: 'النوع' },
   { id: 'status', label: 'الحالة' },
-  { id: 'actions', label: '' },
+  { id: 'action', label: 'الإجراءات' },
 ];
 
 const Areas = () => {
@@ -23,7 +23,8 @@ const Areas = () => {
     {
       name: 'حملة رمضان',
       type: 'تبرعات',
-      status: <button onClick={() => setIsOpen(true)}>edit</button>,
+      /* status: <button onClick={() => setIsOpen(true)}>edit</button>, */
+      status: 'مكتملة',
     },
     { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
     { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
