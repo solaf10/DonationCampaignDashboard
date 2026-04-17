@@ -18,7 +18,8 @@ const columns = [
 ];
 
 const Campaigns = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchedKey, setSearchedKey] = useState('');
   const rows = [
     {
@@ -93,17 +94,24 @@ const Campaigns = () => {
           <p style={{ fontSize: '14px' }}>عدد الحملات: {rows.length}</p>
         </div>
         {/* filter Model btn */}
-        <button className='filter-btn'>
+        <button className='filter-btn' onClick={() => setIsFilterOpen(true)}>
           <FilterAltIcon className='icon' />
         </button>
       </ContentWithTable>
       {/* Edit Modal */}
       <ControlLocationModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
+        isOpen={isEditOpen}
+        setIsOpen={setIsEditOpen}
         title='تعديل المنطقة'
         locationType='areas'
         isEdit={true}
+      />
+      {/* filterModal */}
+      <ControlLocationModal
+        isOpen={isFilterOpen}
+        setIsOpen={setIsFilterOpen}
+        title='تصفية متقدمة'
+        locationType='projects'
       />
     </PageContainer>
   );

@@ -13,10 +13,37 @@ import { useState } from 'react';
 import CustomPagination from './CustomPagination';
 import './PageTable.css';
 import { useNavigate } from 'react-router-dom';
+import {
+  DeleteOutline,
+  EditOutlined,
+  VisibilityOutlined,
+} from '@mui/icons-material';
+import MoreMenu from './MoreMenu';
+
+const actions = [
+  {
+    label: 'عرض التفاصيل',
+    icon: <VisibilityOutlined fontSize='small' />,
+    onClick: () => console.log('view'),
+  },
+  {
+    label: 'تعديل',
+    icon: <EditOutlined fontSize='small' />,
+    onClick: () => console.log('edit'),
+  },
+  {
+    label: 'حذف',
+    icon: <DeleteOutline fontSize='small' />,
+    onClick: () => console.log('delete'),
+    danger: true,
+  },
+];
 
 const PageTable = ({ columns, rows, pageLink }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
   const navigate = useNavigate();
 
@@ -31,6 +58,10 @@ const PageTable = ({ columns, rows, pageLink }) => {
 
   const handleOpenMenu = (e) => {
     e.stopPropagation();
+    setAnchorEl(e.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
   };
   return (
     <div className='table-holder'>
@@ -107,6 +138,13 @@ const PageTable = ({ columns, rows, pageLink }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      {/* MoreInfoMenu */}
+      <MoreMenu
+        isOpen={open}
+        anchorEl={anchorEl}
+        handleCloseMenu={handleCloseMenu}
+        actions={actions}
+      />
     </div>
   );
 };

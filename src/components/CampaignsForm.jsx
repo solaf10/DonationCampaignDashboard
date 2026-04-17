@@ -62,14 +62,13 @@ const CampaignsForm = () => {
 
   // second step content
   const timingForm = (
-    <Grid container spacing={2}>
+    <Grid container spacing={3}>
       <Grid size={6}>
         <CustomInput
           label="تاريخ البدء"
           inputType="date"
           value={startDate}
           setValue={setStartDate}
-          styles={styles}
         />
       </Grid>
       <Grid size={6}>
@@ -79,7 +78,6 @@ const CampaignsForm = () => {
           inputType="date"
           value={endDate}
           setValue={setEndDate}
-          styles={styles}
         />
       </Grid>
       <Grid size={6}>
@@ -89,7 +87,6 @@ const CampaignsForm = () => {
           placeholder="مثال: 00:00"
           value={startTime}
           setValue={setStartTime}
-          styles={styles}
         />
       </Grid>
       <Grid size={6}>
@@ -99,7 +96,6 @@ const CampaignsForm = () => {
           placeholder="مثال: 00:00"
           value={endTime}
           setValue={setEndTime}
-          styles={styles}
         />
       </Grid>
     </Grid>

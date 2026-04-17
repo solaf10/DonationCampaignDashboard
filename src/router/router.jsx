@@ -11,6 +11,7 @@ import EditCampaign from "../pages/EditCampaign";
 import CampaignsDetails from "../pages/CampaignsDetails";
 import ActiveStepProvider from "../contexts/ActiveStepContext";
 import AddProject from "../pages/AddProject";
+import Projects from '../pages/Projects';
 
 export const router = createBrowserRouter([
   {
@@ -39,10 +40,11 @@ export const router = createBrowserRouter([
         path: "governments",
         element: <Governments />,
       },
-      { path: "cities", element: <Cities /> },
-      { path: "areas", element: <Areas /> },
-      { path: "campaigns", element: <Campaigns /> },
-      { path: "campaigns/:id", element: <CampaignsDetails /> },
+      { path: 'projects', element: <Projects/> },
+      { path: 'cities', element: <Cities /> },
+      { path: 'areas', element: <Areas /> },
+      { path: 'campaigns', element: <Campaigns /> },
+      { path: 'campaigns/:id', element: <CampaignsDetails /> },
       {
         path: "campaigns/add",
         element: (

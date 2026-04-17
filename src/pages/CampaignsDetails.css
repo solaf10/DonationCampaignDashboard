@@ -1,9 +1,42 @@
 .campaign-details {
+  .image-wrapper {
+    position: relative;
+    /* base badge */
+    .remaining-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 999px;
+      color: #243b53;
+      font-weight: 600;
+
+      font-size: 0.8rem;
+      font-weight: 600;
+
+      padding: 6px 12px;
+      border-radius: 999px;
+
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+      z-index: 10;
+    }
+
+    /* upcoming variant */
+    .remaining-badge.upcoming {
+      color: #7c4a1d;
+    }
+  }
   .title {
     .btns {
       display: flex;
       align-items: center;
       gap: 8px;
+
       .button {
         height: 40px;
         padding: 0px 16px;
@@ -17,14 +50,33 @@
         font-size: 15px;
         font-weight: 500;
         cursor: pointer;
+        transition: all 0.2s ease;
         .icon {
           font-size: 16px;
         }
+      }
+      .button:hover {
+        border-color: #8c9ea0;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(140, 158, 160, 0.05)
+        );
+        transform: translateY(-1px);
       }
       .button.delete {
         color: #cc4a4a;
         border: none;
         background-color: #fdf2f2;
+      }
+
+      .button.delete:hover {
+        background-color: #fde8e8;
+        color: #b91c1c;
+      }
+      .button:hover .icon {
+        transform: scale(1.1);
+        transition: 0.2s;
       }
     }
   }
@@ -42,5 +94,194 @@
       width: 25px;
       height: 25px;
     }
+  }
+  .infos-holder {
+    .box {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+      .icon {
+        font-size: 32px;
+        color: var(--main-color);
+      }
+      p {
+        color: #888;
+      }
+    }
+  }
+}
+.campaign-date {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 8px 0 16px;
+  font-size: 0.9rem;
+
+  /* كل عنصر */
+  .date-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #374151;
+    font-weight: 500;
+  }
+
+  /* أيقونة التاريخ */
+  .date-item .icon {
+    font-size: 18px;
+    color: #8c9ea0;
+  }
+
+  /* السهم */
+  .date-separator {
+    display: flex;
+    align-items: center;
+  }
+
+  .arrow-icon {
+    font-size: 18px;
+    color: var(--secondary-color);
+  }
+}
+/* ٌRelated Projects */
+.related-projects {
+  margin-top: 24px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+
+  .section-header {
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: var(--main-color);
+    color: white;
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+
+  .projects-table {
+    display: flex;
+    flex-direction: column;
+
+    .table-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 12px 16px;
+      text-decoration: none;
+      color: inherit;
+
+      border-bottom: 1px solid #e5e7eb;
+      transition: 0.2s;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background-color: rgba(1, 74, 91, 0.05);
+      }
+
+      .name {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #111827;
+      }
+
+      .location {
+        font-size: 0.85rem;
+        color: #8c9ea0;
+      }
+    }
+  }
+
+  .add-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 12px 16px;
+    background: white;
+
+    border-top: 1px solid #e5e7eb;
+
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 16px;
+
+    color: var(--main-color);
+    transition: 0.2s;
+
+    .icon {
+      font-size: 18px;
+      color: var(--main-color);
+    }
+
+    &:hover {
+      background: #f9fafb;
+
+      .icon {
+        transform: scale(1.1);
+        transition: 0.2s;
+      }
+    }
+  }
+}
+/* empty projects */
+.empty-projects {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+  text-align: center;
+
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  .text {
+    font-size: 0.95rem;
+    color: #8c9ea0;
+    margin-bottom: 12px;
+  }
+  /* زر CTA */
+  .empty-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 8px 12px;
+    border-radius: 8px;
+
+    background: white;
+    border: 1px solid #e5e7eb;
+
+    color: var(--main-color);
+    font-weight: 500;
+    cursor: pointer;
+
+    transition: 0.2s;
+  }
+
+  .empty-btn:hover {
+    background: rgba(1, 74, 91, 0.05);
+  }
+
+  .empty-btn .icon {
+    font-size: 18px;
+    color: var(--main-color);
   }
 }
