@@ -25,7 +25,10 @@ const ControlLocationModal = ({
       color: 'var(--main-color)',
     },
   };
-  const subtitleStyles = { fontSize: '16px', marginBottom: '-10px' };
+  const subtitleStyles = {
+    fontSize: '16px',
+    marginBottom: '-10px',
+  };
 
   const checkboxInps = [
     { id: 1, label: 'لم تبدأ', value: 'upcoming' },
@@ -128,6 +131,11 @@ const ControlLocationModal = ({
                   />
                 }
                 label={inp.label}
+                sx={{
+                  fontWeight: '400',
+                  color: '#374151',
+                  fontFamily: 'Cairo',
+                }}
               />
             ))}
           </div>

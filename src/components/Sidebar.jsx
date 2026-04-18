@@ -121,9 +121,10 @@ const links = [
       </svg>
     ),
     children: [
-      { id: 51, href: '/content/governments', label: 'المحافظات' },
-      { id: 52, href: '/content/cities', label: 'المدن' },
-      { id: 53, href: '/content/areas', label: 'المناطق' },
+      { id: 51, href: '/content/donars', label: 'نظرة عامة' },
+      { id: 52, href: '/content/individual', label: 'الأفراد' },
+      { id: 53, href: '/content/organizations', label: 'المنظمات' },
+      { id: 54, href: '/content/business', label: 'رجال الأعمال' },
     ],
   },
 

@@ -12,6 +12,10 @@ import CampaignsDetails from '../pages/CampaignsDetails';
 import ActiveStepProvider from '../contexts/ActiveStepContext';
 import AddProject from '../pages/AddProject';
 import Projects from '../pages/Projects';
+import IndividualDonars from '../pages/IndividualDonars';
+import Organizations from '../pages/Organizations';
+import BusinessDonars from '../pages/businessDonars';
+import Donars from '../pages/Donars';
 
 export const router = createBrowserRouter([
   {
@@ -62,8 +66,14 @@ export const router = createBrowserRouter([
           </ActiveStepProvider>
         ),
       },
+      /* Trash */
       { path: 'projects-trash', element: <Projects isTrash={true} /> },
       { path: 'campaigns-trash', element: <Campaigns isTrash={true} /> },
+      /* Donars */
+      { path: 'donars', element: <Donars /> },
+      { path: 'individual', element: <IndividualDonars /> },
+      { path: 'organizations', element: <Organizations /> },
+      { path: 'business', element: <BusinessDonars /> },
     ],
   },
 ]);

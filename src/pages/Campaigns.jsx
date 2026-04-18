@@ -9,6 +9,7 @@ import {
   AddRounded,
   DeleteOutline,
   EditOutlined,
+  FilterAltOutlined,
   RecyclingRounded,
   VisibilityOutlined,
 } from '@mui/icons-material';
@@ -139,7 +140,7 @@ const Campaigns = ({ isTrash = false }) => {
         </div>
         {/* filter Model btn */}
         <button className='filter-btn' onClick={() => setIsFilterOpen(true)}>
-          <FilterAltIcon className='icon' />
+          <FilterAltOutlined className='icon' />
         </button>
       </ContentWithTable>
       {/* Edit Modal */}

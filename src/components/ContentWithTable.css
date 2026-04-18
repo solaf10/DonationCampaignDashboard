@@ -9,7 +9,9 @@
     background-color: transparent;
     border: 1px solid #e5e7eb;
     color: #1f1f1f;
-    border-radius: 8px;
+    padding-right: 8px;
+    padding-left: 16px;
+    border-radius: 999px;
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
@@ -76,8 +78,8 @@
     width: 40px;
     height: 40px;
     background-color: transparent;
-    border: 2px solid #d1d5db;
-    border-radius: 12px;
+    border-radius: 50%;
+    background-color: #d1d5db;
     cursor: pointer;
     transition: 0.5s;
     backdrop-filter: blur(4px);
