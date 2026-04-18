@@ -7,17 +7,18 @@ import {
   Box,
   LinearProgress,
   IconButton,
-  Button
+  Button,
 } from '@mui/material';
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import { RecyclingRounded } from '@mui/icons-material';
 
 import { useNavigate } from "react-router-dom";
 
-export default function ProjectCard({ project }) {
+export default function ProjectCard({ project, isTrash }) {
   if (!project) return null;
 
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ export default function ProjectCard({ project }) {
             gap: 1,
             color: "text.secondary",
             mb: 0.5,
-            justifyContent: 'flex-start'
+            justifyContent: 'flex-start',
           }}
         >
           <LocationOnIcon fontSize="small" sx={{ color: "var(--main-color)" }} />
@@ -111,11 +112,11 @@ export default function ProjectCard({ project }) {
             {project.category}
           </Typography>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Typography fontWeight="bold" fontSize={15}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Typography fontWeight='bold' fontSize={15}>
               {project.price}
             </Typography>
-            <AttachMoneyIcon fontSize="small" />
+            <AttachMoneyIcon fontSize='small' />
           </Box>
         </Box>
 
@@ -153,41 +154,50 @@ export default function ProjectCard({ project }) {
             alignItems: "center",
             borderTop: "1px solid #eeeeee",
             pt: 2,
-            direction: 'rtl'
+            direction: 'rtl',
           }}
         >
-
-          {/* تعديل / حذف */}
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <IconButton size="small" sx={{ color: "#607d8b", border: '1px solid #e0e0e0' }}>
-              <EditOutlinedIcon fontSize="small" />
+          {/* أيقونات التعديل والحذف */}
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <IconButton
+              size='small'
+              sx={{ color: '#607d8b', border: '1px solid #e0e0e0' }}
+            >
+              {isTrash ? (
+                <RecyclingRounded fortSize='small' />
+              ) : (
+                <EditOutlinedIcon fontSize='small' />
+              )}
             </IconButton>
-
-            <IconButton size="small" sx={{ color: "red", border: '1px solid #ffcccc', backgroundColor: '#fff5f5' }}>
-              <DeleteOutlinedIcon fontSize="small" />
+            <IconButton
+              size='small'
+              sx={{
+                color: 'red',
+                border: '1px solid #ffcccc',
+                backgroundColor: '#fff5f5',
+              }}
+            >
+              <DeleteOutlinedIcon fontSize='small' />
             </IconButton>
           </Box>
 
-          {/* زر التفاصيل (التصحيح المهم) */}
           <Button
-            variant="contained"
-            size="small"
-            onClick={() => navigate(`/project/${project.id}`)}
+            variant='contained'
+            size='small'
             sx={{
-              backgroundColor: "var(--main-color)",
+              backgroundColor: 'var(--main-color)',
               color: 'white',
               px: 3,
               borderRadius: 2,
               textTransform: 'none',
-              "&:hover": { backgroundColor: "var(--main-color)" },
-              fontSize: 13
+              '&:hover': { backgroundColor: 'var(--main-color)' },
+              fontSize: 13,
             }}
           >
             معرفة المزيد
           </Button>
 
         </Box>
-
       </CardContent>
     </Card>
   );

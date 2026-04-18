@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
-import { Grid, Box, Container, TextField, IconButton, InputAdornment } from '@mui/material';
+import {
+  Grid,
+  Box,
+  Container,
+  TextField,
+  IconButton,
+  InputAdornment,
+} from '@mui/material';
 
 import ProjectCard from '../components/ProjectCard/ProjectCard';
 import Title from '../components/Title';
 import FilterDrawer from '../components/FilterDrawer';
 
-import SearchIcon from "@mui/icons-material/Search";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import SearchIcon from '@mui/icons-material/Search';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 const projectsData = [
   {
@@ -81,100 +88,88 @@ const projectsData = [
   }
 ];
 
-
-export default function Projects() {
-
-  
+export default function Projects({ isTrash = false }) {
   const [openFilter, setOpenFilter] = useState(false);
 
   return (
-    <Container maxWidth="lg" sx={{ px: 2 }}>
-
-      
-      <Title pageTitle='إدارة المشاريع'>
-        <button className='btn'>
-          <span> + إضافة مشروع</span>
-        </button>
+    <Container maxWidth='lg' sx={{ px: 2 }}>
+      <Title
+        pageTitle={isTrash ? 'سلة مهملات المشاريع' : 'إدارة المشاريع'}
+        subtitle={isTrash ? 'يمكنك استعادة أو حذف العناصر نهائياً' : null}
+      >
+        {!isTrash && (
+          <button className='btn'>
+            <span> + إضافة مشروع</span>
+          </button>
+        )}
       </Title>
 
-     
       <Box
         sx={{
-          width: "100%",
-          border: "1px solid #e0e0e0",
+          width: '100%',
+          border: '1px solid #e0e0e0',
           borderRadius: 3,
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "#f9f9f9",
-          mb: 3.5
+          display: 'flex',
+          alignItems: 'center',
+          backgroundColor: '#f9f9f9',
+          mb: 3.5,
         }}
       >
-
         {/*  البحث */}
         <TextField
           fullWidth
-          placeholder="ابحث حسب الاسم"
-          variant="standard"
+          placeholder='ابحث حسب الاسم'
+          variant='standard'
           InputProps={{
             disableUnderline: true,
             startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: "gray" }} />
+              <InputAdornment position='start'>
+                <SearchIcon sx={{ color: 'gray' }} />
               </InputAdornment>
-            )
+            ),
           }}
           sx={{ px: 2 }}
         />
 
         {/*  زر الفلترة */}
         <IconButton
-          onClick={() => setOpenFilter(true)} 
+          onClick={() => setOpenFilter(true)}
           sx={{
-            backgroundColor: "#eeeeee",
+            backgroundColor: '#eeeeee',
             borderRadius: 2,
-            m: 1
+            m: 1,
           }}
         >
           <FilterListIcon />
         </IconButton>
       </Box>
 
-      
-      <FilterDrawer
-        open={openFilter}
-        onClose={() => setOpenFilter(false)} 
-      />
+      <FilterDrawer open={openFilter} onClose={() => setOpenFilter(false)} />
 
-   
       <Box
         sx={{
-          width: "100%",
-          direction: "ltr",
-          display: "flex",
-          justifyContent: "center"
+          width: '100%',
+          direction: 'ltr',
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
-        <Grid
-          container
-          spacing={4}
-          alignItems="stretch"
-          sx={{ width: "100%" }}
-        >
+        <Grid container spacing={4} alignItems='stretch' sx={{ width: '100%' }}>
           {projectsData.map((project, index) => (
             <Grid
               item
-              xs={12}   
-              sm={6}    
-              md={4}    
+              xs={12}
+              sm={6}
+              md={4}
+              size={3}
               key={index}
-              sx={{ display: "flex" }}
+              sx={{ display: 'flex' }}
             >
-              <ProjectCard project={project} />
+              <ProjectCard project={project} isTrash={isTrash} />
             </Grid>
           ))}
         </Grid>
       </Box>
-
     </Container>
   );
 }

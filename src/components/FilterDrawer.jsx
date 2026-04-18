@@ -18,11 +18,11 @@ import {
   ListItem
 } from "@mui/material";
 
-import CloseIcon from "@mui/icons-material/Close";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CloseIcon from '@mui/icons-material/Close';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function FilterDrawer({ open, onClose }) {
 
@@ -33,7 +33,7 @@ export default function FilterDrawer({ open, onClose }) {
     done: false,
     inProgress: false,
     planned: false,
-    stopped: false
+    stopped: false,
   });
 
   // ❌ شلت التكرار داخل filters (كان فيه خربطة)
@@ -67,14 +67,14 @@ export default function FilterDrawer({ open, onClose }) {
   const handleChange = (key, value) => {
     setFilters((prev) => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
   };
 
   const handleCheckbox = (key) => {
     setStatus((prev) => ({
       ...prev,
-      [key]: !prev[key]
+      [key]: !prev[key],
     }));
   };
 
@@ -92,7 +92,7 @@ export default function FilterDrawer({ open, onClose }) {
       done: false,
       inProgress: false,
       planned: false,
-      stopped: false
+      stopped: false,
     });
 
     setFilters({
@@ -112,9 +112,8 @@ export default function FilterDrawer({ open, onClose }) {
   };
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose}>
+    <Drawer anchor='right' open={open} onClose={onClose}>
       <Box sx={{ width: 220, p: 2 }}>
-
         {/* Header */}
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton onClick={onClose}>
@@ -126,7 +125,7 @@ export default function FilterDrawer({ open, onClose }) {
         {/* الموقع */}
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography fontWeight="bold">الموقع</Typography>
+            <Typography fontWeight='bold'>الموقع</Typography>
           </AccordionSummary>
 
           <AccordionDetails>
@@ -135,15 +134,15 @@ export default function FilterDrawer({ open, onClose }) {
               <Typography>المحافظة</Typography>
               <Select
                 value={filters.governorate}
-                onChange={(e) => handleChange("governorate", e.target.value)}
-                variant="standard"
+                onChange={(e) => handleChange('governorate', e.target.value)}
+                variant='standard'
                 disableUnderline
                 displayEmpty
               >
-                <MenuItem value="">اختر المحافظة</MenuItem>
-                <MenuItem value="دمشق">دمشق</MenuItem>
-                <MenuItem value="حلب">حلب</MenuItem>
-                <MenuItem value="حمص">حمص</MenuItem>
+                <MenuItem value=''>اختر المحافظة</MenuItem>
+                <MenuItem value='دمشق'>دمشق</MenuItem>
+                <MenuItem value='حلب'>حلب</MenuItem>
+                <MenuItem value='حمص'>حمص</MenuItem>
               </Select>
             </FormControl>
 
@@ -151,8 +150,8 @@ export default function FilterDrawer({ open, onClose }) {
               <Typography>المدينة</Typography>
               <Select
                 value={filters.city}
-                onChange={(e) => handleChange("city", e.target.value)}
-                variant="standard"
+                onChange={(e) => handleChange('city', e.target.value)}
+                variant='standard'
                 disableUnderline
                 displayEmpty
               >
@@ -166,18 +165,17 @@ export default function FilterDrawer({ open, onClose }) {
               <Typography>المنطقة</Typography>
               <Select
                 value={filters.region}
-                onChange={(e) => handleChange("region", e.target.value)}
-                variant="standard"
+                onChange={(e) => handleChange('region', e.target.value)}
+                variant='standard'
                 disableUnderline
                 displayEmpty
               >
-                <MenuItem value="">اختر المنطقة</MenuItem>
-                <MenuItem value="جورة الشياح">جورة الشياح</MenuItem>
-                <MenuItem value="الغوطة">الغوطة</MenuItem>
-                <MenuItem value="الخالدية">الخالدية</MenuItem>
+                <MenuItem value=''>اختر المنطقة</MenuItem>
+                <MenuItem value='جورة الشياح'>جورة الشياح</MenuItem>
+                <MenuItem value='الغوطة'>الغوطة</MenuItem>
+                <MenuItem value='الخالدية'>الخالدية</MenuItem>
               </Select>
             </FormControl>
-
           </AccordionDetails>
         </Accordion>
 
@@ -198,7 +196,7 @@ export default function FilterDrawer({ open, onClose }) {
         {/* حالة المشروع */}
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography fontWeight="bold">حالة المشروع</Typography>
+            <Typography fontWeight='bold'>حالة المشروع</Typography>
           </AccordionSummary>
 
           <AccordionDetails>
@@ -224,7 +222,7 @@ export default function FilterDrawer({ open, onClose }) {
         {/* نسبة الإنجاز */}
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography fontWeight="bold">نسبة الإنجاز</Typography>
+            <Typography fontWeight='bold'>نسبة الإنجاز</Typography>
           </AccordionSummary>
 
           <AccordionDetails>
@@ -273,7 +271,7 @@ export default function FilterDrawer({ open, onClose }) {
         {/* الجهة الممولة */}
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography fontWeight="bold">الجهة الممولة</Typography>
+            <Typography fontWeight='bold'>الجهة الممولة</Typography>
           </AccordionSummary>
 
           <AccordionDetails>
@@ -298,7 +296,6 @@ export default function FilterDrawer({ open, onClose }) {
             تطبيق
           </Button>
         </Box>
-
       </Box>
     </Drawer>
   );

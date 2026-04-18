@@ -14,9 +14,9 @@ import {
 import './CampaignsDetails.css';
 import { Box, Grid } from '@mui/material';
 import Title from '../components/Title';
-import AddProjectsModal from '../components/AddProjectsModal';
 import { useDispatch } from 'react-redux';
 import { controlAddProjectModal } from '../redux/slices/ModalContollerSlice';
+import AddModal from '../components/AddModal';
 
 /* const getStatus = (startDate, endDate) => {
   const now = new Date();
@@ -79,7 +79,7 @@ const CampaignsDetails = () => {
       </div>
     );
   const remainingDays = 3;
-  const status = 'ongoing';
+  const status = 'upcoming';
   return (
     <div className='campaign-details'>
       <PageContainer>
@@ -193,7 +193,7 @@ const CampaignsDetails = () => {
           <div className='projects-table'>{rows}</div>
         </Box>
       </PageContainer>
-      <AddProjectsModal />
+      <AddModal />
     </div>
   );
 };

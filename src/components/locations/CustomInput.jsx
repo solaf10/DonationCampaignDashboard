@@ -196,7 +196,6 @@ export default function CustomInput({
               {label}
             </InputLabel>
             <NativeSelect
-              defaultValue=''
               inputProps={{
                 name: label,
                 id: label,
