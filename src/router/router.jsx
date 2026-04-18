@@ -12,6 +12,7 @@ import CampaignsDetails from '../pages/CampaignsDetails';
 import ActiveStepProvider from '../contexts/ActiveStepContext';
 import AddProject from '../pages/AddProject';
 import Projects from '../pages/Projects';
+import ProjectsDetails from '../pages/ProjectsDetails';
 import IndividualDonars from '../pages/IndividualDonars';
 import Organizations from '../pages/Organizations';
 import BusinessDonars from '../pages/businessDonars';
@@ -44,7 +45,8 @@ export const router = createBrowserRouter([
         path: 'governments',
         element: <Governments />,
       },
-      { path: 'projects', element: <Projects /> },
+      { path: 'projects', element: <Projects/> },
+      { path: 'projectsDetails/:id', element: <ProjectsDetails/> },
       { path: 'cities', element: <Cities /> },
       { path: 'areas', element: <Areas /> },
       { path: 'campaigns', element: <Campaigns /> },
