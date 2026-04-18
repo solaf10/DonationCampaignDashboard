@@ -10,60 +10,77 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 
 const projectsData = [
   {
+    id: 1,
     title: "مشروع ترميم المنازل",
     category: "القطاع الإنساني",
     price: "3000.00",
     location: "دمشق",
     progress: 40,
+    executor: "شركة البناء الحديثة",
     image: "../../public/houses-destroyed.jpg"
   },
   {
+    id: 2,
     title: "مشروع دعم المستشفيات",
     category: "القطاع الصحي",
     price: "5000.00",
     location: "حلب",
     progress: 75,
+    executor: "مؤسسة التطوير",
     image: "../../public/hospital.jpg"
   },
   {
+    id: 3,
     title: "مشروع إعادة تأهيل المدارس",
     category: "القطاع التعليمي",
     price: "2000.00",
     location: "إدلب",
     progress: 60,
+    executor: "شركة الإعمار",
     image: "../../public/school.jpeg"
   },
   {
+    id: 4,
     title: "مشروع توزيع سلال غذائية",
     category: "القطاع الإغاثي",
     price: "1500.00",
     location: "حمص",
     progress: 85,
+    executor: "جمعية الأمل",
     image: "../../public/food-basketss.jpg"
   },
   {
+    id: 5,
     title: "مشروع تأمين مياه الشرب",
     category: "قطاع المياه",
     price: "2500.00",
     location: "درعا",
     progress: 50,
+    executor: "شركة البناء الحديثة",
     image: "../../public/water.jpg"
   },
   {
+    id: 6,
     title: "مشروع دعم الأيتام",
     category: "القطاع الاجتماعي",
     price: "4000.00",
     location: "اللاذقية",
     progress: 30,
+    executor: "جمعية الأمل",
     image: "../../public/orphans.jpg"
   },
-  { title: "تأمين مواقف ثابتة للنقل الداخلي ",
-     category: "القطاع الخدمي", 
-     price: "4000.00", 
-     location: "حمص",
-      progress: 30,
-       image: "../../public/مواقف-ذكية.webp" },
+  {
+    id: 7,
+    title: "تأمين مواقف ثابتة للنقل الداخلي",
+    category: "القطاع الخدمي",
+    price: "4000.00",
+    location: "حمص",
+    progress: 30,
+    executor: "مؤسسة التطوير",
+    image: "../../public/مواقف-ذكية.webp"
+  }
 ];
+
 
 export default function Projects() {
 
