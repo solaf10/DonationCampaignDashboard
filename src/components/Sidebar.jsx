@@ -122,7 +122,7 @@ const links = [
     ),
     children: [
       { id: 51, href: '/content/donars', label: 'نظرة عامة' },
-      { id: 52, href: '/content/individual', label: 'الأفراد' },
+      { id: 52, href: '/content/individuals', label: 'الأفراد' },
       { id: 53, href: '/content/organizations', label: 'المنظمات' },
       { id: 54, href: '/content/business', label: 'رجال الأعمال' },
     ],

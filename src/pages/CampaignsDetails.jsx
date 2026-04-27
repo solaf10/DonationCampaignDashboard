@@ -17,123 +17,123 @@ import Title from '../components/Title';
 import { useDispatch } from 'react-redux';
 import { controlAddProjectModal } from '../redux/slices/ModalContollerSlice';
 import AddModal from '../components/AddModal';
+import DonorsInfoCard from '../components/DonorsInfoCard';
 
-/* const getStatus = (startDate, endDate) => {
-  const now = new Date();
-
-  if (now < new Date(startDate)) return 'upcoming';
-  if (now > new Date(endDate)) return 'finished';
-  return 'ongoing';
-}; */
 const relatedProjects = [
+  { id: 1, name: 'مشروع التعليم الرقمي', location: 'دمشق، المزة' },
+  { id: 2, name: 'منصة التبرعات الذكية', location: 'حلب، الفرقان' },
+];
+
+const infos = [
   {
     id: 1,
-    name: 'مشروع التعليم الرقمي',
-    location: 'دمشق، المزة',
+    icon: <FlagOutlined className='icon' />,
+    label: 'المبلغ المستهدف',
+    value: '500000000 ل.س',
   },
   {
     id: 2,
-    name: 'منصة التبرعات الذكية',
-    location: 'حلب، الفرقان',
+    icon: <AccountBalanceWalletOutlined className='icon' />,
+    label: 'المبلغ المجموع',
+    value: '500000000 ل.س',
   },
   {
     id: 3,
-    name: 'إعادة تأهيل المدارس',
-    location: 'حمص، الوعر',
+    icon: <GroupOutlined className='icon' />,
+    label: 'عدد المتبرعين',
+    value: '500',
+  },
+  {
+    id: 4,
+    icon: <TrendingUpOutlined className='icon' />,
+    label: 'نسبة الإنجاز',
+    value: '100%',
   },
 ];
 
 const CampaignsDetails = () => {
   const dispatch = useDispatch();
-  const rows =
-    relatedProjects.length > 0 ? (
-      <>
-        {relatedProjects.map((project) => (
-          <Link
-            to={`/content/projects/${project.id}`}
-            className='table-row'
-            key={project.id}
-          >
-            <div className='name'>{project.name}</div>
-            <div className='location'>📍 {project.location}</div>
-          </Link>
-        ))}
-        <button
-          className='add-row'
-          onClick={() => dispatch(controlAddProjectModal())}
-        >
-          <AddRounded className='icon' />
-          <span>إضافة مشروع</span>
-        </button>
-      </>
-    ) : (
-      <div className='empty-projects'>
-        <div className='text'>لا توجد مشاريع مرتبطة بهذه الحملة</div>
-        <button
-          className='empty-btn'
-          onClick={() => dispatch(controlAddProjectModal())}
-        >
-          <AddRounded className='icon' />
-          إضافة أول مشروع
-        </button>
-      </div>
-    );
+
   const remainingDays = 3;
-  const status = 'upcoming';
+  const status = 'ongoing';
+
   return (
     <div className='campaign-details'>
       <PageContainer>
-        <Title pageTitle='حملة التعليم' subtitle='نشطة' status='ongoing'>
-          <div className='btns'>
+        {/* 🔥 HERO IMAGE */}
+        <div className='image-wrapper'>
+          <img src='/campaignLogo1.png' alt='' />
+
+          <div className='overlay' />
+
+          {/* 🔥 الأزرار فوق يسار */}
+          <div className='image-actions'>
             <Link to='/content/campaigns/edit/1' className='button'>
               <EditCalendarRounded className='icon' />
-              <span>تعديل</span>
+              تعديل
             </Link>
+
             <button className='button delete'>
               <Delete className='icon' />
-              <span>حذف</span>
+              حذف
             </button>
           </div>
-        </Title>
-        <div className='campaign-date'>
-          <span className='date-item'>
-            <CalendarTodayOutlined className='icon' />
-            <span>من: 12 مايو 2026، 10:00 ص</span>
-          </span>
 
-          <span className='date-separator'>
-            <ArrowBackOutlined className='arrow-icon' />
-          </span>
+          {/* 🔥 المحتوى */}
+          <div className='image-content'>
+            <h2>حملة التعليم</h2>
 
-          <span className='date-item'>
-            <CalendarTodayOutlined className='icon' />
-            <span>إلى: 20 مايو 2026، 6:00 م</span>
-          </span>
-        </div>
-        <Grid container spacing={3}>
-          <Grid size={6} className='image-wrapper'>
-            <img
-              src='/image 6.png'
-              alt=''
-              style={{ width: '100%', minHeight: '475px', borderRadius: '8px' }}
-            />
-            {/* 🔥 badge */}
-            {status === 'ongoing' && remainingDays > 0 && (
-              <span className='remaining-badge'>
-                متبقي {remainingDays} أيام
+            <div className='date'>
+              <span>
+                <CalendarTodayOutlined className='icon' />
+                12 مايو 2026
               </span>
+
+              <span className='separator'>
+                <ArrowBackOutlined className='arrow-icon' />
+              </span>
+
+              <span>
+                <CalendarTodayOutlined className='icon' />
+                20 مايو 2026
+              </span>
+            </div>
+
+            {/* 🔥 استخدام status + remainingDays */}
+            {status === 'ongoing' && (
+              <span className='badge'>متبقي {remainingDays} أيام</span>
             )}
 
             {status === 'upcoming' && (
-              <span className='remaining-badge upcoming'>
+              <span className='badge upcoming'>
                 تبدأ خلال {remainingDays} أيام
               </span>
             )}
-          </Grid>
+
+            {status === 'finished' && (
+              <span className='badge finished'>انتهت الحملة</span>
+            )}
+          </div>
+        </div>
+
+        {/* 🔥 infos */}
+        <Grid container spacing={2} mt={3} className='infos-holder'>
+          {infos.map((info) => (
+            <DonorsInfoCard
+              key={info.id}
+              size={3}
+              icon={info.icon}
+              label={info.label}
+              value={info.value}
+            />
+          ))}
+        </Grid>
+
+        {/* 🔥 desc + projects */}
+        <Grid container spacing={3} mt={3}>
           <Grid size={6}>
-            {/* target */}
-            <Box className='box desc' marginBottom={3}>
-              <img src='/Goal.png' alt='goal' className='icon' />
+            <Box className='box desc'>
+              <img src='/Goal.png' alt='' className='icon' />
               <p>
                 تهدف الحملة الى إعادة إعمار سوريا عملية ضخمة ومتعددة الأوجه
                 تتطلب استثمارات تقدر بمئات المليارات من الدولارات (تقديرات البنك
@@ -143,56 +143,39 @@ const CampaignsDetails = () => {
                 الإنتاجية (صناعة وزراعة)، وإعادة بناء النسيج الاجتماعي .
               </p>
             </Box>
-            {/* info */}
-            <Grid className='infos-holder' container spacing={2}>
-              <Grid size={6}>
-                <Box className='box'>
-                  <FlagOutlined className='icon' />
-                  <div className='text'>
-                    <h4>المبلغ المستهدف</h4>
-                    <p>500000000 ل.س</p>
-                  </div>
-                </Box>
-              </Grid>
-              <Grid size={6}>
-                <Box className='box'>
-                  <AccountBalanceWalletOutlined className='icon' />
-                  <div className='text'>
-                    <h4>المبلغ المجموع</h4>
-                    <p>500000000 ل.س</p>
-                  </div>
-                </Box>
-              </Grid>
-              <Grid size={6}>
-                <Box className='box'>
-                  <GroupOutlined className='icon' />
-                  <div className='text'>
-                    <h4>عدد المتبرعين</h4>
-                    <p>500</p>
-                  </div>
-                </Box>
-              </Grid>
-              <Grid size={6}>
-                <Box className='box'>
-                  <TrendingUpOutlined className='icon' />
-                  <div className='text'>
-                    <h4>نسبة الإنجاز</h4>
-                    <p>100%</p>
-                  </div>
-                </Box>
-              </Grid>
-            </Grid>
+          </Grid>
+
+          <Grid size={6}>
+            <Box className='related-projects'>
+              <div className='section-header'>
+                <h3>المشاريع المرتبطة</h3>
+              </div>
+
+              <div className='projects-table'>
+                {relatedProjects.map((project) => (
+                  <Link
+                    key={project.id}
+                    to={`/content/projects/${project.id}`}
+                    className='table-row'
+                  >
+                    <div className='name'>{project.name}</div>
+                    <div className='location'>📍 {project.location}</div>
+                  </Link>
+                ))}
+
+                <button
+                  className='add-row'
+                  onClick={() => dispatch(controlAddProjectModal())}
+                >
+                  <AddRounded className='icon' />
+                  إضافة مشروع
+                </button>
+              </div>
+            </Box>
           </Grid>
         </Grid>
-        {/* related projects */}
-        <Box className='related-projects'>
-          <div className='section-header'>
-            <h3>المشاريع المرتبطة</h3>
-          </div>
-
-          <div className='projects-table'>{rows}</div>
-        </Box>
       </PageContainer>
+
       <AddModal />
     </div>
   );

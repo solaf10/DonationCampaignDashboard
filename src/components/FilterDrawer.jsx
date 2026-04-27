@@ -15,8 +15,8 @@ import {
   MenuItem,
   TextField,
   List,
-  ListItem
-} from "@mui/material";
+  ListItem,
+} from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -25,7 +25,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from 'react';
 
 export default function FilterDrawer({ open, onClose }) {
-
   // ✔️ خليت progress لحاله (كما هو عندك)
   const [progress, setProgress] = useState(0);
 
@@ -38,26 +37,26 @@ export default function FilterDrawer({ open, onClose }) {
 
   // ❌ شلت التكرار داخل filters (كان فيه خربطة)
   const [filters, setFilters] = useState({
-    governorate: "",
-    city: "",
-    region: "",
-    sector: "",
-    executor: ""   // ✔️ أضفناها فقط
+    governorate: '',
+    city: '',
+    region: '',
+    sector: '',
+    executor: '', // ✔️ أضفناها فقط
   });
 
   const [funders, setFunders] = useState({
     businessmen: false,
-    associations: false
+    associations: false,
   });
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   // ✔️ نفس فكرتك لكن من المشاريع لاحقاً
   const executors = [
-    "شركة البناء الحديثة",
-    "مؤسسة التطوير",
-    "شركة الإعمار",
-    "جمعية الأمل",
+    'شركة البناء الحديثة',
+    'مؤسسة التطوير',
+    'شركة الإعمار',
+    'جمعية الأمل',
   ];
 
   const filteredExecutors = executors.filter((item) =>
@@ -96,26 +95,26 @@ export default function FilterDrawer({ open, onClose }) {
     });
 
     setFilters({
-      governorate: "",
-      city: "",
-      region: "",
-      sector: "",
-      executor: ""
+      governorate: '',
+      city: '',
+      region: '',
+      sector: '',
+      executor: '',
     });
 
     setFunders({
       businessmen: false,
-      associations: false
+      associations: false,
     });
 
-    setSearch("");
+    setSearch('');
   };
 
   return (
     <Drawer anchor='right' open={open} onClose={onClose}>
       <Box sx={{ width: 220, p: 2 }}>
         {/* Header */}
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
@@ -129,7 +128,6 @@ export default function FilterDrawer({ open, onClose }) {
           </AccordionSummary>
 
           <AccordionDetails>
-
             <FormControl fullWidth sx={{ mb: 2 }}>
               <Typography>المحافظة</Typography>
               <Select
@@ -155,9 +153,9 @@ export default function FilterDrawer({ open, onClose }) {
                 disableUnderline
                 displayEmpty
               >
-                <MenuItem value="">اختر المدينة</MenuItem>
-                <MenuItem value="حمص المدينة">حمص المدينة</MenuItem>
-                <MenuItem value="الريف الجنوبي">الريف الجنوبي</MenuItem>
+                <MenuItem value=''>اختر المدينة</MenuItem>
+                <MenuItem value='حمص المدينة'>حمص المدينة</MenuItem>
+                <MenuItem value='الريف الجنوبي'>الريف الجنوبي</MenuItem>
               </Select>
             </FormControl>
 
@@ -182,14 +180,22 @@ export default function FilterDrawer({ open, onClose }) {
         {/* القطاع */}
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography fontWeight="bold">القطاع</Typography>
+            <Typography fontWeight='bold'>القطاع</Typography>
           </AccordionSummary>
 
           <AccordionDetails>
-            <MenuItem onClick={() => handleChange("sector", "تعليمي")}>تعليمي</MenuItem>
-            <MenuItem onClick={() => handleChange("sector", "صحي")}>صحي</MenuItem>
-            <MenuItem onClick={() => handleChange("sector", "إنشائي")}>إنشائي</MenuItem>
-            <MenuItem onClick={() => handleChange("sector", "خدمي")}>خدمي</MenuItem>
+            <MenuItem onClick={() => handleChange('sector', 'تعليمي')}>
+              تعليمي
+            </MenuItem>
+            <MenuItem onClick={() => handleChange('sector', 'صحي')}>
+              صحي
+            </MenuItem>
+            <MenuItem onClick={() => handleChange('sector', 'إنشائي')}>
+              إنشائي
+            </MenuItem>
+            <MenuItem onClick={() => handleChange('sector', 'خدمي')}>
+              خدمي
+            </MenuItem>
           </AccordionDetails>
         </Accordion>
 
@@ -201,20 +207,40 @@ export default function FilterDrawer({ open, onClose }) {
 
           <AccordionDetails>
             <FormControlLabel
-              control={<Checkbox checked={status.done} onChange={() => handleCheckbox("done")} />}
-              label="مكتمل"
+              control={
+                <Checkbox
+                  checked={status.done}
+                  onChange={() => handleCheckbox('done')}
+                />
+              }
+              label='مكتمل'
             />
             <FormControlLabel
-              control={<Checkbox checked={status.inProgress} onChange={() => handleCheckbox("inProgress")} />}
-              label="قيد التنفيذ"
+              control={
+                <Checkbox
+                  checked={status.inProgress}
+                  onChange={() => handleCheckbox('inProgress')}
+                />
+              }
+              label='قيد التنفيذ'
             />
             <FormControlLabel
-              control={<Checkbox checked={status.planned} onChange={() => handleCheckbox("planned")} />}
-              label="مخطط"
+              control={
+                <Checkbox
+                  checked={status.planned}
+                  onChange={() => handleCheckbox('planned')}
+                />
+              }
+              label='مخطط'
             />
             <FormControlLabel
-              control={<Checkbox checked={status.stopped} onChange={() => handleCheckbox("stopped")} />}
-              label="متوقف"
+              control={
+                <Checkbox
+                  checked={status.stopped}
+                  onChange={() => handleCheckbox('stopped')}
+                />
+              }
+              label='متوقف'
             />
           </AccordionDetails>
         </Accordion>
@@ -229,26 +255,26 @@ export default function FilterDrawer({ open, onClose }) {
             <Slider
               value={progress}
               onChange={(e, newValue) => setProgress(newValue)}
-              valueLabelDisplay="auto"
-              sx={{ color: "var(--main-color)" }}
+              valueLabelDisplay='auto'
+              sx={{ color: 'var(--main-color)' }}
             />
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-               <Typography>0%</Typography>
-                <Typography>100%</Typography> </Box>
-
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Typography>0%</Typography>
+              <Typography>100%</Typography>{' '}
+            </Box>
           </AccordionDetails>
         </Accordion>
 
         {/* الجهة المنفذة */}
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography fontWeight="bold">الجهة المنفذة</Typography>
+            <Typography fontWeight='bold'>الجهة المنفذة</Typography>
           </AccordionSummary>
 
           <AccordionDetails>
             <TextField
               fullWidth
-              placeholder="ابحث..."
+              placeholder='ابحث...'
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               sx={{ mb: 2 }}
@@ -259,7 +285,7 @@ export default function FilterDrawer({ open, onClose }) {
                 <ListItem
                   key={index}
                   button
-                  onClick={() => handleChange("executor", item)}
+                  onClick={() => handleChange('executor', item)}
                 >
                   {item}
                 </ListItem>
@@ -276,23 +302,38 @@ export default function FilterDrawer({ open, onClose }) {
 
           <AccordionDetails>
             <FormControlLabel
-              control={<Checkbox checked={funders.businessmen} onChange={handleCheckboxChange} name="businessmen" />}
-              label="رجال الأعمال"
+              control={
+                <Checkbox
+                  checked={funders.businessmen}
+                  onChange={handleCheckboxChange}
+                  name='businessmen'
+                />
+              }
+              label='رجال الأعمال'
             />
             <FormControlLabel
-              control={<Checkbox checked={funders.associations} onChange={handleCheckboxChange} name="associations" />}
-              label="الجمعيات"
+              control={
+                <Checkbox
+                  checked={funders.associations}
+                  onChange={handleCheckboxChange}
+                  name='associations'
+                />
+              }
+              label='الجمعيات'
             />
           </AccordionDetails>
         </Accordion>
 
         {/* أزرار */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
-          <Button onClick={handleReset} sx={{ color: "#666" }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+          <Button onClick={handleReset} sx={{ color: '#666' }}>
             إعادة تعيين
           </Button>
 
-          <Button variant="contained" sx={{ backgroundColor: "var(--main-color)" }}>
+          <Button
+            variant='contained'
+            sx={{ backgroundColor: 'var(--main-color)' }}
+          >
             تطبيق
           </Button>
         </Box>
