@@ -5,16 +5,16 @@ import {
   Box,
   Button,
   Typography,
-} from "@mui/material";
-import StepperIcon from "./StepperIcon";
-import "./StepperForm.css";
-import CustomInput from "../locations/CustomInput";
-import { useActiveStep } from "../../contexts/ActiveStepContext";
-import { useState } from "react";
-import SuccessMessageDialog from "../SuccessMessageDialog";
+} from '@mui/material';
+import StepperIcon from './StepperIcon';
+import './StepperForm.css';
+import CustomInput from '../locations/CustomInput';
+import { useActiveStep } from '../../contexts/ActiveStepContext';
+import { useState } from 'react';
+import SuccessMessageDialog from '../SuccessMessageDialog';
 // import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import AddModal from "../AddModal";
+import { useNavigate } from 'react-router-dom';
+import AddModal from '../AddBySelectionModal';
 // import { controlAddModal } from "../../redux/slices/ModalContollerSlice";
 export default function StepperForm({
   icons,
@@ -47,21 +47,21 @@ export default function StepperForm({
 
   return (
     <>
-      <Box sx={{ display: "flex", gap: 4 }}>
+      <Box sx={{ display: 'flex', gap: 4 }}>
         <Box
           sx={{
-            backgroundColor: "#fff",
-            borderRadius: "14px",
+            backgroundColor: '#fff',
+            borderRadius: '14px',
             padding: 3,
-            boxShadow: "0 4px 12px rgba(1,74,91,0.08)",
+            boxShadow: '0 4px 12px rgba(1,74,91,0.08)',
           }}
         >
           {/* 🔹 الستيبر (يمين) */}
           <Stepper
             activeStep={activeStep}
-            orientation="vertical"
+            orientation='vertical'
             sx={{
-              minWidth: "200px",
+              minWidth: '200px',
             }}
           >
             {steps.map((label, index) => (
@@ -73,9 +73,9 @@ export default function StepperForm({
                     ),
                   }}
                   sx={{
-                    "& .MuiStepLabel-label": {
-                      fontFamily: "Cairo",
-                      fontSize: "14px",
+                    '& .MuiStepLabel-label': {
+                      fontFamily: 'Cairo',
+                      fontSize: '14px',
                     },
                   }}
                 >
@@ -90,66 +90,66 @@ export default function StepperForm({
         <Box
           sx={{
             flex: 1,
-            height: "425px",
-            backgroundColor: "#fff",
-            borderRadius: "14px",
+            height: '425px',
+            backgroundColor: '#fff',
+            borderRadius: '14px',
             padding: 3,
-            boxShadow: "0 4px 12px rgba(1,74,91,0.08)",
+            boxShadow: '0 4px 12px rgba(1,74,91,0.08)',
           }}
         >
           <form
             onSubmit={handleSubmit}
             style={{
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
             }}
           >
             {children}
 
             <Box
               sx={{
-                display: "flex",
+                display: 'flex',
                 gap: 1,
                 pt: 2,
-                borderTop: "1px solid #e1eaea",
+                borderTop: '1px solid #e1eaea',
               }}
             >
               {activeStep === steps.length - 1 ? (
                 <Button
-                  variant="contained"
+                  variant='contained'
                   asChild
                   sx={{
-                    backgroundColor: "#014a5b",
-                    borderRadius: "8px",
-                    padding: "8px 24px",
-                    cursor: "pointer",
+                    backgroundColor: '#014a5b',
+                    borderRadius: '8px',
+                    padding: '8px 24px',
+                    cursor: 'pointer',
                   }}
-                  className="btn"
+                  className='btn'
                 >
                   <input
-                    type="submit"
+                    type='submit'
                     value={submitBtnTitle}
                     style={{
-                      backgroundColor: "transparent",
-                      border: "none",
-                      fontSize: "inherit",
-                      color: "inherit",
-                      cursor: "pointer",
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      fontSize: 'inherit',
+                      color: 'inherit',
+                      cursor: 'pointer',
                     }}
                   />
                 </Button>
               ) : (
                 <Button
-                  variant="contained"
+                  variant='contained'
                   onClick={handleNext}
                   sx={{
-                    backgroundColor: "#014a5b",
-                    borderRadius: "8px",
-                    padding: "8px 24px",
+                    backgroundColor: '#014a5b',
+                    borderRadius: '8px',
+                    padding: '8px 24px',
                   }}
-                  className="btn"
+                  className='btn'
                 >
                   التالي
                 </Button>
@@ -158,10 +158,10 @@ export default function StepperForm({
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 sx={{
-                  borderRadius: "8px",
-                  padding: "8px 24px",
-                  border: "none",
-                  color: "#8c9ea0",
+                  borderRadius: '8px',
+                  padding: '8px 24px',
+                  border: 'none',
+                  color: '#8c9ea0',
                 }}
               >
                 رجوع

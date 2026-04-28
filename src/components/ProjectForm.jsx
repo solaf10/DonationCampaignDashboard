@@ -398,59 +398,59 @@ import {
   FactCheckOutlined,
   FolderOutlined,
   RequestQuoteOutlined,
-} from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { useActiveStep } from "../contexts/ActiveStepContext";
-import StepperForm from "./Stepper/StepperForm";
-import { useState, useRef } from "react";
-import CustomInput from "./locations/CustomInput";
-import Textarea from "./Textarea";
-import { Grid, Typography } from "@mui/material";
-import "./CampaignsForm.css";
-import AddModal from "./AddModal";
-import { Navigate } from "react-router-dom";
+} from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { useActiveStep } from '../contexts/ActiveStepContext';
+import StepperForm from './Stepper/StepperForm';
+import { useState, useRef } from 'react';
+import CustomInput from './locations/CustomInput';
+import Textarea from './Textarea';
+import { Grid, Typography } from '@mui/material';
+import './CampaignsForm.css';
+import AddModal from './AddBySelectionModal';
+import { Navigate } from 'react-router-dom';
 
-const steps = ["المعلومات الأساسية", "التفاصيل والمتطلبات ", " الوسائط"];
+const steps = ['المعلومات الأساسية', 'التفاصيل والمتطلبات ', ' الوسائط'];
 const ProjectForm = () => {
   const navigate = useNavigate();
   const { activeStep } = useActiveStep();
-  const [name, setName] = useState("");
-  const [purpose, setPurpose] = useState("");
+  const [name, setName] = useState('');
+  const [purpose, setPurpose] = useState('');
 
   // second step ✅
-  const [region, setRegion] = useState("");
-  const [sector, setSector] = useState("");
-  const [estimatedCost, setEstimatedCost] = useState("");
-  const [completionRate, setCompletionRate] = useState("");
-  const [fundingParties, setFundingParties] = useState("");
-  const [implementingParty, setImplementingParty] = useState("");
+  const [region, setRegion] = useState('');
+  const [sector, setSector] = useState('');
+  const [estimatedCost, setEstimatedCost] = useState('');
+  const [completionRate, setCompletionRate] = useState('');
+  const [fundingParties, setFundingParties] = useState('');
+  const [implementingParty, setImplementingParty] = useState('');
   // third step
   // third step
   //   const [coverImage, setCoverImage] = useState(null);
   const [extraImages, setExtraImages] = useState([]);
-  const [videoUrl, setVideoUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState('');
   const extraInputRef = useRef(null);
-  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState('');
 
   const icons = {
-    1: <FolderOutlined fontSize="small" />,
-    2: <CalendarMonthOutlined fontSize="small" />,
-    3: <RequestQuoteOutlined fontSize="small" />,
-    4: <FactCheckOutlined fontSize="small" />,
+    1: <FolderOutlined fontSize='small' />,
+    2: <CalendarMonthOutlined fontSize='small' />,
+    3: <RequestQuoteOutlined fontSize='small' />,
+    4: <FactCheckOutlined fontSize='small' />,
   };
 
-  const styles = { marginBottom: "24px" };
+  const styles = { marginBottom: '24px' };
   const HorizontalInput = ({ label, value, setValue, placeholder }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
       <div
-        style={{ width: "fitcontent", textAlign: "right", fontFamily: "Cairo" }}
+        style={{ width: 'fitcontent', textAlign: 'right', fontFamily: 'Cairo' }}
       >
         {label}
       </div>
 
-      <div style={{ width: "75%" }}>
+      <div style={{ width: '75%' }}>
         <CustomInput
-          inputType="input"
+          inputType='input'
           placeholder={placeholder}
           value={value}
           setValue={setValue}
@@ -461,40 +461,40 @@ const ProjectForm = () => {
 
   // first step
   const infoForm = (
-    <div className="form-holder">
+    <div className='form-holder'>
       <CustomInput
-        label="اسم المشروع"
-        inputType="input"
-        placeholder="اسم المشروع"
+        label='اسم المشروع'
+        inputType='input'
+        placeholder='اسم المشروع'
         value={name}
         setValue={setName}
         styles={styles}
       />
       <Textarea
-        label="أهداف المشروع"
-        placeholder="اكتب أهداف المشروع باختصار..."
+        label='أهداف المشروع'
+        placeholder='اكتب أهداف المشروع باختصار...'
         value={purpose}
         setValue={setPurpose}
-        inputType="textarea"
+        inputType='textarea'
       />
     </div>
   );
 
   // second step ✅
   const infomForm = (
-    <div className="form-holder">
+    <div className='form-holder'>
       <CustomInput
-        label="الجهات الممولة"
-        inputType="input"
-        placeholder="الجهات الممولة"
+        label='الجهات الممولة'
+        inputType='input'
+        placeholder='الجهات الممولة'
         value={fundingParties}
         setValue={setFundingParties}
         styles={styles}
       />
       <CustomInput
-        label="الجهة المنفذة"
-        inputType="input"
-        placeholder="الجهة المنفذة"
+        label='الجهة المنفذة'
+        inputType='input'
+        placeholder='الجهة المنفذة'
         value={implementingParty}
         setValue={setImplementingParty}
         styles={styles}
@@ -502,9 +502,9 @@ const ProjectForm = () => {
       <Grid container spacing={3}>
         <Grid size={6}>
           <CustomInput
-            label="المنطقة"
-            inputType="input"
-            placeholder="المنطقة"
+            label='المنطقة'
+            inputType='input'
+            placeholder='المنطقة'
             value={region}
             setValue={setRegion}
             inline
@@ -512,9 +512,9 @@ const ProjectForm = () => {
         </Grid>
         <Grid size={6}>
           <CustomInput
-            label="القطاع"
-            inputType="input"
-            placeholder="القطاع"
+            label='القطاع'
+            inputType='input'
+            placeholder='القطاع'
             value={sector}
             setValue={setSector}
             inline
@@ -522,9 +522,9 @@ const ProjectForm = () => {
         </Grid>
         <Grid size={6}>
           <CustomInput
-            label="الكلفة المقدرة"
-            inputType="input"
-            placeholder="$"
+            label='الكلفة المقدرة'
+            inputType='input'
+            placeholder='$'
             value={estimatedCost}
             setValue={(val) => {
               if (!isNaN(val)) setEstimatedCost(val);
@@ -534,9 +534,9 @@ const ProjectForm = () => {
         </Grid>
         <Grid size={6}>
           <CustomInput
-            label="نسبة الانجاز"
-            inputType="input"
-            placeholder="ضع نسبة تتراوح بين 0 - 100"
+            label='نسبة الانجاز'
+            inputType='input'
+            placeholder='ضع نسبة تتراوح بين 0 - 100'
             value={completionRate}
             setValue={(val) => {
               if (!isNaN(val) && Number(val) <= 100) setCompletionRate(val);
@@ -550,84 +550,84 @@ const ProjectForm = () => {
 
   // last step
   const paymentForm = (
-    <div className="form-holder">
-      <div className="image-upload" style={{ marginTop: "24px" }}>
+    <div className='form-holder'>
+      <div className='image-upload' style={{ marginTop: '24px' }}>
         {/* 1. صورة الغلاف */}
-        <div style={{ display: "flex", gap: "20px", margin: "0 0  20px 0 " }}>
+        <div style={{ display: 'flex', gap: '20px', margin: '0 0  20px 0 ' }}>
           <Typography
             sx={{
               mb: 1,
-              fontFamily: "Cairo",
-              fontSize: "16px",
-              color: "#374151",
+              fontFamily: 'Cairo',
+              fontSize: '16px',
+              color: '#374151',
             }}
           >
             صورة غلاف المشروع
           </Typography>
-          <div className="product-image" style={{ padding: "16.5px 14px" }}>
+          <div className='product-image' style={{ padding: '16.5px 14px' }}>
             <label
-              htmlFor="upload"
-              className={selectedImage != "" ? "image-selected" : ""}
+              htmlFor='upload'
+              className={selectedImage != '' ? 'image-selected' : ''}
             >
-              {selectedImage != "" ? (
+              {selectedImage != '' ? (
                 <img src={selectedImage} alt="campaign's cover image" />
               ) : (
                 <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 512 512"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="icon"
+                  stroke='currentColor'
+                  fill='currentColor'
+                  strokeWidth='0'
+                  viewBox='0 0 512 512'
+                  height='1em'
+                  width='1em'
+                  xmlns='http://www.w3.org/2000/svg'
+                  className='icon'
                 >
                   <path
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="32"
-                    d="M320 367.79h76c55 0 100-29.21 100-83.6s-53-81.47-96-83.6c-8.89-85.06-71-136.8-144-136.8-69 0-113.44 45.79-128 91.2-60 5.7-112 43.88-112 106.4s54 106.4 120 106.4h56"
+                    fill='none'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='32'
+                    d='M320 367.79h76c55 0 100-29.21 100-83.6s-53-81.47-96-83.6c-8.89-85.06-71-136.8-144-136.8-69 0-113.44 45.79-128 91.2-60 5.7-112 43.88-112 106.4s54 106.4 120 106.4h56'
                   />
                   <path
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="32"
-                    d="m320 255.79-64-64-64 64m64 192.42V207.79"
+                    fill='none'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='32'
+                    d='m320 255.79-64-64-64 64m64 192.42V207.79'
                   />
                 </svg>
               )}
               <span>
-                {selectedImage != "" ? "" : "اسحب الصورة هنا أو اضغط للرفع"}
+                {selectedImage != '' ? '' : 'اسحب الصورة هنا أو اضغط للرفع'}
               </span>
             </label>
             <input
-              className="upload-input"
-              id="upload"
-              type="file"
+              className='upload-input'
+              id='upload'
+              type='file'
               onChange={(e) => {
                 setSelectedImage(URL.createObjectURL(e?.target?.files?.[0]));
               }}
             />
           </div>
         </div>
-        <div className="form-holder">
+        <div className='form-holder'>
           {/* 2. صور إضافية */}
           <div
             style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "24px",
-              direction: "rtl",
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '24px',
+              direction: 'rtl',
             }}
           >
             <Typography
               sx={{
-                fontFamily: "Cairo",
-                fontSize: "16px",
-                color: "#374151",
-                whiteSpace: "nowrap",
+                fontFamily: 'Cairo',
+                fontSize: '16px',
+                color: '#374151',
+                whiteSpace: 'nowrap',
                 mt: 1,
               }}
             >
@@ -637,36 +637,36 @@ const ProjectForm = () => {
             <div
               style={{
                 mb: 1,
-                fontFamily: "Cairo",
-                fontSize: "16px",
+                fontFamily: 'Cairo',
+                fontSize: '16px',
 
-                color: " rgb(55, 65, 81)",
-                height: "70px",
-                cursor: "pointer",
-                border: "2px dashed #ccc",
-                borderRadius: "8px",
-                transition: " 0.5s",
-                width: "70px",
-                position: "relative",
-                overflow: "hidden",
+                color: ' rgb(55, 65, 81)',
+                height: '70px',
+                cursor: 'pointer',
+                border: '2px dashed #ccc',
+                borderRadius: '8px',
+                transition: ' 0.5s',
+                width: '70px',
+                position: 'relative',
+                overflow: 'hidden',
               }}
             >
               {/* الصور المختارة */}
               {extraImages.map((img, index) => (
-                <div key={index} style={{ width: "100% ", height: "100%" }}>
+                <div key={index} style={{ width: '100% ', height: '100%' }}>
                   <img
                     src={URL.createObjectURL(img)}
                     alt={`extra-${index}`}
                     style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
                     }}
                   />
                   <div
                     onClick={() =>
                       setExtraImages((prev) =>
-                        prev.filter((_, i) => i !== index),
+                        prev.filter((_, i) => i !== index)
                       )
                     }
                     // style={{
@@ -695,22 +695,22 @@ const ProjectForm = () => {
               <div
                 onClick={() => extraInputRef.current?.click()}
                 style={{
-                  display: "flex",
-                  margin: "5px 0 0 0",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  gap: "10px",
-                  color: " rgb(154, 160, 166)",
+                  display: 'flex',
+                  margin: '5px 0 0 0',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  gap: '10px',
+                  color: ' rgb(154, 160, 166)',
                 }}
               >
-                <span style={{ fontSize: "22px", lineHeight: 1 }}>+</span>
+                <span style={{ fontSize: '22px', lineHeight: 1 }}>+</span>
                 <Typography
                   sx={{
-                    fontFamily: "Cairo",
-                    fontSize: "11px",
-                    color: "#9AA0A6",
+                    fontFamily: 'Cairo',
+                    fontSize: '11px',
+                    color: '#9AA0A6',
                   }}
                 >
                   إضافة صور
@@ -718,10 +718,10 @@ const ProjectForm = () => {
               </div>
               <input
                 ref={extraInputRef}
-                type="file"
-                accept="image/*"
+                type='file'
+                accept='image/*'
                 multiple
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 onChange={(e) => {
                   const files = Array.from(e.target.files || []);
                   setExtraImages((prev) => [...prev, ...files]);
@@ -733,27 +733,27 @@ const ProjectForm = () => {
           {/* 3. فيديو توضيحي */}
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "24px",
-              direction: "rtl",
+              display: 'flex',
+              alignItems: 'center',
+              gap: '24px',
+              direction: 'rtl',
             }}
           >
             <Typography
               sx={{
-                fontFamily: "Cairo",
-                fontSize: "16px",
-                color: "#374151",
-                whiteSpace: "nowrap",
+                fontFamily: 'Cairo',
+                fontSize: '16px',
+                color: '#374151',
+                whiteSpace: 'nowrap',
               }}
             >
               فيديو توضيحي
             </Typography>
 
             <CustomInput
-              label=""
-              inputType="url"
-              placeholder="https://youtube.com/.."
+              label=''
+              inputType='url'
+              placeholder='https://youtube.com/..'
               value={videoUrl}
               setValue={setVideoUrl}
               styles={styles}
@@ -767,13 +767,13 @@ const ProjectForm = () => {
   return (
     <StepperForm
       icons={icons}
-      submitBtnTitle="إضافة المشروع"
+      submitBtnTitle='إضافة المشروع'
       steps={steps}
-      successTitle="تم إنشاء المشروع بنجاح!"
-      successMessage="تم حفظ المشروع بنجاح"
-      successPrimaryText="إضافة حملة للمشروع"
-      successNavigate="/content/projects"
-      onSuccessPrimaryAction={() => navigate("/content/projects")}
+      successTitle='تم إنشاء المشروع بنجاح!'
+      successMessage='تم حفظ المشروع بنجاح'
+      successPrimaryText='إضافة حملة للمشروع'
+      successNavigate='/content/projects'
+      onSuccessPrimaryAction={() => navigate('/content/projects')}
     >
       {activeStep === 0 ? infoForm : activeStep === 1 ? infomForm : paymentForm}
     </StepperForm>

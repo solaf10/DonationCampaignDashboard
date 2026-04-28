@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  isAddProjectModalOpen: false,
+  isAddBySelectionModalOpen: false,
   isControlLocationModalOpen: false,
   isMoreInfoMenuShown: false,
 };
@@ -10,8 +10,8 @@ const modalControllerSlice = createSlice({
   name: 'modalController',
   initialState,
   reducers: {
-    controlAddModal: (state) => {
-      state.isAddModalOpen = !state.isAddModalOpen;
+    controlAddBySelectionModal: (state) => {
+      state.isAddBySelectionModalOpen = !state.isAddBySelectionModalOpen;
     },
     controlControlLocationModal: (state) => {
       state.isAddProjectModalOpen = !state.isAddProjectModalOpen;
@@ -23,7 +23,7 @@ const modalControllerSlice = createSlice({
 });
 
 export const {
-  controlAddProjectModal,
+  controlAddBySelectionModal,
   controlControlLocationModal,
   controlMoreInfoMenu,
 } = modalControllerSlice.actions;

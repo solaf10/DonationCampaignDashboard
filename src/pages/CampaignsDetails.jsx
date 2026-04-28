@@ -16,7 +16,7 @@ import { Box, Grid } from '@mui/material';
 import Title from '../components/Title';
 import { useDispatch } from 'react-redux';
 import { controlAddProjectModal } from '../redux/slices/ModalContollerSlice';
-import AddModal from '../components/AddModal';
+import AddModal from '../components/AddBySelectionModal';
 import DonorsInfoCard from '../components/DonorsInfoCard';
 
 const relatedProjects = [
