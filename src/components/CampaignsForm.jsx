@@ -125,7 +125,10 @@ const CampaignsForm = () => {
         >
           صورة غلاف الحملة
         </Typography>
-        <div className='product-image' style={{ padding: '16.5px 14px' }}>
+        <div
+          className='product-image'
+          style={{ padding: '16.5px 14px', width: '100%' }}
+        >
           <label
             htmlFor='upload'
             className={selectedImage != '' ? 'image-selected' : ''}

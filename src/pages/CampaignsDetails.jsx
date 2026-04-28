@@ -13,9 +13,8 @@ import {
 } from '@mui/icons-material';
 import './CampaignsDetails.css';
 import { Box, Grid } from '@mui/material';
-import Title from '../components/Title';
 import { useDispatch } from 'react-redux';
-import { controlAddProjectModal } from '../redux/slices/ModalContollerSlice';
+import { controlAddBySelectionModal } from '../redux/slices/ModalContollerSlice';
 import AddModal from '../components/AddBySelectionModal';
 import DonorsInfoCard from '../components/DonorsInfoCard';
 
@@ -165,7 +164,7 @@ const CampaignsDetails = () => {
 
                 <button
                   className='add-row'
-                  onClick={() => dispatch(controlAddProjectModal())}
+                  onClick={() => dispatch(controlAddBySelectionModal())}
                 >
                   <AddRounded className='icon' />
                   إضافة مشروع
