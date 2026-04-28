@@ -65,7 +65,6 @@ const Donars = () => {
     display: 'flex',
     alignItems: 'center',
     backgroundColor: '#f9f9f9',
-    mb: 3.5,
   };
   const infoCards = infos.map((info) => (
     <DonorsInfoCard
