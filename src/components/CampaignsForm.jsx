@@ -11,11 +11,12 @@ import CustomInput from "./locations/CustomInput";
 import Textarea from "./Textarea";
 import { Grid, Typography } from "@mui/material";
 import "./CampaignsForm.css";
-import AddProjectsModal from "./AddModal";
+import AddModal from "./AddModal";
 
 const steps = ["معلومات الحملة", "جدولة للحملة", "التمويل والوسائط"];
 
 const CampaignsForm = () => {
+  const [isAddProjectsOpen, setIsAddProjectsOpen] = useState(false);
   const { activeStep } = useActiveStep();
   const [name, setName] = useState("");
   const [purpose, setPurpose] = useState("");
@@ -177,17 +178,22 @@ const CampaignsForm = () => {
   );
 
   return (
-    <>
-      <StepperForm icons={icons} submitBtnTitle="إضافة الحملة" steps={steps}>
-        {activeStep === 0
-          ? infoForm
-          : activeStep === 1
-            ? timingForm
-            : paymentForm}
-      </StepperForm>
-      {/* Projects Modal */}
-      <AddProjectsModal />
-    </>
+    <StepperForm
+      icons={icons}
+      submitBtnTitle="إضافة الحملة"
+      steps={steps}
+      successTitle="تم إنشاء الحملة بنجاح!"
+      successMessage="يمكنك الآن إضافة مشاريع مرتبطة أو المتابعة لاحقًا"
+      successPrimaryText="إضافة مشاريع الآن"
+      successNavigate="/content/campaigns"
+      onSuccessPrimaryAction={() => setIsAddProjectsOpen(true)}
+    >
+      {activeStep === 0
+        ? infoForm
+        : activeStep === 1
+          ? timingForm
+          : paymentForm}
+    </StepperForm>
   );
 };
 

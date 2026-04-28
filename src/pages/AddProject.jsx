@@ -1,6 +1,6 @@
 import PageContainer from "../components/PageContainer";
 import Title from "../components/Title";
-import ProjectForm from "../components/Projects/ProjectForm";
+import ProjectForm from "../components/ProjectForm";
 
 const AddProject = () => {
   return (

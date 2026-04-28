@@ -21,6 +21,11 @@ export default function StepperForm({
   submitBtnTitle,
   steps,
   children,
+  successTitle,
+  successMessage,
+  successPrimaryText,
+  successNavigate,
+  onSuccessPrimaryAction,
 }) {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isAddProjectsOpen, setIsAddProjectsOpen] = useState(false);
@@ -172,18 +177,28 @@ export default function StepperForm({
         // />
         <SuccessMessageDialog
           isOpen={isSuccessOpen}
-          Add={isAddProjectsOpen}
           setIsOpen={setIsSuccessOpen}
-          title="تم إنشاء الحملة بنجاح!"
-          message="يمكنك الآن إضافة مشاريع مرتبطة أو المتابعة لاحقًا"
-          primaryButtonText="إضافة مشاريع الآن"
-          onPrimaryAction={() => {
-            setIsSuccessOpen(false);
-            setIsAddProjectsOpen(true); // 🔥 هون الربط الحقيقي
-          }}
-          navigateAfterClose="/content/campaigns"
+          title={successTitle}
+          message={successMessage}
+          primaryButtonText={successPrimaryText}
+          onPrimaryAction={onSuccessPrimaryAction}
+          navigateAfterClose={successNavigate}
           navigate={navigate}
         />
+        // <SuccessMessageDialog
+        //   isOpen={isSuccessOpen}
+        //   Add={isAddProjectsOpen}
+        //   setIsOpen={setIsSuccessOpen}
+        //   title="تم إنشاء الحملة بنجاح!"
+        //   message="يمكنك الآن إضافة مشاريع مرتبطة أو المتابعة لاحقًا"
+        //   primaryButtonText="إضافة مشاريع الآن"
+        //   onPrimaryAction={() => {
+        //     setIsSuccessOpen(false);
+        //     setIsAddProjectsOpen(true);
+        //   }}
+        //   navigateAfterClose="/content/campaigns"
+        //   navigate={navigate}
+        // />
       )}
       <AddModal
         isOpen={isAddProjectsOpen}
