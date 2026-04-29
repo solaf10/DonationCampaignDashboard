@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import PageContainer from '../components/PageContainer';
+import { Link } from "react-router-dom";
+import PageContainer from "../components/PageContainer";
 import {
   AccountBalanceWalletOutlined,
   AddRounded,
@@ -10,13 +10,13 @@ import {
   FlagOutlined,
   GroupOutlined,
   TrendingUpOutlined,
-} from '@mui/icons-material';
-import './CampaignsDetails.css';
-import { Box, Grid } from '@mui/material';
-import Title from '../components/Title';
-import AddProjectsModal from '../components/AddProjectsModal';
-import { useDispatch } from 'react-redux';
-import { controlAddProjectModal } from '../redux/slices/ModalContollerSlice';
+} from "@mui/icons-material";
+import "./CampaignsDetails.css";
+import { Box, Grid } from "@mui/material";
+import Title from "../components/Title";
+import AddModal from "../components/AddModal";
+import { useDispatch } from "react-redux";
+import { controlAddProjectModal } from "../redux/slices/ModalContollerSlice";
 
 /* const getStatus = (startDate, endDate) => {
   const now = new Date();
@@ -28,18 +28,18 @@ import { controlAddProjectModal } from '../redux/slices/ModalContollerSlice';
 const relatedProjects = [
   {
     id: 1,
-    name: 'مشروع التعليم الرقمي',
-    location: 'دمشق، المزة',
+    name: "مشروع التعليم الرقمي",
+    location: "دمشق، المزة",
   },
   {
     id: 2,
-    name: 'منصة التبرعات الذكية',
-    location: 'حلب، الفرقان',
+    name: "منصة التبرعات الذكية",
+    location: "حلب، الفرقان",
   },
   {
     id: 3,
-    name: 'إعادة تأهيل المدارس',
-    location: 'حمص، الوعر',
+    name: "إعادة تأهيل المدارس",
+    location: "حمص، الوعر",
   },
 ];
 
@@ -51,89 +51,89 @@ const CampaignsDetails = () => {
         {relatedProjects.map((project) => (
           <Link
             to={`/content/projects/${project.id}`}
-            className='table-row'
+            className="table-row"
             key={project.id}
           >
-            <div className='name'>{project.name}</div>
-            <div className='location'>📍 {project.location}</div>
+            <div className="name">{project.name}</div>
+            <div className="location">📍 {project.location}</div>
           </Link>
         ))}
         <button
-          className='add-row'
+          className="add-row"
           onClick={() => dispatch(controlAddProjectModal())}
         >
-          <AddRounded className='icon' />
+          <AddRounded className="icon" />
           <span>إضافة مشروع</span>
         </button>
       </>
     ) : (
-      <div className='empty-projects'>
-        <div className='text'>لا توجد مشاريع مرتبطة بهذه الحملة</div>
+      <div className="empty-projects">
+        <div className="text">لا توجد مشاريع مرتبطة بهذه الحملة</div>
         <button
-          className='empty-btn'
+          className="empty-btn"
           onClick={() => dispatch(controlAddProjectModal())}
         >
-          <AddRounded className='icon' />
+          <AddRounded className="icon" />
           إضافة أول مشروع
         </button>
       </div>
     );
   const remainingDays = 3;
-  const status = 'upcoming';
+  const status = "upcoming";
   return (
-    <div className='campaign-details'>
+    <div className="campaign-details">
       <PageContainer>
-        <Title pageTitle='حملة التعليم' subtitle='نشطة' status='ongoing'>
-          <div className='btns'>
-            <Link to='/content/campaigns/edit/1' className='button'>
-              <EditCalendarRounded className='icon' />
+        <Title pageTitle="حملة التعليم" subtitle="نشطة" status="ongoing">
+          <div className="btns">
+            <Link to="/content/campaigns/edit/1" className="button">
+              <EditCalendarRounded className="icon" />
               <span>تعديل</span>
             </Link>
-            <button className='button delete'>
-              <Delete className='icon' />
+            <button className="button delete">
+              <Delete className="icon" />
               <span>حذف</span>
             </button>
           </div>
         </Title>
-        <div className='campaign-date'>
-          <span className='date-item'>
-            <CalendarTodayOutlined className='icon' />
+        <div className="campaign-date">
+          <span className="date-item">
+            <CalendarTodayOutlined className="icon" />
             <span>من: 12 مايو 2026، 10:00 ص</span>
           </span>
 
-          <span className='date-separator'>
-            <ArrowBackOutlined className='arrow-icon' />
+          <span className="date-separator">
+            <ArrowBackOutlined className="arrow-icon" />
           </span>
 
-          <span className='date-item'>
-            <CalendarTodayOutlined className='icon' />
+          <span className="date-item">
+            <CalendarTodayOutlined className="icon" />
             <span>إلى: 20 مايو 2026، 6:00 م</span>
           </span>
         </div>
         <Grid container spacing={3}>
-          <Grid size={6} className='image-wrapper'>
+          <Grid size={6} className="image-wrapper">
             <img
-              src='/image 6.png'
-              alt=''
-              style={{ width: '100%', minHeight: '475px', borderRadius: '8px' }}
+              src="/image 6.png"
+              alt=""
+              style={{ width: "100%", minHeight: "475px", borderRadius: "8px" }}
             />
             {/* 🔥 badge */}
-            {status === 'ongoing' && remainingDays > 0 && (
-              <span className='remaining-badge'>
+            {status === "ongoing" && remainingDays > 0 && (
+              <span className="remaining-badge">
                 متبقي {remainingDays} أيام
               </span>
             )}
 
-            {status === 'upcoming' && (
-              <span className='remaining-badge upcoming'>
+            {status === "upcoming" && (
+              <span className="remaining-badge upcoming">
                 تبدأ خلال {remainingDays} أيام
               </span>
             )}
           </Grid>
           <Grid size={6}>
             {/* target */}
-            <Box className='box desc' marginBottom={3}>
-              <img src='/Goal.png' alt='goal' className='icon' />
+            <Box className="box desc" marginBottom={3}>
+              <img src="/Goal.png" alt="goal" className="icon" />
               <p>
                 تهدف الحملة الى إعادة إعمار سوريا عملية ضخمة ومتعددة الأوجه
                 تتطلب استثمارات تقدر بمئات المليارات من الدولارات (تقديرات البنك
@@ -144,38 +144,38 @@ const CampaignsDetails = () => {
               </p>
             </Box>
             {/* info */}
-            <Grid className='infos-holder' container spacing={2}>
+            <Grid className="infos-holder" container spacing={2}>
               <Grid size={6}>
-                <Box className='box'>
-                  <FlagOutlined className='icon' />
-                  <div className='text'>
+                <Box className="box">
+                  <FlagOutlined className="icon" />
+                  <div className="text">
                     <h4>المبلغ المستهدف</h4>
                     <p>500000000 ل.س</p>
                   </div>
                 </Box>
               </Grid>
               <Grid size={6}>
-                <Box className='box'>
-                  <AccountBalanceWalletOutlined className='icon' />
-                  <div className='text'>
+                <Box className="box">
+                  <AccountBalanceWalletOutlined className="icon" />
+                  <div className="text">
                     <h4>المبلغ المجموع</h4>
                     <p>500000000 ل.س</p>
                   </div>
                 </Box>
               </Grid>
               <Grid size={6}>
-                <Box className='box'>
-                  <GroupOutlined className='icon' />
-                  <div className='text'>
+                <Box className="box">
+                  <GroupOutlined className="icon" />
+                  <div className="text">
                     <h4>عدد المتبرعين</h4>
                     <p>500</p>
                   </div>
                 </Box>
               </Grid>
               <Grid size={6}>
-                <Box className='box'>
-                  <TrendingUpOutlined className='icon' />
-                  <div className='text'>
+                <Box className="box">
+                  <TrendingUpOutlined className="icon" />
+                  <div className="text">
                     <h4>نسبة الإنجاز</h4>
                     <p>100%</p>
                   </div>
@@ -185,12 +185,12 @@ const CampaignsDetails = () => {
           </Grid>
         </Grid>
         {/* related projects */}
-        <Box className='related-projects'>
-          <div className='section-header'>
+        <Box className="related-projects">
+          <div className="section-header">
             <h3>المشاريع المرتبطة</h3>
           </div>
 
-          <div className='projects-table'>{rows}</div>
+          <div className="projects-table">{rows}</div>
         </Box>
       </PageContainer>
       <AddProjectsModal />

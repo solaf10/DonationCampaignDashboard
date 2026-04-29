@@ -47,11 +47,17 @@ export default function SuccessMessageDialog({
       </DialogContent>
 
       <DialogActions sx={{ padding: "16px" }}>
-        <Button variant="contained" onClick={handlePrimary}>
+        <Button
+          style={{ backgroundColor: "var(--main-color)" }}
+          variant="contained"
+          onClick={handlePrimary}
+        >
           {primaryButtonText}
         </Button>
 
-        <Button onClick={handleClose}>لاحقًا</Button>
+        <Button style={{ Color: "var(--main-color)" }} onClick={handleClose}>
+          لاحقًا
+        </Button>
       </DialogActions>
     </Dialog>
   );
