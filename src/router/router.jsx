@@ -10,7 +10,13 @@ import AddCampaign from '../pages/AddCampaign';
 import EditCampaign from '../pages/EditCampaign';
 import CampaignsDetails from '../pages/CampaignsDetails';
 import ActiveStepProvider from '../contexts/ActiveStepContext';
+import AddProject from '../pages/AddProject';
 import Projects from '../pages/Projects';
+import ProjectsDetails from '../pages/ProjectsDetails';
+import IndividualDonars from '../pages/IndividualDonars';
+import Organizations from '../pages/Organizations';
+import BusinessDonars from '../pages/businessDonars';
+import Donars from '../pages/Donars';
 
 export const router = createBrowserRouter([
   {
@@ -39,7 +45,8 @@ export const router = createBrowserRouter([
         path: 'governments',
         element: <Governments />,
       },
-      { path: 'projects', element: <Projects/> },
+      { path: 'projects', element: <Projects /> },
+      { path: 'projectsDetails/:id', element: <ProjectsDetails /> },
       { path: 'cities', element: <Cities /> },
       { path: 'areas', element: <Areas /> },
       { path: 'campaigns', element: <Campaigns /> },
@@ -53,7 +60,22 @@ export const router = createBrowserRouter([
         ),
       },
       { path: 'campaigns/edit/:id', element: <EditCampaign /> },
-      
+      {
+        path: 'projects/add',
+        element: (
+          <ActiveStepProvider>
+            <AddProject />
+          </ActiveStepProvider>
+        ),
+      },
+      /* Trash */
+      { path: 'projects-trash', element: <Projects isTrash={true} /> },
+      { path: 'campaigns-trash', element: <Campaigns isTrash={true} /> },
+      /* Donars */
+      { path: 'donars', element: <Donars /> },
+      { path: 'individuals', element: <IndividualDonars /> },
+      { path: 'organizations', element: <Organizations /> },
+      { path: 'business', element: <BusinessDonars /> },
     ],
   },
 ]);

@@ -1,41 +1,30 @@
 .campaign-details {
+  /* 🔥 HERO */
   .image-wrapper {
     position: relative;
-    /* base badge */
-    .remaining-badge {
+    height: 400px;
+    border-radius: 12px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .overlay {
       position: absolute;
-      top: 12px;
-      right: 12px;
-
-      background: rgba(255, 255, 255, 0.55);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: 999px;
-      color: #243b53;
-      font-weight: 600;
-
-      font-size: 0.8rem;
-      font-weight: 600;
-
-      padding: 6px 12px;
-      border-radius: 999px;
-
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-      z-index: 10;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
     }
 
-    /* upcoming variant */
-    .remaining-badge.upcoming {
-      color: #7c4a1d;
-    }
-  }
-  .title {
-    .btns {
+    /* 🔥 الأزرار (رجعنا ستايلك القديم) */
+    .image-actions {
+      position: absolute;
+      top: 16px;
+      left: 16px;
       display: flex;
-      align-items: center;
       gap: 8px;
+      z-index: 10;
 
       .button {
         height: 40px;
@@ -43,245 +32,283 @@
         display: flex;
         align-items: center;
         gap: 8px;
+
         background-color: transparent;
-        border: 1px solid #e5e7eb;
-        color: #1f1f1f;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        color: white;
+
         border-radius: 8px;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 500;
         cursor: pointer;
         transition: all 0.2s ease;
+
         .icon {
           font-size: 16px;
         }
       }
+
       .button:hover {
-        border-color: #8c9ea0;
-        background: linear-gradient(
-          to bottom,
-          transparent,
-          rgba(140, 158, 160, 0.05)
-        );
+        background: rgba(255, 255, 255, 0.15);
         transform: translateY(-1px);
       }
+
       .button.delete {
-        color: #cc4a4a;
+        color: #ffb4b4;
         border: none;
-        background-color: #fdf2f2;
+        background-color: rgba(255, 0, 0, 0.15);
+        /* color: #cc4a4a;
+        background-color: #fdf2f2; */
       }
 
       .button.delete:hover {
-        background-color: #fde8e8;
-        color: #b91c1c;
+        background-color: rgba(255, 0, 0, 0.25);
+        color: #ff8080;
       }
+
       .button:hover .icon {
         transform: scale(1.1);
         transition: 0.2s;
       }
     }
+
+    /* 🔥 المحتوى */
+    .image-content {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      left: 20px;
+      color: white;
+
+      h2 {
+        margin-bottom: 8px;
+        font-size: 22px;
+      }
+
+      .date {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        margin-bottom: 10px;
+
+        span {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .icon {
+          font-size: 16px;
+          opacity: 0.9;
+        }
+
+        /* 🔥 السهم */
+        .separator {
+          display: flex;
+          align-items: center;
+
+          .arrow-icon {
+            font-size: 18px;
+            color: white;
+            opacity: 0.8;
+          }
+        }
+      }
+
+      /* 🔥 badge */
+      .badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.85);
+        color: #1f1f1f;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .badge.upcoming {
+        background: #f5efe6;
+        color: #7a5c2e;
+      }
+
+      .badge.finished {
+        background: #f0f2f3;
+        color: #4d5458;
+      }
+    }
   }
-  .box {
-    padding: 16px;
-    background-color: white;
-    border-radius: 8px;
+
+  /* 🔥 infos */
+  .infos-holder {
+    .box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+
+      .main-info {
+        width: 100%;
+        gap: 0px;
+        justify-content: space-between;
+      }
+
+      p {
+        margin-top: 8px;
+        line-height: 1;
+      }
+    }
   }
+
+  /* 🔥 desc */
   .desc {
     display: flex;
     align-items: flex-start;
     gap: 8px;
+
     .icon {
       margin-top: 5px;
       width: 25px;
       height: 25px;
     }
   }
-  .infos-holder {
-    .box {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      justify-content: center;
-      .icon {
-        font-size: 32px;
-        color: var(--main-color);
-      }
-      p {
-        color: #888;
-      }
-    }
-  }
-}
-.campaign-date {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 
-  margin: 8px 0 16px;
-  font-size: 0.9rem;
+  /* 🔥 Related Projects */
+  .related-projects {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
 
-  /* كل عنصر */
-  .date-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #374151;
-    font-weight: 500;
-  }
-
-  /* أيقونة التاريخ */
-  .date-item .icon {
-    font-size: 18px;
-    color: #8c9ea0;
-  }
-
-  /* السهم */
-  .date-separator {
-    display: flex;
-    align-items: center;
-  }
-
-  .arrow-icon {
-    font-size: 18px;
-    color: var(--secondary-color);
-  }
-}
-/* ٌRelated Projects */
-.related-projects {
-  margin-top: 24px;
-  background: white;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  overflow: hidden;
-
-  .section-header {
-    padding: 14px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    background-color: var(--main-color);
-    color: white;
-
-    h3 {
-      font-size: 1rem;
-      font-weight: 600;
-    }
-  }
-
-  .projects-table {
-    display: flex;
-    flex-direction: column;
-
-    .table-row {
+    .section-header {
+      padding: 14px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
 
-      padding: 12px 16px;
-      text-decoration: none;
-      color: inherit;
+      background-color: var(--main-color);
+      color: white;
 
-      border-bottom: 1px solid #e5e7eb;
+      h3 {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+    }
+
+    .projects-table {
+      display: flex;
+      flex-direction: column;
+
+      .table-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 12px 16px;
+        text-decoration: none;
+        color: inherit;
+
+        border-bottom: 1px solid #e5e7eb;
+        transition: 0.2s;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:hover {
+          background-color: rgba(1, 74, 91, 0.05);
+        }
+
+        .name {
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: #111827;
+        }
+
+        .location {
+          font-size: 0.85rem;
+          color: #8c9ea0;
+        }
+      }
+    }
+
+    .add-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+
+      padding: 12px 16px;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 16px;
+
+      color: var(--main-color);
       transition: 0.2s;
 
-      &:last-child {
-        border-bottom: none;
+      .icon {
+        font-size: 18px;
+        color: var(--main-color);
       }
 
       &:hover {
-        background-color: rgba(1, 74, 91, 0.05);
-      }
+        background: #f9fafb;
 
-      .name {
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: #111827;
-      }
-
-      .location {
-        font-size: 0.85rem;
-        color: #8c9ea0;
+        .icon {
+          transform: scale(1.1);
+          transition: 0.2s;
+        }
       }
     }
   }
 
-  .add-row {
+  /* 🔥 empty */
+  .empty-projects {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
 
-    padding: 12px 16px;
-    background: white;
+    padding: 24px;
+    text-align: center;
 
-    border-top: 1px solid #e5e7eb;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
 
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 16px;
+    .text {
+      font-size: 0.95rem;
+      color: #8c9ea0;
+      margin-bottom: 12px;
+    }
 
-    color: var(--main-color);
-    transition: 0.2s;
+    .empty-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
 
-    .icon {
+      padding: 8px 12px;
+      border-radius: 8px;
+
+      background: white;
+      border: 1px solid #e5e7eb;
+
+      color: var(--main-color);
+      font-weight: 500;
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    .empty-btn:hover {
+      background: rgba(1, 74, 91, 0.05);
+    }
+
+    .empty-btn .icon {
       font-size: 18px;
       color: var(--main-color);
     }
-
-    &:hover {
-      background: #f9fafb;
-
-      .icon {
-        transform: scale(1.1);
-        transition: 0.2s;
-      }
-    }
-  }
-}
-/* empty projects */
-.empty-projects {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  padding: 24px;
-  text-align: center;
-
-  background: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
-  .text {
-    font-size: 0.95rem;
-    color: #8c9ea0;
-    margin-bottom: 12px;
-  }
-  /* زر CTA */
-  .empty-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    padding: 8px 12px;
-    border-radius: 8px;
-
-    background: white;
-    border: 1px solid #e5e7eb;
-
-    color: var(--main-color);
-    font-weight: 500;
-    cursor: pointer;
-
-    transition: 0.2s;
-  }
-
-  .empty-btn:hover {
-    background: rgba(1, 74, 91, 0.05);
-  }
-
-  .empty-btn .icon {
-    font-size: 18px;
-    color: var(--main-color);
   }
 }

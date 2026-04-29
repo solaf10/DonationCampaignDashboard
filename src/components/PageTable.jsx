@@ -7,45 +7,24 @@ import {
   TableRow,
   Paper,
   IconButton,
+  Button,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
 import CustomPagination from './CustomPagination';
 import './PageTable.css';
 import { useNavigate } from 'react-router-dom';
-import {
-  DeleteOutline,
-  EditOutlined,
-  VisibilityOutlined,
-} from '@mui/icons-material';
-import MoreMenu from './MoreMenu';
-
-const actions = [
-  {
-    label: 'عرض التفاصيل',
-    icon: <VisibilityOutlined fontSize='small' />,
-    onClick: () => console.log('view'),
-  },
-  {
-    label: 'تعديل',
-    icon: <EditOutlined fontSize='small' />,
-    onClick: () => console.log('edit'),
-  },
-  {
-    label: 'حذف',
-    icon: <DeleteOutline fontSize='small' />,
-    onClick: () => console.log('delete'),
-    danger: true,
-  },
-];
+import { useDispatch } from 'react-redux';
+import { setAnchorEl } from '../redux/slices/MenuAnchorElSlice';
+import { controlMoreInfoMenu } from '../redux/slices/ModalContollerSlice';
+import { EditCalendarRounded } from '@mui/icons-material';
 
 const PageTable = ({ columns, rows, pageLink }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -58,11 +37,10 @@ const PageTable = ({ columns, rows, pageLink }) => {
 
   const handleOpenMenu = (e) => {
     e.stopPropagation();
-    setAnchorEl(e.currentTarget);
+    dispatch(setAnchorEl(e.currentTarget));
+    dispatch(controlMoreInfoMenu());
   };
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
+
   return (
     <div className='table-holder'>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -105,6 +83,15 @@ const PageTable = ({ columns, rows, pageLink }) => {
                             </IconButton>
                           </TableCell>
                         );
+                      } else if (column.id === 'action') {
+                        return (
+                          <TableCell onClick={handleOpenMenu} key={column.id}>
+                            <Button className='button'>
+                              <EditCalendarRounded className='icon' />
+                              <span>تعديل</span>
+                            </Button>
+                          </TableCell>
+                        );
                       }
 
                       return (
@@ -138,13 +125,6 @@ const PageTable = ({ columns, rows, pageLink }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      {/* MoreInfoMenu */}
-      <MoreMenu
-        isOpen={open}
-        anchorEl={anchorEl}
-        handleCloseMenu={handleCloseMenu}
-        actions={actions}
-      />
     </div>
   );
 };

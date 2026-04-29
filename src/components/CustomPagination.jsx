@@ -50,9 +50,12 @@ const CustomPagination = ({
             onClick={() => handleClickPage(index)}
             sx={{
               cursor: 'pointer',
-              px: 1.5,
-              py: 0.5,
-              borderRadius: 1,
+              width: '34px',
+              height: '34px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '50%',
               bgcolor: index === page ? 'var(--main-color)' : 'transparent',
               color: index === page ? 'white' : 'var(--main-color)',
               fontWeight: 500,

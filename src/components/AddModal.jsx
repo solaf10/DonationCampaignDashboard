@@ -74,16 +74,16 @@
 // };
 
 // export default AddModal;
-import { useState } from "react";
-import CustomModal from "./CustomModal";
-import CustomInput from "./locations/CustomInput";
+import { useState } from 'react';
+import CustomModal from './CustomModal';
+import CustomInput from './locations/CustomInput';
 
 const AddModal = ({ isOpen, onClose, projects = [], onSubmit }) => {
-  const [searchedKey, setSearchedKey] = useState("");
+  const [searchedKey, setSearchedKey] = useState('');
   const [selectedProjects, setSelectedProjects] = useState([]);
 
   const filteredProjects = projects.filter((project) =>
-    project.name.toLowerCase().includes(searchedKey.toLowerCase()),
+    project.name.toLowerCase().includes(searchedKey.toLowerCase())
   );
 
   const handleSelectProject = (project) => {
@@ -114,7 +114,7 @@ const AddModal = ({ isOpen, onClose, projects = [], onSubmit }) => {
           key={project.id}
           onClick={() => handleSelectProject(project)}
           className={`project-card ${
-            selectedProjects.find((p) => p.id === project.id) ? "selected" : ""
+            selectedProjects.find((p) => p.id === project.id) ? 'selected' : ''
           }`}
         >
           <h4>{project.name}</h4>
@@ -129,21 +129,21 @@ const AddModal = ({ isOpen, onClose, projects = [], onSubmit }) => {
     <CustomModal
       isOpen={isOpen}
       setIsOpen={onClose}
-      modalTitle="إضافة مشاريع"
-      submitBtnTitle="إضافة"
+      modalTitle='إضافة مشاريع'
+      submitBtnTitle='إضافة'
       onSubmit={handleSubmit}
-      styles={{ width: "600px" }}
+      styles={{ width: '600px' }}
     >
       <CustomInput
-        inputType="input"
-        label="ابحث عن مشاريع"
+        inputType='input'
+        label='ابحث عن مشاريع'
         value={searchedKey}
         setValue={setSearchedKey}
       />
 
-      <div className="project-section">
+      <div className='project-section'>
         <h3>اختر المشاريع</h3>
-        <div className="cards-holder">{cards}</div>
+        <div className='cards-holder'>{cards}</div>
       </div>
     </CustomModal>
   );

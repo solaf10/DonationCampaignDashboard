@@ -51,7 +51,7 @@ body {
   justify-content: center;
   align-items: center;
   font-size: var(--button-font);
-  border-radius: 10px;
+  border-radius: 999px;
   color: white;
   border: none;
   transition: var(--main-trans);
@@ -60,7 +60,7 @@ body {
   transition: box-shadow 0.3s, transform 0.3s;
 }
 .back-btn {
-  border-radius: 8px;
+  border-radius: 999px;
   padding: 8px 24px;
   border: none;
   color: #6b7280;
@@ -92,4 +92,9 @@ body {
   margin: 10px 0px 10px 10px;
   background-color: var(--bg-color);
   border-radius: 15px;
+}
+.box {
+  padding: 24px;
+  background-color: white;
+  border-radius: 12px;
 }

@@ -9,7 +9,7 @@ const columns = [
   { id: 'name', label: 'الاسم' },
   { id: 'type', label: 'النوع' },
   { id: 'status', label: 'الحالة' },
-  { id: 'actions', label: '' },
+  { id: 'action', label: 'الإجراءات' },
 ];
 
 const rows = [

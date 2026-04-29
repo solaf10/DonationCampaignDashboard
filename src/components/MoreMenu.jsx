@@ -1,6 +1,11 @@
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
+import { useSelector } from 'react-redux';
 
-const MoreMenu = ({ anchorEl, handleCloseMenu, actions, isOpen }) => {
+const MoreMenu = ({ handleCloseMenu, actions }) => {
+  const isOpen = useSelector(
+    (state) => state.modalController.isMoreInfoMenuShown
+  );
+  const anchorEl = useSelector((state) => state.menuAnchorEl.anchorEl);
   return (
     <Menu
       anchorEl={anchorEl}

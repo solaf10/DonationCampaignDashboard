@@ -12,13 +12,22 @@ const columns = [
   { id: 'status', label: 'الحالة' },
   { id: 'action', label: 'الإجراءات' },
 ];
+/* const columns = [
+  { id: 'name', label: 'الاسم' },
+  { id: 'phone', label: 'رقم التواصل' },
+  { id: 'last-donation', label: 'أخر تبرع' },
+  { id: 'date', label: 'تاريخ الاستحقاق' },
+  { id: 'donation-type', label: 'طريقة التبرع' },
+  { id: 'destination', label: 'الوجهة' },
+  { id: 'status', label: 'الحالة' },
+]; */
 
-const Areas = () => {
-  const [area, setArea] = useState('');
-  const [city, setCity] = useState('');
-  const [government, setGovernment] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+const BusinessDonars = () => {
+  const [searchedKey, setSearchedKey] = useState('');
+  const [order, setOrder] = useState('');
+  const [donationType, setDonationType] = useState('');
+  const [destination, setDestination] = useState('');
+
   const rows = [
     {
       name: 'حملة رمضان',
@@ -41,25 +50,20 @@ const Areas = () => {
   };
   return (
     <PageContainer>
-      <Title pageTitle='إدارة الموقع(المكان)' subtitle='المناطق'>
-        <button onClick={() => setIsAddModalOpen(true)} className='btn'>
-          <span>إضافة منطقة</span>
-          <AddRounded />
-        </button>
-      </Title>
+      <Title pageTitle='إدارة المتبرعين' subtitle='رجال أعمال' />
+
       {/* Table & filter */}
       <ContentWithTable
-        isOpen={isAddModalOpen}
-        setIsOpen={setIsAddModalOpen}
         columns={columns}
         rows={rows}
-        className='areas'
+        className='business-donars'
+        pageLink='/content/business'
       >
         {/* filter holder */}
         <div className='input-holder'>
           <CustomInput
             inputType='textField'
-            placeholder='ابحث في المناطق'
+            placeholder='ابحث حسب الاسم'
             styles={{
               width: '400px',
               height: 'auto',
@@ -67,17 +71,15 @@ const Areas = () => {
                 color: 'var(--main-color)', // لون اللابل عند focus
               },
             }}
-            value={area}
-            setValue={setArea}
-          >
-            nothing
-          </CustomInput>
+            value={searchedKey}
+            setValue={setSearchedKey}
+          />
           <CustomInput
-            label='المحافظة'
+            label='الترتيب'
             inputType='nativeSelect'
             styles={nativeSelectStyles}
-            value={government}
-            setValue={setGovernment}
+            value={order}
+            setValue={setOrder}
           >
             <option value='' disabled style={{ display: 'none' }}></option>
             <option value='all'>الكل</option>
@@ -85,11 +87,23 @@ const Areas = () => {
             <option value='Alghuta'>حماة</option>
           </CustomInput>
           <CustomInput
-            label='المدينة'
+            label='طريقة التبرع'
             inputType='nativeSelect'
             styles={nativeSelectStyles}
-            value={city}
-            setValue={setCity}
+            value={donationType}
+            setValue={setDonationType}
+          >
+            <option value='' disabled style={{ display: 'none' }}></option>
+            <option value='all'>الكل</option>
+            <option value='Alhamra'>الحمراء</option>
+            <option value='Alghuta'>الغوطة</option>
+          </CustomInput>
+          <CustomInput
+            label='الوجهة'
+            inputType='nativeSelect'
+            styles={nativeSelectStyles}
+            value={destination}
+            setValue={setDestination}
           >
             <option value='' disabled style={{ display: 'none' }}></option>
             <option value='all'>الكل</option>
@@ -98,19 +112,10 @@ const Areas = () => {
           </CustomInput>
         </div>
 
-        <p>عدد المناطق: {rows.length}</p>
+        <p>عدد المنظمات: {rows.length}</p>
       </ContentWithTable>
-
-      {/* Edit Modal */}
-      <ControlLocationModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        title='تعديل المنطقة'
-        locationType='areas'
-        isEdit={true}
-      />
     </PageContainer>
   );
 };
 
-export default Areas;
+export default BusinessDonars;

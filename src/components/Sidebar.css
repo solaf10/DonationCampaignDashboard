@@ -5,9 +5,6 @@
   border-radius: 15px 0px 0px 15px;
   overflow-y: auto;
   overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   .logo {
     text-align: center;
     padding: 40px 0px 40px;
@@ -34,9 +31,9 @@
       }
     }
     > a.active::before,
-    .sidebar-accordion.open button::before,
+    .active-accordion button::before,
     > a:hover::before,
-    .sidebar-accordion:not(.open):hover button::before {
+    .sidebar-accordion:not(.Mui-expanded):hover button::before {
       content: '';
       position: absolute;
       left: 0;
@@ -49,9 +46,9 @@
       pointer-events: none;
     }
     > a.active::after,
-    .sidebar-accordion.open button::after,
+    .active-accordion button::after,
     > a:hover::after,
-    .sidebar-accordion:not(.open):hover button::after {
+    .sidebar-accordion:not(.Mui-expanded):hover button::after {
       content: '';
       position: absolute;
       left: 0;
@@ -67,7 +64,7 @@
       flex-grow: unset;
     }
     /* a:not(.active):hover,
-    .sidebar-accordion:not(.open):hover button {
+    .sidebar-accordion:not(.Mui-expanded):hover button {
       background-color: rgba(255, 255, 255, 0.2);
     } */
     .sidebar-accordion {
@@ -129,9 +126,9 @@
     z-index: 2;
   }
   li .active,
-  .sidebar-accordion.open button,
+  .active-accordion button,
   a:not(.active):hover,
-  .sidebar-accordion:not(.open):hover button {
+  .sidebar-accordion:not(.Mui-expanded):hover button {
     /* margin-bottom: 10px; */
     background-color: var(--bg-color);
     color: var(--main-color);

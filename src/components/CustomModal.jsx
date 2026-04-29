@@ -77,7 +77,7 @@ export default function CustomModal({
             variant='contained'
             sx={{
               backgroundColor: '#014a5b',
-              borderRadius: '8px',
+              borderRadius: '999px',
               padding: '8px 24px',
             }}
             className='btn'
@@ -88,7 +88,7 @@ export default function CustomModal({
             variant='outlined'
             onClick={handleClose}
             sx={{
-              borderRadius: '8px',
+              borderRadius: '999px',
               padding: '8px 24px',
               border: 'none',
               color: '#8c9ea0',
