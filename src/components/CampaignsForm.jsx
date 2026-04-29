@@ -11,11 +11,12 @@ import CustomInput from "./locations/CustomInput";
 import Textarea from "./Textarea";
 import { Grid, Typography } from "@mui/material";
 import "./CampaignsForm.css";
-import AddProjectsModal from "./AddModal";
+import AddModal from "./AddModal";
 
 const steps = ["معلومات الحملة", "جدولة للحملة", "التمويل والوسائط"];
 
 const CampaignsForm = () => {
+  const [isAddProjectsOpen, setIsAddProjectsOpen] = useState(false);
   const { activeStep } = useActiveStep();
   const [name, setName] = useState("");
   const [purpose, setPurpose] = useState("");
@@ -62,14 +63,13 @@ const CampaignsForm = () => {
 
   // second step content
   const timingForm = (
-    <Grid container spacing={2}>
+    <Grid container spacing={3}>
       <Grid size={6}>
         <CustomInput
           label="تاريخ البدء"
           inputType="date"
           value={startDate}
           setValue={setStartDate}
-          styles={styles}
         />
       </Grid>
       <Grid size={6}>
@@ -79,7 +79,6 @@ const CampaignsForm = () => {
           inputType="date"
           value={endDate}
           setValue={setEndDate}
-          styles={styles}
         />
       </Grid>
       <Grid size={6}>
@@ -89,7 +88,6 @@ const CampaignsForm = () => {
           placeholder="مثال: 00:00"
           value={startTime}
           setValue={setStartTime}
-          styles={styles}
         />
       </Grid>
       <Grid size={6}>
@@ -99,7 +97,6 @@ const CampaignsForm = () => {
           placeholder="مثال: 00:00"
           value={endTime}
           setValue={setEndTime}
-          styles={styles}
         />
       </Grid>
     </Grid>
@@ -181,17 +178,22 @@ const CampaignsForm = () => {
   );
 
   return (
-    <>
-      <StepperForm icons={icons} submitBtnTitle="إضافة الحملة" steps={steps}>
-        {activeStep === 0
-          ? infoForm
-          : activeStep === 1
-            ? timingForm
-            : paymentForm}
-      </StepperForm>
-      {/* Projects Modal */}
-      <AddProjectsModal />
-    </>
+    <StepperForm
+      icons={icons}
+      submitBtnTitle="إضافة الحملة"
+      steps={steps}
+      successTitle="تم إنشاء الحملة بنجاح!"
+      successMessage="يمكنك الآن إضافة مشاريع مرتبطة أو المتابعة لاحقًا"
+      successPrimaryText="إضافة مشاريع الآن"
+      successNavigate="/content/campaigns"
+      onSuccessPrimaryAction={() => setIsAddProjectsOpen(true)}
+    >
+      {activeStep === 0
+        ? infoForm
+        : activeStep === 1
+          ? timingForm
+          : paymentForm}
+    </StepperForm>
   );
 };
 

@@ -1,18 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  isAddModalOpen: false,
+  isAddProjectModalOpen: false,
+  isControlLocationModalOpen: false,
 };
 
 const modalControllerSlice = createSlice({
-  name: "modalController",
+  name: 'modalController',
   initialState,
   reducers: {
-    controlAddModal: (state) => {
-      state.isAddModalOpen = !state.isAddModalOpen;
+    controlAddProjectModal: (state) => {
+      state.isAddProjectModalOpen = !state.isAddProjectModalOpen;
+    },
+    controlControlLocationModal: (state) => {
+      state.isAddProjectModalOpen = !state.isAddProjectModalOpen;
     },
   },
 });
 
-export const { controlAddModal } = modalControllerSlice.actions;
+export const { controlAddProjectModal, controlControlLocationModal } =
+  modalControllerSlice.actions;
 export default modalControllerSlice.reducer;
