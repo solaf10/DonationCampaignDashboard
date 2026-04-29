@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Grid,
   Box,
@@ -6,14 +6,16 @@ import {
   TextField,
   IconButton,
   InputAdornment,
-} from '@mui/material';
+} from "@mui/material";
 
-import ProjectCard from '../components/ProjectCard/ProjectCard';
-import Title from '../components/Title';
-import FilterDrawer from '../components/FilterDrawer';
+import ProjectCard from "../components/ProjectCard/ProjectCard";
+import Title from "../components/Title";
+import FilterDrawer from "../components/FilterDrawer";
 
-import SearchIcon from '@mui/icons-material/Search';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import SearchIcon from "@mui/icons-material/Search";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import { Link } from "react-router-dom";
+import { AddRounded } from "@mui/icons-material";
 
 const projectsData = [
   {
@@ -24,7 +26,7 @@ const projectsData = [
     location: "دمشق",
     progress: 40,
     executor: "شركة البناء الحديثة",
-    image: "../../public/houses-destroyed.jpg"
+    image: "../../public/houses-destroyed.jpg",
   },
   {
     id: 2,
@@ -34,7 +36,7 @@ const projectsData = [
     location: "حلب",
     progress: 75,
     executor: "مؤسسة التطوير",
-    image: "../../public/hospital.jpg"
+    image: "../../public/hospital.jpg",
   },
   {
     id: 3,
@@ -44,7 +46,7 @@ const projectsData = [
     location: "إدلب",
     progress: 60,
     executor: "شركة الإعمار",
-    image: "../../public/school.jpeg"
+    image: "../../public/school.jpeg",
   },
   {
     id: 4,
@@ -54,7 +56,7 @@ const projectsData = [
     location: "حمص",
     progress: 85,
     executor: "جمعية الأمل",
-    image: "../../public/food-basketss.jpg"
+    image: "../../public/food-basketss.jpg",
   },
   {
     id: 5,
@@ -64,7 +66,7 @@ const projectsData = [
     location: "درعا",
     progress: 50,
     executor: "شركة البناء الحديثة",
-    image: "../../public/water.jpg"
+    image: "../../public/water.jpg",
   },
   {
     id: 6,
@@ -74,7 +76,7 @@ const projectsData = [
     location: "اللاذقية",
     progress: 30,
     executor: "جمعية الأمل",
-    image: "../../public/orphans.jpg"
+    image: "../../public/orphans.jpg",
   },
   {
     id: 7,
@@ -84,47 +86,48 @@ const projectsData = [
     location: "حمص",
     progress: 30,
     executor: "مؤسسة التطوير",
-    image: "../../public/مواقف-ذكية.webp"
-  }
+    image: "../../public/مواقف-ذكية.webp",
+  },
 ];
 
 export default function Projects({ isTrash = false }) {
   const [openFilter, setOpenFilter] = useState(false);
 
   return (
-    <Container maxWidth='lg' sx={{ px: 2 }}>
+    <Container maxWidth="lg" sx={{ px: 2 }}>
       <Title
-        pageTitle={isTrash ? 'سلة مهملات المشاريع' : 'إدارة المشاريع'}
-        subtitle={isTrash ? 'يمكنك استعادة أو حذف العناصر نهائياً' : null}
+        pageTitle={isTrash ? "سلة مهملات المشاريع" : "إدارة المشاريع"}
+        subtitle={isTrash ? "يمكنك استعادة أو حذف العناصر نهائياً" : null}
       >
         {!isTrash && (
-          <button className='btn'>
-            <span> + إضافة مشروع</span>
-          </button>
+          <Link to="/content/projects/add" className="btn">
+            <span>إضافة مشروع</span>
+            <AddRounded />
+          </Link>
         )}
       </Title>
 
       <Box
         sx={{
-          width: '100%',
-          border: '1px solid #e0e0e0',
+          width: "100%",
+          border: "1px solid #e0e0e0",
           borderRadius: 3,
-          display: 'flex',
-          alignItems: 'center',
-          backgroundColor: '#f9f9f9',
+          display: "flex",
+          alignItems: "center",
+          backgroundColor: "#f9f9f9",
           mb: 3.5,
         }}
       >
         {/*  البحث */}
         <TextField
           fullWidth
-          placeholder='ابحث حسب الاسم'
-          variant='standard'
+          placeholder="ابحث حسب الاسم"
+          variant="standard"
           InputProps={{
             disableUnderline: true,
             startAdornment: (
-              <InputAdornment position='start'>
-                <SearchIcon sx={{ color: 'gray' }} />
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: "gray" }} />
               </InputAdornment>
             ),
           }}
@@ -135,7 +138,7 @@ export default function Projects({ isTrash = false }) {
         <IconButton
           onClick={() => setOpenFilter(true)}
           sx={{
-            backgroundColor: '#eeeeee',
+            backgroundColor: "#eeeeee",
             borderRadius: 2,
             m: 1,
           }}
@@ -148,13 +151,13 @@ export default function Projects({ isTrash = false }) {
 
       <Box
         sx={{
-          width: '100%',
-          direction: 'ltr',
-          display: 'flex',
-          justifyContent: 'center',
+          width: "100%",
+          direction: "ltr",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        <Grid container spacing={4} alignItems='stretch' sx={{ width: '100%' }}>
+        <Grid container spacing={4} alignItems="stretch" sx={{ width: "100%" }}>
           {projectsData.map((project, index) => (
             <Grid
               item
@@ -163,7 +166,7 @@ export default function Projects({ isTrash = false }) {
               md={4}
               size={3}
               key={index}
-              sx={{ display: 'flex' }}
+              sx={{ display: "flex" }}
             >
               <ProjectCard project={project} isTrash={isTrash} />
             </Grid>
