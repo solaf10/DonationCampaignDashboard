@@ -9,21 +9,27 @@ import {
 import './SuccessMessageDialog.css';
 import { CheckCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { controlAddBySelectionModal } from '../redux/slices/ModalContollerSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  controlAddBySelectionModal,
+  controlSuccessDialog,
+} from '../redux/slices/ModalContollerSlice';
 
-export default function SuccessMessageDialog({ isOpen, setIsOpen }) {
+export default function SuccessMessageDialog({ title, desc, btnTitle }) {
+  const isOpen = useSelector(
+    (state) => state.modalController.isSuccessDialogOpen
+  );
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const handleClose = () => {
-    setIsOpen(false);
-    navigate('/content/campaigns');
+    dispatch(controlSuccessDialog());
+    navigate(-1);
   };
 
   const handleAddProjects = () => {
-    setIsOpen(false);
+    dispatch(controlSuccessDialog());
     dispatch(controlAddBySelectionModal());
   };
 
@@ -37,7 +43,7 @@ export default function SuccessMessageDialog({ isOpen, setIsOpen }) {
           <Typography
             sx={{ fontFamily: 'Cairo', fontWeight: 'bold', fontSize: '18px' }}
           >
-            تم إنشاء الحملة بنجاح!
+            {title}
           </Typography>
         </DialogTitle>
 
@@ -49,8 +55,7 @@ export default function SuccessMessageDialog({ isOpen, setIsOpen }) {
               color: '#6B7280',
             }}
           >
-            تم إنشاء حملتك بنجاح. يمكنك الآن إضافة مشاريع مرتبطة أو القيام بذلك
-            لاحقًا.
+            {desc}
           </Typography>
         </DialogContent>
 
@@ -67,7 +72,7 @@ export default function SuccessMessageDialog({ isOpen, setIsOpen }) {
             onClick={handleAddProjects}
             className='btn'
           >
-            إضافة مشاريع الآن
+            {btnTitle}
           </Button>
           <Button
             variant='outlined'

@@ -11,8 +11,8 @@ import CustomInput from './locations/CustomInput';
 import Textarea from './Textarea';
 import { Grid, Typography } from '@mui/material';
 import './CampaignsForm.css';
-import { Navigate } from 'react-router-dom';
 import AddBySelectionModal from './AddBySelectionModal';
+import SuccessMessageDialog from './SuccessMessageDialog';
 
 const steps = ['المعلومات الأساسية', 'التفاصيل والمتطلبات ', ' الوسائط'];
 const ProjectForm = () => {
@@ -269,25 +269,9 @@ const ProjectForm = () => {
                   <div
                     onClick={() =>
                       setExtraImages((prev) =>
-                        prev.filter((_, i) => i !== index)
+                        prev?.filter((_, i) => i !== index)
                       )
                     }
-                    // style={{
-                    //   position: "absolute",
-                    //   top: "2px",
-                    //   left: "2px",
-                    //   background: "#fff",
-                    //   borderRadius: "50%",
-                    //   width: "18px",
-                    //   height: "18px",
-                    //   display: "flex",
-                    //   alignItems: "center",
-                    //   justifyContent: "center",
-                    //   cursor: "pointer",
-                    //   fontSize: "12px",
-                    //   color: "#666",
-                    //   boxShadow: "0 1px 3px #0003",
-                    // }}
                   >
                     ×
                   </div>
@@ -377,7 +361,16 @@ const ProjectForm = () => {
           : paymentForm}
       </StepperForm>
       {/* AddCampaign */}
-      <AddBySelectionModal />
+      <SuccessMessageDialog
+        title='تم إنشاء المشروع بنجاح!'
+        desc='تم إنشاء مشروعك بنجاح. يمكنك الآن إضافته إلى حملة موجودة أو القيام بذلك لاحقًا.'
+        btnTitle='إضافة إلى حملة'
+      />
+      <AddBySelectionModal
+        entriesType='campaigns'
+        entries={[]}
+        modalTitle='إضافة المشروع إلى حملة'
+      />
     </>
   );
 };

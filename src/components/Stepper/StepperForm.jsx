@@ -1,48 +1,29 @@
-import {
-  Stepper,
-  Step,
-  StepLabel,
-  Box,
-  Button,
-  Typography,
-} from '@mui/material';
+import { Stepper, Step, StepLabel, Box, Button } from '@mui/material';
 import StepperIcon from './StepperIcon';
 import './StepperForm.css';
-import CustomInput from '../locations/CustomInput';
 import { useActiveStep } from '../../contexts/ActiveStepContext';
-import { useState } from 'react';
-import SuccessMessageDialog from '../SuccessMessageDialog';
-// import { useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom';
-import AddModal from '../AddBySelectionModal';
-// import { controlAddModal } from "../../redux/slices/ModalContollerSlice";
+import { useDispatch } from 'react-redux';
+import { controlSuccessDialog } from '../../redux/slices/ModalContollerSlice';
+
 export default function StepperForm({
   icons,
   submitBtnTitle,
   steps,
   children,
-  successTitle,
-  successMessage,
-  successPrimaryText,
-  successNavigate,
-  onSuccessPrimaryAction,
 }) {
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
-  const [isAddProjectsOpen, setIsAddProjectsOpen] = useState(false);
   const { activeStep, setActiveStep } = useActiveStep();
-  const projects = [];
-  const handleNext = () => {
+  const handleNext = (e) => {
+    e.preventDefault();
     setActiveStep((prev) => prev + 1);
   };
 
   const handleBack = () => {
     setActiveStep((prev) => prev - 1);
   };
-  // const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSuccessOpen(true);
+    dispatch(controlSuccessDialog());
   };
 
   return (
@@ -116,44 +97,21 @@ export default function StepperForm({
                 borderTop: '1px solid #e1eaea',
               }}
             >
-              {activeStep === steps.length - 1 ? (
-                <Button
-                  variant='contained'
-                  asChild
-                  sx={{
-                    backgroundColor: '#014a5b',
-                    borderRadius: '8px',
-                    padding: '8px 24px',
-                    cursor: 'pointer',
-                  }}
-                  className='btn'
-                >
-                  <input
-                    type='submit'
-                    value={submitBtnTitle}
-                    style={{
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      fontSize: 'inherit',
-                      color: 'inherit',
-                      cursor: 'pointer',
-                    }}
-                  />
-                </Button>
-              ) : (
-                <Button
-                  variant='contained'
-                  onClick={handleNext}
-                  sx={{
-                    backgroundColor: '#014a5b',
-                    borderRadius: '8px',
-                    padding: '8px 24px',
-                  }}
-                  className='btn'
-                >
-                  التالي
-                </Button>
-              )}
+              <Button
+                type={activeStep === steps.length - 1 ? 'submit' : 'button'}
+                onClick={
+                  activeStep === steps.length - 1 ? undefined : handleNext
+                }
+                variant='contained'
+                sx={{
+                  backgroundColor: '#014a5b',
+                  borderRadius: '8px',
+                  padding: '8px 24px',
+                }}
+                className='btn'
+              >
+                {activeStep === steps.length - 1 ? submitBtnTitle : 'التالي'}
+              </Button>
               <Button
                 disabled={activeStep === 0}
                 onClick={handleBack}
@@ -170,45 +128,6 @@ export default function StepperForm({
           </form>
         </Box>
       </Box>
-      {isSuccessOpen && (
-        // <SuccessMessageDialog
-        //   isOpen={isSuccessMessageDialogOpen}
-        //   setIsOpen={setIsSuccessMessageDialogOpen}
-        // />
-        <SuccessMessageDialog
-          isOpen={isSuccessOpen}
-          setIsOpen={setIsSuccessOpen}
-          title={successTitle}
-          message={successMessage}
-          primaryButtonText={successPrimaryText}
-          onPrimaryAction={onSuccessPrimaryAction}
-          navigateAfterClose={successNavigate}
-          navigate={navigate}
-        />
-        // <SuccessMessageDialog
-        //   isOpen={isSuccessOpen}
-        //   Add={isAddProjectsOpen}
-        //   setIsOpen={setIsSuccessOpen}
-        //   title="تم إنشاء الحملة بنجاح!"
-        //   message="يمكنك الآن إضافة مشاريع مرتبطة أو المتابعة لاحقًا"
-        //   primaryButtonText="إضافة مشاريع الآن"
-        //   onPrimaryAction={() => {
-        //     setIsSuccessOpen(false);
-        //     setIsAddProjectsOpen(true);
-        //   }}
-        //   navigateAfterClose="/content/campaigns"
-        //   navigate={navigate}
-        // />
-      )}
-      <AddModal
-        isOpen={isAddProjectsOpen}
-        onClose={() => setIsAddProjectsOpen(false)}
-        projects={projects}
-        onSubmit={(selected) => {
-          console.log(selected);
-          setIsAddProjectsOpen(false);
-        }}
-      />
     </>
   );
 }
