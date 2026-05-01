@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { controlAddBySelectionModal } from '../redux/slices/ModalContollerSlice';
 import AddModal from '../components/AddBySelectionModal';
 import DonorsInfoCard from '../components/DonorsInfoCard';
+import AddBySelectionModal from '../components/AddBySelectionModal';
 
 const relatedProjects = [
   { id: 1, name: 'مشروع التعليم الرقمي', location: 'دمشق، المزة' },
@@ -47,6 +48,29 @@ const infos = [
     icon: <TrendingUpOutlined className='icon' />,
     label: 'نسبة الإنجاز',
     value: '100%',
+  },
+];
+
+const projects = [
+  {
+    id: 1,
+    name: 'مشروع التخرج',
+    location: 'حمص-الحمراء',
+  },
+  {
+    id: 2,
+    name: 'تعليم إلكتروني',
+    location: 'حمص-الحميدية',
+  },
+  {
+    id: 3,
+    name: 'متجر إلكتروني',
+    location: 'دمشق-الحميدية',
+  },
+  {
+    id: 4,
+    name: 'تطبيق حجوزات',
+    location: 'حماة-ابن رشد',
   },
 ];
 
@@ -175,7 +199,11 @@ const CampaignsDetails = () => {
         </Grid>
       </PageContainer>
 
-      <AddModal />
+      <AddBySelectionModal
+        entriesType='projects'
+        entries={projects}
+        modalTitle='إضافة مشاريع مرتبطة'
+      />
     </div>
   );
 };
