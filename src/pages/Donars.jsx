@@ -10,6 +10,7 @@ import {
   VolunteerActivismOutlined,
 } from '@mui/icons-material';
 import DonorsInfoCard from '../components/DonorsInfoCard';
+import StarDonarsSection from '../components/StarDonarsSection';
 
 const infos = [
   {
@@ -54,6 +55,41 @@ const infos = [
   },
 ];
 
+const topDonors = [
+  {
+    id: 1,
+    name: 'أحمد محمد',
+    type: 'فرد',
+    amount: '100,000 ل.س',
+    image: '/1st-place-medal.png',
+  },
+  {
+    id: 2,
+    name: 'شركة النور',
+    type: 'منظمة',
+    amount: '500,000 ل.س',
+    image: '/2nd-place-medal.png',
+  },
+  {
+    id: 3,
+    name: 'خالد العلي',
+    type: 'رجل أعمال',
+    amount: '1,200,000 ل.س',
+  },
+  {
+    id: 4,
+    name: 'مبادرة الخير',
+    type: 'منظمة',
+    amount: '300,000 ل.س',
+  },
+  {
+    id: 5,
+    name: 'سارة حسن',
+    type: 'فرد',
+    amount: '75,000 ل.س',
+  },
+];
+
 const Donars = () => {
   const searchInputStyles = {
     width: '500px',
@@ -95,8 +131,23 @@ const Donars = () => {
           sx={searchInputStyles}
         />
       </Title>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} marginBottom={2}>
         {infoCards}
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid size={6}>
+          <h2
+            style={{
+              fontSize: '32px',
+              fontWeight: '600',
+              marginBottom: '8px',
+            }}
+          >
+            أبرز المتبرعين
+          </h2>
+          <StarDonarsSection topDonors={topDonors} />
+        </Grid>
+        <Grid size={6}></Grid>
       </Grid>
     </PageContainer>
   );
