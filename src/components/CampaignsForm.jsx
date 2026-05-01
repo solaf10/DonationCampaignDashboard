@@ -1,8 +1,7 @@
 import {
-  CalendarMonthOutlined,
-  FactCheckOutlined,
-  FolderOutlined,
-  RequestQuoteOutlined,
+  EventOutlined,
+  InfoOutline,
+  PaymentsOutlined,
 } from '@mui/icons-material';
 import { useActiveStep } from '../contexts/ActiveStepContext';
 import StepperForm from './Stepper/StepperForm';
@@ -11,12 +10,11 @@ import CustomInput from './locations/CustomInput';
 import Textarea from './Textarea';
 import { Grid, Typography } from '@mui/material';
 import './CampaignsForm.css';
-import AddModal from './AddBySelectionModal';
+import AddBySelectionModal from './AddBySelectionModal';
 
 const steps = ['معلومات الحملة', 'جدولة للحملة', 'التمويل والوسائط'];
 
 const CampaignsForm = () => {
-  const [isAddProjectsOpen, setIsAddProjectsOpen] = useState(false);
   const { activeStep } = useActiveStep();
   const [name, setName] = useState('');
   const [purpose, setPurpose] = useState('');
@@ -30,10 +28,9 @@ const CampaignsForm = () => {
   const [selectedImage, setSelectedImage] = useState('');
 
   const icons = {
-    1: <FolderOutlined fontSize='small' />,
-    2: <CalendarMonthOutlined fontSize='small' />,
-    3: <RequestQuoteOutlined fontSize='small' />,
-    4: <FactCheckOutlined fontSize='small' />,
+    1: <InfoOutline fontSize='small' />,
+    2: <EventOutlined fontSize='small' />,
+    3: <PaymentsOutlined fontSize='small' />,
   };
   // custom input custom styles
   const styles = {
@@ -125,10 +122,7 @@ const CampaignsForm = () => {
         >
           صورة غلاف الحملة
         </Typography>
-        <div
-          className='product-image'
-          style={{ padding: '16.5px 14px', width: '100%' }}
-        >
+        <div className='product-image' style={{ padding: '16.5px 14px' }}>
           <label
             htmlFor='upload'
             className={selectedImage != '' ? 'image-selected' : ''}
@@ -141,11 +135,10 @@ const CampaignsForm = () => {
                 fill='currentColor'
                 strokeWidth='0'
                 viewBox='0 0 512 512'
-                class='icon'
+                className='icon'
                 height='1em'
                 width='1em'
                 xmlns='http://www.w3.org/2000/svg'
-                className='icon'
               >
                 <path
                   fill='none'
@@ -181,22 +174,17 @@ const CampaignsForm = () => {
   );
 
   return (
-    <StepperForm
-      icons={icons}
-      submitBtnTitle='إضافة الحملة'
-      steps={steps}
-      successTitle='تم إنشاء الحملة بنجاح!'
-      successMessage='يمكنك الآن إضافة مشاريع مرتبطة أو المتابعة لاحقًا'
-      successPrimaryText='إضافة مشاريع الآن'
-      successNavigate='/content/campaigns'
-      onSuccessPrimaryAction={() => setIsAddProjectsOpen(true)}
-    >
-      {activeStep === 0
-        ? infoForm
-        : activeStep === 1
-        ? timingForm
-        : paymentForm}
-    </StepperForm>
+    <>
+      <StepperForm icons={icons} submitBtnTitle='إضافة الحملة' steps={steps}>
+        {activeStep === 0
+          ? infoForm
+          : activeStep === 1
+          ? timingForm
+          : paymentForm}
+      </StepperForm>
+      {/* Projects Modal */}
+      <AddBySelectionModal />
+    </>
   );
 };
 
