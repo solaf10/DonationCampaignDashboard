@@ -1,6 +1,8 @@
 .sidebar {
-  width: 19%;
+  width: 240px;
+  position: fixed;
   height: 100vh;
+  z-index: 3;
   background-color: var(--main-color);
   border-radius: 15px 0px 0px 15px;
   overflow-y: auto;

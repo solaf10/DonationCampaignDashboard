@@ -18,7 +18,7 @@ const StarDonarsSection = ({ topDonors }) => {
 
       {/* RIGHT */}
       <div className='rightGroup'>
-        <div className='value'>{donor.total}</div>
+        <div className='value'>{donor.amount}</div>
         <div className='type'>(إجمالي التبرع)</div>
       </div>
     </div>
