@@ -16,7 +16,10 @@ import './PageTable.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAnchorEl } from '../redux/slices/MenuAnchorElSlice';
-import { controlMoreInfoMenu } from '../redux/slices/ModalContollerSlice';
+import {
+  controlControlLocationModal,
+  controlMoreInfoMenu,
+} from '../redux/slices/ModalContollerSlice';
 import { EditCalendarRounded } from '@mui/icons-material';
 
 const PageTable = ({ columns, rows, pageLink }) => {
@@ -87,7 +90,19 @@ const PageTable = ({ columns, rows, pageLink }) => {
                         } else if (column.id === 'action') {
                           return (
                             <TableCell onClick={handleOpenMenu} key={column.id}>
-                              <Button className='button'>
+                              <Button
+                                className='button'
+                                onClick={(e) => {
+                                  e.stopPropagation();
+
+                                  dispatch(
+                                    controlControlLocationModal({
+                                      type: 'edit',
+                                      id: row.uuid,
+                                    }),
+                                  );
+                                }}
+                              >
                                 <EditCalendarRounded className='icon' />
                                 <span>تعديل</span>
                               </Button>

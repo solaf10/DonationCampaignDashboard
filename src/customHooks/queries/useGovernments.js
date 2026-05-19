@@ -8,7 +8,10 @@ export default function useGovernments() {
 export const useSearchGovernments = (search) => {
   return useQuery({
     queryKey: ['governments', search],
-    queryFn: () => searchGovernments(search),
-    enabled: !!search, //don't work if search is empty
+    queryFn: () =>
+      searchGovernments({
+        governorate_name: search,
+      }),
+    enabled: !!search.trim(), //don't work if search is empty
   });
 };

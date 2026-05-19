@@ -5,6 +5,8 @@ const initialState = {
   isControlLocationModalOpen: false,
   isMoreInfoMenuShown: false,
   isSuccessDialogOpen: false,
+  controlLocationModalType: 'add',
+  selectedLocationID: null,
 };
 
 const modalControllerSlice = createSlice({
@@ -14,8 +16,10 @@ const modalControllerSlice = createSlice({
     controlAddBySelectionModal: (state) => {
       state.isAddBySelectionModalOpen = !state.isAddBySelectionModalOpen;
     },
-    controlControlLocationModal: (state) => {
-      state.isAddProjectModalOpen = !state.isAddProjectModalOpen;
+    controlControlLocationModal: (state, action) => {
+      state.isControlLocationModalOpen = !state.isControlLocationModalOpen;
+      state.controlLocationModalType = action.payload.type;
+      state.selectedLocationID = action.payload.id;
     },
     controlMoreInfoMenu: (state) => {
       state.isMoreInfoMenuShown = !state.isMoreInfoMenuShown;

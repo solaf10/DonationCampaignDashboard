@@ -25,6 +25,7 @@ export default function CustomInput({
   value,
   setValue,
   inline,
+  errorMsg,
 }) {
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -33,39 +34,90 @@ export default function CustomInput({
   const [showPassword, setShowPassword] = useState(false);
 
   const inputsStyles = {
-    '& .MuiInputBase-input': { color: '#333' },
-    '& .MuiInput-underline:before': { borderBottomColor: '#ccc' },
+    '& .MuiInputBase-input': {
+      color: '#333',
+    },
+
+    /* ===== DEFAULT BORDER ===== */
+    '& .MuiInput-underline:before': {
+      borderBottomColor: '#ccc',
+    },
+
     '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
       borderBottomColor: 'var(--secondary-color)',
     },
+
     '& .MuiInput-underline:after': {
       borderBottomColor: 'var(--secondary-color)',
     },
+
+    /* ===== ERROR STATE ===== */
+    '& .Mui-error:before': {
+      borderBottomColor: 'var(--error-color)',
+    },
+
+    '& .Mui-error:hover:not(.Mui-disabled):before': {
+      borderBottomColor: 'var(--error-color)',
+    },
+
+    '& .Mui-error:after': {
+      borderBottomColor: 'var(--error-color)',
+    },
+
+    '& .MuiFormLabel-root.Mui-error': {
+      color: 'var(--error-color)',
+    },
+
+    '& .MuiFormHelperText-root.Mui-error': {
+      color: 'var(--error-color)',
+      fontFamily: 'Cairo',
+    },
+
+    /* ===== SELECT ===== */
     '& .MuiSelect-select': {
       color: '#333',
       fontFamily: 'Cairo',
       padding: '8px 0',
     },
-    '& .Mui-disabled': { backgroundColor: '#F5F6F8', cursor: 'not-allowed' },
+
+    /* ===== DISABLED ===== */
+    '& .Mui-disabled': {
+      backgroundColor: '#F5F6F8',
+      cursor: 'not-allowed',
+    },
+
     '& .Mui-disabled:before': {
       borderBottomColor: '#DADDE3',
       borderBottomStyle: 'solid',
     },
+
     '& .Mui-disabled:after': {
       borderBottomColor: '#DADDE3',
       borderBottomStyle: 'solid',
     },
+
     '& .MuiSelect-select.Mui-disabled': {
       color: '#9AA0A6',
       WebkitTextFillColor: '#9AA0A6',
     },
-    '& .MuiInputLabel-root': { color: '#8c9ea0', fontFamily: 'Cairo' },
-    '& .MuiInputLabel-root.Mui-focused': { color: 'var(--main-color)' },
+
+    /* ===== LABEL ===== */
+    '& .MuiInputLabel-root': {
+      color: '#8c9ea0',
+      fontFamily: 'Cairo',
+    },
+
+    '& .MuiInputLabel-root.Mui-focused': {
+      color: 'var(--main-color)',
+    },
+
+    /* ===== PLACEHOLDER ===== */
     '& .MuiInputBase-input::placeholder': {
       fontSize: '14px',
       color: '#9AA0A6',
       opacity: 1,
     },
+
     ...styles,
   };
 
@@ -132,6 +184,7 @@ export default function CustomInput({
         variant='standard'
         disabled={isDisabled}
         sx={inputsStyles}
+        error={!!errorMsg}
       >
         {inputType === 'select' ? (
           <Select
@@ -147,7 +200,12 @@ export default function CustomInput({
                   </span>
                 );
               }
-              return selected;
+
+              const selectedChild = Array.isArray(children)
+                ? children.find((child) => child.props.value === selected)
+                : children;
+
+              return selectedChild?.props.children || selected;
             }}
           >
             {children}
@@ -189,7 +247,6 @@ export default function CustomInput({
               {label}
             </InputLabel>
             <NativeSelect
-              defaultValue=''
               inputProps={{ name: label, id: label }}
               sx={{
                 minWidth: '100px',
@@ -256,9 +313,12 @@ export default function CustomInput({
       </FormControl>
 
       {/* 🔹 Helper text */}
-      {helperText && (
-        <FormHelperText sx={{ color: '#9AA0A6' }}>{helperText}</FormHelperText>
-      )}
+      {helperText ||
+        (errorMsg && (
+          <FormHelperText error={!!errorMsg} sx={{ color: '#9AA0A6' }}>
+            {helperText ? helperText : errorMsg}
+          </FormHelperText>
+        ))}
     </div>
   );
 }

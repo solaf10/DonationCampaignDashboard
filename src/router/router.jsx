@@ -17,65 +17,93 @@ import IndividualDonars from '../pages/IndividualDonars';
 import Organizations from '../pages/Organizations';
 import BusinessDonars from '../pages/businessDonars';
 import Donars from '../pages/Donars';
+import ProtectedRoute from '../utils/ProtectedRoute';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <Auth />,
-    /* children: [
-      {
-        path: '',
-        element: <LogIn />,
-      },
-      {
-        path: 'register',
-        element: <Register />,
-      },
-    ], */
   },
+
+  // Protected Routes
   {
-    path: '/content',
-    element: <Root />,
+    element: <ProtectedRoute />,
     children: [
       {
-        path: 'dashboard',
-        element: <Dashboard />,
+        path: '/content',
+        element: <Root />,
+        children: [
+          {
+            path: 'dashboard',
+            element: <Dashboard />,
+          },
+          {
+            path: 'governments',
+            element: <Governments />,
+          },
+          { path: 'projects', element: <Projects /> },
+          { path: 'projectsDetails/:id', element: <ProjectsDetails /> },
+          { path: 'cities', element: <Cities /> },
+          { path: 'areas', element: <Areas /> },
+          { path: 'campaigns', element: <Campaigns /> },
+          { path: 'campaigns/:id', element: <CampaignsDetails /> },
+
+          {
+            path: 'campaigns/add',
+            element: (
+              <ActiveStepProvider>
+                <AddCampaign />
+              </ActiveStepProvider>
+            ),
+          },
+
+          {
+            path: 'campaigns/edit/:id',
+            element: <EditCampaign />,
+          },
+
+          {
+            path: 'projects/add',
+            element: (
+              <ActiveStepProvider>
+                <AddProject />
+              </ActiveStepProvider>
+            ),
+          },
+
+          /* Trash */
+          {
+            path: 'projects-trash',
+            element: <Projects isTrash={true} />,
+          },
+
+          {
+            path: 'campaigns-trash',
+            element: <Campaigns isTrash={true} />,
+          },
+
+          /* Donars */
+          {
+            path: 'donars',
+            element: <Donars />,
+          },
+
+          {
+            path: 'individuals',
+            element: <IndividualDonars />,
+          },
+
+          {
+            path: 'organizations',
+            element: <Organizations />,
+          },
+
+          {
+            path: 'business',
+            element: <BusinessDonars />,
+          },
+        ],
       },
-      {
-        path: 'governments',
-        element: <Governments />,
-      },
-      { path: 'projects', element: <Projects /> },
-      { path: 'projectsDetails/:id', element: <ProjectsDetails /> },
-      { path: 'cities', element: <Cities /> },
-      { path: 'areas', element: <Areas /> },
-      { path: 'campaigns', element: <Campaigns /> },
-      { path: 'campaigns/:id', element: <CampaignsDetails /> },
-      {
-        path: 'campaigns/add',
-        element: (
-          <ActiveStepProvider>
-            <AddCampaign />
-          </ActiveStepProvider>
-        ),
-      },
-      { path: 'campaigns/edit/:id', element: <EditCampaign /> },
-      {
-        path: 'projects/add',
-        element: (
-          <ActiveStepProvider>
-            <AddProject />
-          </ActiveStepProvider>
-        ),
-      },
-      /* Trash */
-      { path: 'projects-trash', element: <Projects isTrash={true} /> },
-      { path: 'campaigns-trash', element: <Campaigns isTrash={true} /> },
-      /* Donars */
-      { path: 'donars', element: <Donars /> },
-      { path: 'individuals', element: <IndividualDonars /> },
-      { path: 'organizations', element: <Organizations /> },
-      { path: 'business', element: <BusinessDonars /> },
     ],
   },
 ]);
