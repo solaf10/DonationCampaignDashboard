@@ -11,18 +11,15 @@ const AddBySelectionModal = ({ entriesType, entries, modalTitle }) => {
   const [selectedProjects, setSelectedProjects] = useState([]);
 
   const isOpen = useSelector(
-    (state) => state.modalController.isAddBySelectionModalOpen
+    (state) => state.modalController.isAddBySelectionModalOpen,
   );
 
   const filteredProjects = entries.filter((project) =>
-    project.name.toLowerCase().includes(searchedKey.toLowerCase())
+    project.name.toLowerCase().includes(searchedKey.toLowerCase()),
   );
 
   const dispatch = useDispatch();
 
-  const handleClose = () => {
-    dispatch(controlAddBySelectionModal());
-  };
   const handleSelectProject = (project) => {
     setSelectedProjects((prev) => {
       const exists = prev.find((p) => p.id === project.id);
@@ -73,7 +70,7 @@ const AddBySelectionModal = ({ entriesType, entries, modalTitle }) => {
   return (
     <CustomModal
       isOpen={isOpen}
-      setIsOpen={handleClose}
+      closeHandler={() => dispatch(controlAddBySelectionModal())}
       modalTitle={modalTitle}
       submitBtnTitle='إضافة'
       styles={{ width: '600px' }}

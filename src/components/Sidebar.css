@@ -8,6 +8,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   .logo {
+    width: 100%;
     text-align: center;
     padding: 40px 0px 40px;
   }

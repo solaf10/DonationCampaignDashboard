@@ -4,48 +4,93 @@ import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
 import { useState } from 'react';
 import { AddRounded } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
+import CityModalForm from '../components/locations/CityModalForm';
+import useCities, {
+  useFilterCitiesByGovernment,
+  useSearchCities,
+} from '../customHooks/queries/useCities';
+import useGovernments from '../customHooks/queries/useGovernments';
 
 const columns = [
-  { id: 'name', label: 'الاسم' },
-  { id: 'type', label: 'النوع' },
-  { id: 'status', label: 'الحالة' },
+  { id: 'city_name', label: 'المدينة' },
+  { id: 'governorate_name', label: 'المحافظة' },
   { id: 'action', label: 'الإجراءات' },
-];
-
-const rows = [
-  { name: 'حملة رمضان', type: 'تبرعات', status: 'نشطة' },
-  { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
-  { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
-  { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
-  { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
-  { name: 'حملة  جديدةرمضان', type: 'تبرعات', status: 'نشطة' },
-  { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
-  { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
-  { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
-  { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
 ];
 
 const Cities = () => {
   const [city, setCity] = useState('');
-  const [government, setGovernment] = useState('');
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [government, setGovernment] = useState('all');
+
+  const { data: cities, isPending: isFetchingCities, error } = useCities();
+
+  // fetch governments
+  const {
+    data: governmentsData,
+    /* isPending: isGovernmentFetching,
+      error, */
+  } = useGovernments();
+
+  // enableSearch when there is a search value, otherwise use the all cities query
+  const {
+    data: searchedCities,
+    /* isPending: isSearchLoading,
+      error: searchError, */
+  } = useSearchCities(city);
+
+  // filter cities by government when there is a government value
+  const { data: filteredCitiesByGovernment, isFiltering } =
+    useFilterCitiesByGovernment(government !== 'all' ? government : null);
+
+  const allCities = cities?.data || [];
+  const searchCities = searchedCities?.data || [];
+
+  let rawData = allCities;
+
+  // search + filter
+  if (city.trim() && government !== 'all') {
+    rawData = searchCities.filter((c) => c.governorate?.uuid === government);
+  }
+
+  // search only
+  else if (city.trim()) {
+    rawData = searchCities;
+  }
+
+  // filter only
+  else if (government !== 'all') {
+    rawData = allCities.filter((c) => c.governorate?.uuid === government);
+  }
+
+  const rows =
+    rawData.map((city) => ({
+      uuid: city.uuid,
+      city_name: city.city_name,
+      governorate_name: city?.governorate.governorate_name,
+      governorate_uuid: city?.governorate.uuid,
+    })) || [];
+
+  const governments = governmentsData?.data || [];
+
+  const dispatch = useDispatch();
+
   const nativeSelectStyles = { minWidth: '100px' };
   return (
     <PageContainer>
       <Title pageTitle='إدارة الموقع(المكان)' subtitle='المدن'>
-        <button onClick={() => setIsAddModalOpen(true)} className='btn'>
+        <button
+          onClick={() =>
+            dispatch(controlControlLocationModal({ type: 'add', id: null }))
+          }
+          className='btn'
+        >
           <span>إضافة مدينة</span>
           <AddRounded />
         </button>
       </Title>
       {/* Fitler & table */}
-      <ContentWithTable
-        isOpen={isAddModalOpen}
-        setIsOpen={setIsAddModalOpen}
-        columns={columns}
-        rows={rows}
-        className='cities'
-      >
+      <ContentWithTable columns={columns} rows={rows} className='cities'>
         {/* filter holder */}
         <div className='input-holder'>
           <CustomInput
@@ -60,9 +105,8 @@ const Cities = () => {
             }}
             value={city}
             setValue={setCity}
-          >
-            nothing
-          </CustomInput>
+          />
+
           <CustomInput
             label='المحافظة'
             inputType='nativeSelect'
@@ -72,13 +116,17 @@ const Cities = () => {
           >
             <option value='' disabled style={{ display: 'none' }}></option>
             <option value='all'>الكل</option>
-            <option value='Alhamra'>حمص</option>
-            <option value='Alghuta'>حماة</option>
+            {governments.map((government) => (
+              <option key={government.uuid} value={government.uuid}>
+                {government.governorate_name}
+              </option>
+            ))}
           </CustomInput>
         </div>
 
         <p>عدد المدن: {rows.length}</p>
       </ContentWithTable>
+      <CityModalForm cities={rows} governments={governments} />
     </PageContainer>
   );
 };

@@ -16,7 +16,10 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import MoreMenu from '../components/MoreMenu';
 import { useDispatch } from 'react-redux';
-import { controlMoreInfoMenu } from '../redux/slices/ModalContollerSlice';
+import {
+  controlControlLocationModal,
+  controlMoreInfoMenu,
+} from '../redux/slices/ModalContollerSlice';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
@@ -29,7 +32,6 @@ const columns = [
 
 const Campaigns = ({ isTrash = false }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchedKey, setSearchedKey] = useState('');
 
   const navigate = useNavigate();
@@ -139,7 +141,10 @@ const Campaigns = ({ isTrash = false }) => {
           <p style={{ fontSize: '14px' }}>عدد الحملات: {rows.length}</p>
         </div>
         {/* filter Model btn */}
-        <button className='filter-btn' onClick={() => setIsFilterOpen(true)}>
+        <button
+          className='filter-btn'
+          onClick={() => dispatch(controlControlLocationModal())}
+        >
           <FilterAltOutlined className='icon' />
         </button>
       </ContentWithTable>
@@ -153,12 +158,7 @@ const Campaigns = ({ isTrash = false }) => {
       />
 
       {/* filterModal */}
-      <ControlLocationModal
-        isOpen={isFilterOpen}
-        setIsOpen={setIsFilterOpen}
-        title='تصفية متقدمة'
-        locationType='projects'
-      />
+      <ControlLocationModal title='تصفية متقدمة' locationType='projects' />
 
       {/* MoreInfoMenu */}
       <MoreMenu
