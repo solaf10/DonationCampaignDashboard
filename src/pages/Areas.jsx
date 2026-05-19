@@ -69,9 +69,7 @@ const Areas = () => {
             }}
             value={area}
             setValue={setArea}
-          >
-            nothing
-          </CustomInput>
+          />
           <CustomInput
             label='المحافظة'
             inputType='nativeSelect'

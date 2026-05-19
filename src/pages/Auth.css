@@ -1,0 +1,93 @@
+.auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  /* background: linear-gradient(
+  135deg,
+  #014a5b,
+  #026b80,
+  #0aa6a6
+); */
+  background: linear-gradient(135deg, #014a5b, #026b80, #0aa6a6);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* SIGN BOX */
+.sign {
+  position: relative;
+  padding: 25px 32px;
+  width: 500px;
+  min-height: 435px;
+  border-radius: 16px;
+  background-color: white;
+}
+.sign .btn {
+  min-height: 48px;
+  width: 100%;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 18px rgba(1, 74, 91, 0.25);
+}
+.sign .btn-loader {
+  width: 20px;
+  height: 20px;
+}
+
+/* TITLE */
+.sign .sign-title {
+  margin-bottom: 24px;
+}
+
+.sign .sign-title h1 {
+  font-size: 32px;
+  text-align: center;
+}
+
+.sign .sign-title p {
+  font-size: 18px;
+  color: #7a7a7a;
+}
+
+.logo {
+  width: 45px;
+  vertical-align: text-top;
+}
+
+/* FORM */
+.sign form {
+  display: flex;
+  flex-direction: column;
+}
+
+.sign form label {
+  margin-bottom: 4px;
+}
+
+.sign form > div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+  p {
+    margin: 0px;
+  }
+}
+
+/* SUBMIT */
+.sign form input[type='submit'] {
+  margin-top: 15px;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .auth {
+    padding: 20px;
+  }
+
+  .sign {
+    width: 100%;
+  }
+}
