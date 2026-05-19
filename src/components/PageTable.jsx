@@ -63,43 +63,46 @@ const PageTable = ({ columns, rows, pageLink }) => {
             </TableHead>
 
             <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => (
-                  <TableRow
-                    hover
-                    key={index}
-                    onClick={() =>
-                      pageLink ? navigate(pageLink + `/${index + 1}`) : null
-                    }
-                    style={{ cursor: pageLink ? 'pointer' : 'unset' }}
-                  >
-                    {columns.map((column) => {
-                      if (column.id === 'actions') {
-                        return (
-                          <TableCell onClick={handleOpenMenu} key={column.id}>
-                            <IconButton>
-                              <MoreVertIcon />
-                            </IconButton>
-                          </TableCell>
-                        );
-                      } else if (column.id === 'action') {
-                        return (
-                          <TableCell onClick={handleOpenMenu} key={column.id}>
-                            <Button className='button'>
-                              <EditCalendarRounded className='icon' />
-                              <span>تعديل</span>
-                            </Button>
-                          </TableCell>
-                        );
+              {rows &&
+                rows
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ?.map((row, index) => (
+                    <TableRow
+                      hover
+                      key={index}
+                      onClick={() =>
+                        pageLink ? navigate(pageLink + `/${index + 1}`) : null
                       }
+                      style={{ cursor: pageLink ? 'pointer' : 'unset' }}
+                    >
+                      {columns.map((column) => {
+                        if (column.id === 'actions') {
+                          return (
+                            <TableCell onClick={handleOpenMenu} key={column.id}>
+                              <IconButton>
+                                <MoreVertIcon />
+                              </IconButton>
+                            </TableCell>
+                          );
+                        } else if (column.id === 'action') {
+                          return (
+                            <TableCell onClick={handleOpenMenu} key={column.id}>
+                              <Button className='button'>
+                                <EditCalendarRounded className='icon' />
+                                <span>تعديل</span>
+                              </Button>
+                            </TableCell>
+                          );
+                        }
 
-                      return (
-                        <TableCell key={column.id}>{row[column.id]}</TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
+                        return (
+                          <TableCell key={column.id}>
+                            {row[column.id]}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -118,7 +121,7 @@ const PageTable = ({ columns, rows, pageLink }) => {
             }
           /> */}
         <CustomPagination
-          count={rows.length}
+          count={rows?.length || 3}
           page={page}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}

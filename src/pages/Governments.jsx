@@ -4,30 +4,35 @@ import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
 import { AddRounded } from '@mui/icons-material';
 import { useState } from 'react';
+import useGovernments, {
+  useSearchGovernments,
+} from '../customHooks/queries/useGovernments';
+import useDebounce from '../customHooks/useDebounce';
 
 const columns = [
-  { id: 'name', label: 'الاسم' },
-  { id: 'type', label: 'النوع' },
-  { id: 'status', label: 'الحالة' },
+  { id: 'governorate_name', label: 'الاسم' },
   { id: 'action', label: 'الإجراءات' },
-];
-
-const rows = [
-  { name: 'حملة رمضان', type: 'تبرعات', status: 'نشطة' },
-  { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
-  { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
-  { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
-  { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
-  { name: 'حملة  جديدةرمضان', type: 'تبرعات', status: 'نشطة' },
-  { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
-  { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
-  { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
-  { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
 ];
 
 const Governments = () => {
   const [government, setGovernment] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const {
+    data: governments,
+    isPending: isGovernmentFetching,
+    error,
+  } = useGovernments();
+
+  const {
+    data: searchedGovernments,
+    isPending: isSearchLoading,
+    error: searchError,
+  } = useSearchGovernments({ governorate_name: government });
+
+  const rows = government.trim()
+    ? searchedGovernments?.data || []
+    : governments?.data || [];
+
   return (
     <PageContainer>
       <Title pageTitle='إدارة الموقع(المكان)' subtitle='المحافظات'>
@@ -56,10 +61,9 @@ const Governments = () => {
           }}
           value={government}
           setValue={setGovernment}
-        >
-          nothing
-        </CustomInput>
-        <p>عدد المحافظات: {rows.length}</p>
+        />
+
+        <p>عدد المحافظات: {rows?.length}</p>
       </ContentWithTable>
     </PageContainer>
   );
