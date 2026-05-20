@@ -14,6 +14,13 @@ const config = {
     edit: 'city/update',
     filter: 'city/filter',
   },
+  areas: {
+    all: 'district/index',
+    search: 'district/search',
+    add: 'district/add',
+    edit: 'district/update',
+    filter: 'district/filter',
+  },
   activities: 'api/activities',
   contact: 'api/contactForms/contact-us/',
 };

@@ -91,17 +91,6 @@ const topDonors = [
 ];
 
 const Donars = () => {
-  const searchInputStyles = {
-    width: '500px',
-    height: '48px',
-    justifyContent: 'center',
-    px: 2,
-    border: '1px solid #e0e0e0',
-    borderRadius: 3,
-    display: 'flex',
-    alignItems: 'center',
-    backgroundColor: '#f9f9f9',
-  };
   const infoCards = infos.map((info) => (
     <DonorsInfoCard
       size={3}
@@ -114,23 +103,8 @@ const Donars = () => {
   ));
   return (
     <PageContainer>
-      <Title pageTitle='إدارة المتبرعين'>
-        {/*  البحث */}
-        <TextField
-          fullWidth
-          placeholder='ابحث حسب الاسم'
-          variant='standard'
-          InputProps={{
-            disableUnderline: true,
-            startAdornment: (
-              <InputAdornment position='start'>
-                <SearchIcon sx={{ color: 'gray' }} />
-              </InputAdornment>
-            ),
-          }}
-          sx={searchInputStyles}
-        />
-      </Title>
+      <Title pageTitle='إدارة المتبرعين' />
+
       <Grid container spacing={2} marginBottom={2}>
         {infoCards}
       </Grid>

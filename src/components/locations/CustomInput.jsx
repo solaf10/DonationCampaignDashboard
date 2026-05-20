@@ -313,12 +313,11 @@ export default function CustomInput({
       </FormControl>
 
       {/* 🔹 Helper text */}
-      {helperText ||
-        (errorMsg && (
-          <FormHelperText error={!!errorMsg} sx={{ color: '#9AA0A6' }}>
-            {helperText ? helperText : errorMsg}
-          </FormHelperText>
-        ))}
+      {((helperText && isDisabled) || errorMsg) && (
+        <FormHelperText error={!!errorMsg} sx={{ color: '#9AA0A6' }}>
+          {helperText ? helperText : errorMsg}
+        </FormHelperText>
+      )}
     </div>
   );
 }

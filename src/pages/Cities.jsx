@@ -7,11 +7,8 @@ import { AddRounded } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
 import CityModalForm from '../components/locations/CityModalForm';
-import useCities, {
-  useFilterCitiesByGovernment,
-  useSearchCities,
-} from '../customHooks/queries/useCities';
 import useGovernments from '../customHooks/queries/useGovernments';
+import useGetCitiesLogic from '../customHooks/useGetCitiesLogic';
 
 const columns = [
   { id: 'city_name', label: 'المدينة' },
@@ -23,53 +20,22 @@ const Cities = () => {
   const [city, setCity] = useState('');
   const [government, setGovernment] = useState('all');
 
-  const { data: cities, isPending: isFetchingCities, error } = useCities();
+  const {
+    rows,
+    /* isSearchLoading,
+    searchError,
+    isFiltering,
+    filterError,
+    isFetchingCities,
+    citiesError, */
+  } = useGetCitiesLogic(city, government);
 
   // fetch governments
   const {
     data: governmentsData,
     /* isPending: isGovernmentFetching,
-      error, */
+    error: governmentsError, */
   } = useGovernments();
-
-  // enableSearch when there is a search value, otherwise use the all cities query
-  const {
-    data: searchedCities,
-    /* isPending: isSearchLoading,
-      error: searchError, */
-  } = useSearchCities(city);
-
-  // filter cities by government when there is a government value
-  const { data: filteredCitiesByGovernment, isFiltering } =
-    useFilterCitiesByGovernment(government !== 'all' ? government : null);
-
-  const allCities = cities?.data || [];
-  const searchCities = searchedCities?.data || [];
-
-  let rawData = allCities;
-
-  // search + filter
-  if (city.trim() && government !== 'all') {
-    rawData = searchCities.filter((c) => c.governorate?.uuid === government);
-  }
-
-  // search only
-  else if (city.trim()) {
-    rawData = searchCities;
-  }
-
-  // filter only
-  else if (government !== 'all') {
-    rawData = allCities.filter((c) => c.governorate?.uuid === government);
-  }
-
-  const rows =
-    rawData.map((city) => ({
-      uuid: city.uuid,
-      city_name: city.city_name,
-      governorate_name: city?.governorate.governorate_name,
-      governorate_uuid: city?.governorate.uuid,
-    })) || [];
 
   const governments = governmentsData?.data || [];
 

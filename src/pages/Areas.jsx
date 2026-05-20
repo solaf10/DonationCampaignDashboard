@@ -5,56 +5,71 @@ import CustomInput from '../components/locations/CustomInput';
 import { AddRounded } from '@mui/icons-material';
 import Title from '../components/Title';
 import PageContainer from '../components/PageContainer';
+import { useDispatch } from 'react-redux';
+import useCities from '../customHooks/queries/useCities';
+import useGovernments from '../customHooks/queries/useGovernments';
+import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
+import useGetAreasLogic from '../customHooks/useGetAreasLogic';
+import AreaModalForm from '../components/locations/AreaModalForm';
 
 const columns = [
-  { id: 'name', label: 'الاسم' },
-  { id: 'type', label: 'النوع' },
-  { id: 'status', label: 'الحالة' },
+  { id: 'district_name', label: 'المنطقة' },
+  { id: 'city_name', label: 'المدينة' },
+  { id: 'governorate_name', label: 'المحافظة' },
   { id: 'action', label: 'الإجراءات' },
 ];
 
 const Areas = () => {
   const [area, setArea] = useState('');
-  const [city, setCity] = useState('');
-  const [government, setGovernment] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const rows = [
-    {
-      name: 'حملة رمضان',
-      type: 'تبرعات',
-      /* status: <button onClick={() => setIsOpen(true)}>edit</button>, */
-      status: 'مكتملة',
-    },
-    { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
-    { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
-    { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
-    { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
-    { name: 'حملة  جديدةرمضان', type: 'تبرعات', status: 'نشطة' },
-    { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
-    { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
-    { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
-    { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
-  ];
+  const [city, setCity] = useState('all');
+  const [government, setGovernment] = useState('all');
+
+  // fetch & filter areas logic
+  const {
+    rows,
+    /* isSearching,
+    searchError,
+    isFiltering,
+    filterError,
+    isFetchingAreas,
+    areasError, */
+  } = useGetAreasLogic(area, city, government);
+
+  const {
+    data: cities,
+    /* isPending: isFetchingCities,
+    error: citiesError, */
+  } = useCities();
+
+  // fetch governments
+  const {
+    data: governmentsData,
+    /* isPending: isGovernmentFetching,
+    error: governmentsError, */
+  } = useGovernments();
+
+  const governments = governmentsData?.data || [];
+
+  const dispatch = useDispatch();
+
   const nativeSelectStyles = {
     minWidth: '100px',
   };
   return (
     <PageContainer>
       <Title pageTitle='إدارة الموقع(المكان)' subtitle='المناطق'>
-        <button onClick={() => setIsAddModalOpen(true)} className='btn'>
+        <button
+          onClick={() =>
+            dispatch(controlControlLocationModal({ type: 'add', id: null }))
+          }
+          className='btn'
+        >
           <span>إضافة منطقة</span>
           <AddRounded />
         </button>
       </Title>
       {/* Table & filter */}
-      <ContentWithTable
-        isOpen={isAddModalOpen}
-        setIsOpen={setIsAddModalOpen}
-        columns={columns}
-        rows={rows}
-        className='areas'
-      >
+      <ContentWithTable columns={columns} rows={rows} className='areas'>
         {/* filter holder */}
         <div className='input-holder'>
           <CustomInput
@@ -77,10 +92,12 @@ const Areas = () => {
             value={government}
             setValue={setGovernment}
           >
-            <option value='' disabled style={{ display: 'none' }}></option>
             <option value='all'>الكل</option>
-            <option value='Alhamra'>حمص</option>
-            <option value='Alghuta'>حماة</option>
+            {governments.map((government) => (
+              <option key={government.uuid} value={government.uuid}>
+                {government.governorate_name}
+              </option>
+            ))}
           </CustomInput>
           <CustomInput
             label='المدينة'
@@ -89,24 +106,18 @@ const Areas = () => {
             value={city}
             setValue={setCity}
           >
-            <option value='' disabled style={{ display: 'none' }}></option>
             <option value='all'>الكل</option>
-            <option value='Alhamra'>الحمراء</option>
-            <option value='Alghuta'>الغوطة</option>
+            {cities?.data.map((city) => (
+              <option key={city.uuid} value={city.uuid}>
+                {city.city_name}
+              </option>
+            ))}
           </CustomInput>
         </div>
 
         <p>عدد المناطق: {rows.length}</p>
       </ContentWithTable>
-
-      {/* Edit Modal */}
-      <ControlLocationModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        title='تعديل المنطقة'
-        locationType='areas'
-        isEdit={true}
-      />
+      <AreaModalForm governments={governments} areas={rows} />
     </PageContainer>
   );
 };
