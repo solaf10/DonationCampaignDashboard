@@ -1,5 +1,12 @@
-
-import { Grid, Box, Container, TextField, IconButton, InputAdornment, Pagination } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  Grid,
+  Box,
+  Container,
+  TextField,
+  IconButton,
+  InputAdornment,
+} from '@mui/material';
 
 import ProjectCard from '../components/ProjectCard/ProjectCard';
 import Title from '../components/Title';
@@ -10,7 +17,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import projectsData from "../components/data/ProjectsData";
-
+import { Link } from 'react-router-dom';
 
 export default function Projects() {
   const [openFilter, setOpenFilter] = useState(false);
@@ -25,60 +32,71 @@ export default function Projects() {
   const paginatedProjects = projectsData.slice(startIndex, endIndex);
 
   return (
-    <Container maxWidth="lg" sx={{ px: 2 }}>
-
-      <Title pageTitle='إدارة المشاريع'>
-        <button className='btn'>
-          <span> + إضافة مشروع</span>
-        </button>
+    <Container className='projects' maxWidth='lg' sx={{ px: 2 }}>
+      <Title
+        pageTitle={isTrash ? 'سلة مهملات المشاريع' : 'إدارة المشاريع'}
+        subtitle={isTrash ? 'يمكنك استعادة أو حذف العناصر نهائياً' : null}
+      >
+        {!isTrash && (
+          <Link to='/content/projects/add' className='btn'>
+            <span>إضافة مشروع</span>
+            <AddRounded />
+          </Link>
+        )}
       </Title>
 
-      {/* Search + Filter */}
-      <Box
-        sx={{
-          width: "100%",
-          border: "1px solid #e0e0e0",
-          borderRadius: 3,
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "#f9f9f9",
-          mb: 3.5
-        }}
-      >
-        <TextField
-          fullWidth
-          placeholder="ابحث حسب الاسم"
-          variant="standard"
-          InputProps={{
-            disableUnderline: true,
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: "gray" }} />
-              </InputAdornment>
-            )
-          }}
-          sx={{ px: 2 }}
-        />
+      <div className='filters-holder'>
+        {/* filter holder */}
+        <div className='input-holder'>
+          <CustomInput
+            inputType='textField'
+            placeholder='ابحث حسب الاسم'
+            styles={{
+              width: '400px',
+              height: 'auto',
+              '& .MuiInputLabel-root.Mui-focused': {
+                color: 'var(--main-color)', // لون اللابل عند focus
+              },
+            }}
+          />
 
+          <p style={{ fontSize: '14px' }}>عدد الحملات: {projectsData.length}</p>
+        </div>
         <IconButton
           onClick={() => setOpenFilter(true)}
-          sx={{ backgroundColor: "#eeeeee", borderRadius: 2, m: 1 }}
+          sx={{
+            backgroundColor: '#eeeeee',
+            borderRadius: 2,
+            m: 1,
+          }}
+          className='filter-btn'
         >
-          <FilterListIcon />
+          <FilterListIcon className='icon' />
         </IconButton>
-      </Box>
+      </div>
 
       <FilterDrawer open={openFilter} onClose={() => setOpenFilter(false)} />
 
-      {/* Projects Grid */}
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        <Grid container spacing={4} sx={{ width: "100%" }}>
-          {paginatedProjects.map((project) => (
-            <Grid item xs={12} sm={6} md={4} key={project.id} sx={{ display: "flex" }}>
-              <ProjectCard
-                project={project}
-                onDetailsClick={() => navigate(`/projects/${project.id}`)}
-              />
+      <Box
+        sx={{
+          width: '100%',
+          direction: 'ltr',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <Grid container spacing={4} alignItems='stretch' sx={{ width: '100%' }}>
+          {projectsData.map((project, index) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              size={3}
+              key={index}
+              sx={{ display: 'flex' }}
+            >
+              <ProjectCard project={project} isTrash={isTrash}  onDetailsClick={() => navigate(`/projects/${project.id}`)}/>
             </Grid>
           ))}
         </Grid>

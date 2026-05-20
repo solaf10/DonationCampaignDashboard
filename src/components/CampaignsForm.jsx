@@ -10,9 +10,32 @@ import CustomInput from './locations/CustomInput';
 import Textarea from './Textarea';
 import { Grid, Typography } from '@mui/material';
 import './CampaignsForm.css';
-import AddProjectsModal from './AddProjectsModal';
-
+import AddBySelectionModal from './AddBySelectionModal';
+import SuccessMessageDialog from './SuccessMessageDialog';
 const steps = ['معلومات الحملة', 'جدولة للحملة', 'التمويل والوسائط'];
+
+const projects = [
+  {
+    id: 1,
+    name: 'مشروع التخرج',
+    location: 'حمص-الحمراء',
+  },
+  {
+    id: 2,
+    name: 'تعليم إلكتروني',
+    location: 'حمص-الحميدية',
+  },
+  {
+    id: 3,
+    name: 'متجر إلكتروني',
+    location: 'دمشق-الحميدية',
+  },
+  {
+    id: 4,
+    name: 'تطبيق حجوزات',
+    location: 'حماة-ابن رشد',
+  },
+];
 
 const CampaignsForm = () => {
   const { activeStep } = useActiveStep();
@@ -135,11 +158,10 @@ const CampaignsForm = () => {
                 fill='currentColor'
                 strokeWidth='0'
                 viewBox='0 0 512 512'
-                class='icon'
+                className='icon'
                 height='1em'
                 width='1em'
                 xmlns='http://www.w3.org/2000/svg'
-                className='icon'
               >
                 <path
                   fill='none'
@@ -184,7 +206,16 @@ const CampaignsForm = () => {
           : paymentForm}
       </StepperForm>
       {/* Projects Modal */}
-      <AddProjectsModal />
+      <SuccessMessageDialog
+        title='تم إنشاء الحملة بنجاح!'
+        desc='تم إنشاء حملتك بنجاح. يمكنك الآن إضافة مشاريع مرتبطة أو القيام بذلك لاحقًا.'
+        btnTitle='إضافة مشاريع الآن'
+      />
+      <AddBySelectionModal
+        entriesType='projects'
+        entries={projects}
+        modalTitle='إضافة مشاريع مرتبطة'
+      />
     </>
   );
 };

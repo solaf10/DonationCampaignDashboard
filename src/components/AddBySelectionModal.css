@@ -48,6 +48,10 @@
     }
   }
 }
+.empty-projects {
+  align-items: center;
+  gap: 8px;
+}
 /* Empty project */
 .empty-projects-min {
   width: 100%;

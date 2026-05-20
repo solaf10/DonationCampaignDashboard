@@ -5,8 +5,22 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomInput from '../components/locations/CustomInput';
 import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
-import { AddRounded } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import {
+  AddRounded,
+  DeleteOutline,
+  EditOutlined,
+  FilterAltOutlined,
+  RecyclingRounded,
+  VisibilityOutlined,
+} from '@mui/icons-material';
+import { Link, useNavigate } from 'react-router-dom';
+import MoreMenu from '../components/MoreMenu';
+import { useDispatch } from 'react-redux';
+import {
+  controlControlLocationModal,
+  controlMoreInfoMenu,
+} from '../redux/slices/ModalContollerSlice';
+import { IconButton } from '@mui/material';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
@@ -17,9 +31,39 @@ const columns = [
   { id: 'actions', label: '' },
 ];
 
-const Campaigns = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const Campaigns = ({ isTrash = false }) => {
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const [searchedKey, setSearchedKey] = useState('');
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const actions = [
+    {
+      label: 'عرض التفاصيل',
+      icon: <VisibilityOutlined fontSize='small' />,
+      onClick: () => navigate('/content/campaigns/3'),
+    },
+    {
+      label: isTrash ? 'استعادة' : 'تعديل',
+      icon: isTrash ? (
+        <RecyclingRounded fontSize='small' />
+      ) : (
+        <EditOutlined fontSize='small' />
+      ),
+      onClick: () =>
+        isTrash
+          ? console.log('recycle')
+          : navigate('/content/campaigns/edit/3'),
+    },
+    {
+      label: 'حذف',
+      icon: <DeleteOutline fontSize='small' />,
+      onClick: () => console.log('delete'),
+      danger: true,
+    },
+  ];
+
   const rows = [
     {
       name: 'حملة رمضان',
@@ -59,11 +103,16 @@ const Campaigns = () => {
   ];
   return (
     <PageContainer>
-      <Title pageTitle='إدارة الحملات'>
-        <Link to='/content/campaigns/add' className='btn'>
-          <span>إضافة حملة</span>
-          <AddRounded />
-        </Link>
+      <Title
+        pageTitle={isTrash ? 'سلة مهملات الحملات' : 'إدارة الحملات'}
+        subtitle={isTrash ? 'يمكنك استعادة أو حذف العناصر نهائياً' : null}
+      >
+        {!isTrash && (
+          <Link to='/content/campaigns/add' className='btn'>
+            <span>إضافة حملة</span>
+            <AddRounded />
+          </Link>
+        )}
       </Title>
       {/* filter & table */}
       <ContentWithTable
@@ -93,17 +142,29 @@ const Campaigns = () => {
           <p style={{ fontSize: '14px' }}>عدد الحملات: {rows.length}</p>
         </div>
         {/* filter Model btn */}
-        <button className='filter-btn'>
-          <FilterAltIcon className='icon' />
-        </button>
+        <IconButton
+          className='filter-btn'
+          onClick={() => dispatch(controlControlLocationModal())}
+        >
+          <FilterAltOutlined className='icon' />
+        </IconButton>
       </ContentWithTable>
       {/* Edit Modal */}
       <ControlLocationModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
+        isOpen={isEditOpen}
+        setIsOpen={setIsEditOpen}
         title='تعديل المنطقة'
         locationType='areas'
         isEdit={true}
+      />
+
+      {/* filterModal */}
+      <ControlLocationModal title='تصفية متقدمة' locationType='projects' />
+
+      {/* MoreInfoMenu */}
+      <MoreMenu
+        handleCloseMenu={() => dispatch(controlMoreInfoMenu())}
+        actions={actions}
       />
     </PageContainer>
   );

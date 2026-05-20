@@ -4,46 +4,56 @@ import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
 import { AddRounded } from '@mui/icons-material';
 import { useState } from 'react';
+import useGovernments, {
+  useSearchGovernments,
+} from '../customHooks/queries/useGovernments';
+import { useDispatch } from 'react-redux';
+import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
+import CustomModal from '../components/CustomModal';
+import GovernmentModalForm from '../components/locations/GovernmentModalForm';
 
 const columns = [
-  { id: 'name', label: 'الاسم' },
-  { id: 'type', label: 'النوع' },
-  { id: 'status', label: 'الحالة' },
-  { id: 'actions', label: '' },
-];
-
-const rows = [
-  { name: 'حملة رمضان', type: 'تبرعات', status: 'نشطة' },
-  { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
-  { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
-  { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
-  { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
-  { name: 'حملة  جديدةرمضان', type: 'تبرعات', status: 'نشطة' },
-  { name: 'حملة الشتاء', type: 'إغاثة', status: 'موقوفة' },
-  { name: 'حملة التعليم', type: 'تعليم', status: 'نشطة' },
-  { name: 'حملة الصحة', type: 'طبية', status: 'نشطة' },
-  { name: 'حملة الغذاء', type: 'غذائية', status: 'مكتملة' },
+  { id: 'governorate_name', label: 'الاسم' },
+  { id: 'action', label: 'الإجراءات' },
 ];
 
 const Governments = () => {
   const [government, setGovernment] = useState('');
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  // fetch governments
+  const {
+    data: governments,
+    /* isPending: isGovernmentFetching,
+    error, */
+  } = useGovernments();
+
+  // enableSearch when there is a search value, otherwise use the all governments query
+  const {
+    data: searchedGovernments,
+    /* isPending: isSearchLoading,
+    error: searchError, */
+  } = useSearchGovernments(government);
+
+  const rows = government.trim()
+    ? searchedGovernments?.data || []
+    : governments?.data || [];
+
+  const dispatch = useDispatch();
+
   return (
     <PageContainer>
       <Title pageTitle='إدارة الموقع(المكان)' subtitle='المحافظات'>
-        <button onClick={() => setIsAddModalOpen(true)} className='btn'>
+        <button
+          onClick={() =>
+            dispatch(controlControlLocationModal({ type: 'add', id: null }))
+          }
+          className='btn'
+        >
           <span>إضافة محافظة</span>
           <AddRounded />
         </button>
       </Title>
       {/* Filter & Table */}
-      <ContentWithTable
-        isOpen={isAddModalOpen}
-        setIsOpen={setIsAddModalOpen}
-        columns={columns}
-        rows={rows}
-        className='governments'
-      >
+      <ContentWithTable columns={columns} rows={rows} className='governments'>
         <CustomInput
           inputType='textField'
           placeholder='ابحث في المحافظات'
@@ -56,11 +66,12 @@ const Governments = () => {
           }}
           value={government}
           setValue={setGovernment}
-        >
-          nothing
-        </CustomInput>
-        <p>عدد المحافظات: {rows.length}</p>
+        />
+
+        <p>عدد المحافظات: {rows?.length}</p>
       </ContentWithTable>
+
+      <GovernmentModalForm governments={rows} />
     </PageContainer>
   );
 };

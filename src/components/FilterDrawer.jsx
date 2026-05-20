@@ -42,6 +42,7 @@ export default function FilterDrawer({ open, onClose }) {
     region: '',
     sector: '',
     executor: '', 
+
   });
 
   const [funders, setFunders] = useState({

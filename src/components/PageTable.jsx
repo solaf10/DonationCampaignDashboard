@@ -7,18 +7,27 @@ import {
   TableRow,
   Paper,
   IconButton,
+  Button,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
 import CustomPagination from './CustomPagination';
 import './PageTable.css';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setAnchorEl } from '../redux/slices/MenuAnchorElSlice';
+import {
+  controlControlLocationModal,
+  controlMoreInfoMenu,
+} from '../redux/slices/ModalContollerSlice';
+import { EditCalendarRounded } from '@mui/icons-material';
 
 const PageTable = ({ columns, rows, pageLink }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -31,7 +40,10 @@ const PageTable = ({ columns, rows, pageLink }) => {
 
   const handleOpenMenu = (e) => {
     e.stopPropagation();
+    dispatch(setAnchorEl(e.currentTarget));
+    dispatch(controlMoreInfoMenu());
   };
+
   return (
     <div className='table-holder'>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -54,34 +66,58 @@ const PageTable = ({ columns, rows, pageLink }) => {
             </TableHead>
 
             <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => (
-                  <TableRow
-                    hover
-                    key={index}
-                    onClick={() =>
-                      pageLink ? navigate(pageLink + `/${index + 1}`) : null
-                    }
-                    style={{ cursor: pageLink ? 'pointer' : 'unset' }}
-                  >
-                    {columns.map((column) => {
-                      if (column.id === 'actions') {
+              {rows &&
+                rows
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ?.map((row, index) => (
+                    <TableRow
+                      hover
+                      key={index}
+                      onClick={() =>
+                        pageLink ? navigate(pageLink + `/${index + 1}`) : null
+                      }
+                      style={{ cursor: pageLink ? 'pointer' : 'unset' }}
+                    >
+                      {columns.map((column) => {
+                        if (column.id === 'actions') {
+                          return (
+                            <TableCell onClick={handleOpenMenu} key={column.id}>
+                              <IconButton>
+                                <MoreVertIcon />
+                              </IconButton>
+                            </TableCell>
+                          );
+                        } else if (column.id === 'action') {
+                          return (
+                            <TableCell onClick={handleOpenMenu} key={column.id}>
+                              <Button
+                                className='button'
+                                onClick={(e) => {
+                                  e.stopPropagation();
+
+                                  dispatch(
+                                    controlControlLocationModal({
+                                      type: 'edit',
+                                      id: row.uuid,
+                                    }),
+                                  );
+                                }}
+                              >
+                                <EditCalendarRounded className='icon' />
+                                <span>تعديل</span>
+                              </Button>
+                            </TableCell>
+                          );
+                        }
+
                         return (
-                          <TableCell onClick={handleOpenMenu} key={column.id}>
-                            <IconButton>
-                              <MoreVertIcon />
-                            </IconButton>
+                          <TableCell key={column.id}>
+                            {row[column.id]}
                           </TableCell>
                         );
-                      }
-
-                      return (
-                        <TableCell key={column.id}>{row[column.id]}</TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
+                      })}
+                    </TableRow>
+                  ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -100,7 +136,7 @@ const PageTable = ({ columns, rows, pageLink }) => {
             }
           /> */}
         <CustomPagination
-          count={rows.length}
+          count={rows?.length || 3}
           page={page}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}

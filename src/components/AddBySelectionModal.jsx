@@ -2,51 +2,24 @@ import { useState } from 'react';
 import CustomModal from './CustomModal';
 import CustomInput from './locations/CustomInput';
 import { useDispatch, useSelector } from 'react-redux';
-import { controlAddProjectModal } from '../redux/slices/ModalContollerSlice';
-import './AddProjectsModal.css';
-import { FolderOutlined } from '@mui/icons-material';
+import './AddBySelectionModal.css';
 import { Link } from 'react-router-dom';
+import { controlAddBySelectionModal } from '../redux/slices/ModalContollerSlice';
 
-const projects = [
-  {
-    id: 1,
-    name: 'مشروع التخرج',
-    location: 'حمص-الحمراء',
-  },
-  {
-    id: 2,
-    name: 'تعليم إلكتروني',
-    location: 'حمص-الحميدية',
-  },
-  {
-    id: 3,
-    name: 'متجر إلكتروني',
-    location: 'دمشق-الحميدية',
-  },
-  {
-    id: 4,
-    name: 'تطبيق حجوزات',
-    location: 'حماة-ابن رشد',
-  },
-];
-
-const AddProjectsModal = () => {
+const AddBySelectionModal = ({ entriesType, entries, modalTitle }) => {
   const [searchedKey, setSearchedKey] = useState('');
   const [selectedProjects, setSelectedProjects] = useState([]);
 
   const isOpen = useSelector(
-    (state) => state.modalController.isAddProjectModalOpen
+    (state) => state.modalController.isAddBySelectionModalOpen,
   );
 
-  const filteredProjects = projects.filter((project) =>
-    project.name.toLowerCase().includes(searchedKey.toLowerCase())
+  const filteredProjects = entries.filter((project) =>
+    project.name.toLowerCase().includes(searchedKey.toLowerCase()),
   );
 
   const dispatch = useDispatch();
 
-  const handleClose = () => {
-    dispatch(controlAddProjectModal());
-  };
   const handleSelectProject = (project) => {
     setSelectedProjects((prev) => {
       const exists = prev.find((p) => p.id === project.id);
@@ -60,12 +33,21 @@ const AddProjectsModal = () => {
   };
 
   const cards =
-    projects.length === 0 ? (
+    entries.length === 0 ? (
       <div className='empty-projects'>
-        <p className='empty-text'>لا توجد مشاريع حالياً</p>
+        <p className='empty-text'>
+          لا توجد {entriesType === 'projects' ? 'مشاريع' : 'حملات'} حالياً
+        </p>
 
-        <Link to='/content/projects/add' className='empty-projects-action'>
-          إضافة مشروع
+        <Link
+          to={
+            entriesType === 'projects'
+              ? '/content/projects/add'
+              : '/content/campaigns/add'
+          }
+          className='empty-projects-action'
+        >
+          إضافة {entriesType === 'projects' ? 'مشروع' : 'حملة'}
         </Link>
       </div>
     ) : filteredProjects.length > 0 ? (
@@ -88,20 +70,24 @@ const AddProjectsModal = () => {
   return (
     <CustomModal
       isOpen={isOpen}
-      setIsOpen={handleClose}
-      modalTitle='إضافة مشاريع مرتبطة'
+      closeHandler={() => dispatch(controlAddBySelectionModal())}
+      modalTitle={modalTitle}
       submitBtnTitle='إضافة'
       styles={{ width: '600px' }}
     >
       <CustomInput
         inputType='input'
-        label='ابحث عن مشاريع'
-        placeholder='اكتب اسم المشروع...'
+        label={`ابحث عن ${entriesType === 'projects' ? 'مشاريع' : 'حملات'}`}
+        placeholder={`اكتب اسم ${
+          entriesType === 'projects' ? 'المشروع' : 'الحملة'
+        }...`}
         value={searchedKey}
         setValue={setSearchedKey}
       />
       <div className='project-section'>
-        <h3 className='project-title'>اختر المشاريع</h3>
+        <h3 className='project-title'>
+          اختر {entriesType === 'projects' ? 'المشاريع' : 'الحملات'}
+        </h3>
 
         <div className='cards-holder'>{cards}</div>
       </div>
@@ -109,4 +95,4 @@ const AddProjectsModal = () => {
   );
 };
 
-export default AddProjectsModal;
+export default AddBySelectionModal;

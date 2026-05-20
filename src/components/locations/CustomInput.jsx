@@ -1,3 +1,4 @@
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   FormControl,
   Select,
@@ -7,8 +8,11 @@ import {
   Input,
   InputLabel,
   NativeSelect,
+  IconButton,
+  InputAdornment,
 } from '@mui/material';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { useState } from 'react';
 
 export default function CustomInput({
   label,
@@ -20,33 +24,63 @@ export default function CustomInput({
   styles,
   value,
   setValue,
+  inline,
+  errorMsg,
 }) {
   const handleChange = (e) => {
     setValue(e.target.value);
   };
+
+  const [showPassword, setShowPassword] = useState(false);
+
   const inputsStyles = {
-    /* 🔹 underline default */
     '& .MuiInputBase-input': {
       color: '#333',
     },
+
+    /* ===== DEFAULT BORDER ===== */
     '& .MuiInput-underline:before': {
       borderBottomColor: '#ccc',
     },
+
     '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
       borderBottomColor: 'var(--secondary-color)',
     },
+
     '& .MuiInput-underline:after': {
       borderBottomColor: 'var(--secondary-color)',
     },
 
-    /* 🔹 النص داخل select */
+    /* ===== ERROR STATE ===== */
+    '& .Mui-error:before': {
+      borderBottomColor: 'var(--error-color)',
+    },
+
+    '& .Mui-error:hover:not(.Mui-disabled):before': {
+      borderBottomColor: 'var(--error-color)',
+    },
+
+    '& .Mui-error:after': {
+      borderBottomColor: 'var(--error-color)',
+    },
+
+    '& .MuiFormLabel-root.Mui-error': {
+      color: 'var(--error-color)',
+    },
+
+    '& .MuiFormHelperText-root.Mui-error': {
+      color: 'var(--error-color)',
+      fontFamily: 'Cairo',
+    },
+
+    /* ===== SELECT ===== */
     '& .MuiSelect-select': {
       color: '#333',
       fontFamily: 'Cairo',
       padding: '8px 0',
     },
 
-    /* 🔴 Disabled fix */
+    /* ===== DISABLED ===== */
     '& .Mui-disabled': {
       backgroundColor: '#F5F6F8',
       cursor: 'not-allowed',
@@ -54,7 +88,7 @@ export default function CustomInput({
 
     '& .Mui-disabled:before': {
       borderBottomColor: '#DADDE3',
-      borderBottomStyle: 'solid', // ❌ منع المنقط
+      borderBottomStyle: 'solid',
     },
 
     '& .Mui-disabled:after': {
@@ -64,94 +98,81 @@ export default function CustomInput({
 
     '& .MuiSelect-select.Mui-disabled': {
       color: '#9AA0A6',
-      WebkitTextFillColor: '#9AA0A6', // مهم جداً
+      WebkitTextFillColor: '#9AA0A6',
     },
-    // nativeSelect?
+
+    /* ===== LABEL ===== */
     '& .MuiInputLabel-root': {
-      color: '#8c9ea0', // لون اللابل
+      color: '#8c9ea0',
       fontFamily: 'Cairo',
     },
+
     '& .MuiInputLabel-root.Mui-focused': {
-      color: 'var(--main-color)', // لون اللابل عند focus
+      color: 'var(--main-color)',
     },
-    // placeholder
+
+    /* ===== PLACEHOLDER ===== */
     '& .MuiInputBase-input::placeholder': {
-      fontSize: '14px', // 👈 حجم الخط
+      fontSize: '14px',
       color: '#9AA0A6',
-      opacity: 1, // مهم لأن MUI بيخفف الشفافية
+      opacity: 1,
     },
+
     ...styles,
   };
+
   const pickerStyles = {
-    /* 🔹 underline default */
-    '& .MuiPickersInputBase-root': {
-      minHeight: '48px',
-      color: '#333',
-    },
-    '& .MuiPickersInputBase-root:before': {
-      borderBottomColor: '#ccc',
-    },
+    '& .MuiPickersInputBase-root': { minHeight: '48px', color: '#333' },
+    '& .MuiPickersInputBase-root:before': { borderBottomColor: '#ccc' },
     '& .MuiPickersInputBase-root:hover:not(.Mui-disabled):before': {
       borderBottomColor: 'var(--secondary-color)',
     },
     '& .MuiPickersInputBase-root:after': {
       borderBottomColor: 'var(--secondary-color)',
     },
-
-    /* 🔹 النص داخل select */
     '& .MuiSelect-select': {
       color: '#333',
       fontFamily: 'Cairo',
       padding: '8px 0',
     },
-
-    /* 🔴 Disabled fix */
-    '& .Mui-disabled': {
-      backgroundColor: '#F5F6F8',
-      cursor: 'not-allowed',
-    },
-
+    '& .Mui-disabled': { backgroundColor: '#F5F6F8', cursor: 'not-allowed' },
     '& .Mui-disabled:before': {
       borderBottomColor: '#DADDE3',
-      borderBottomStyle: 'solid', // ❌ منع المنقط
+      borderBottomStyle: 'solid',
     },
-
     '& .Mui-disabled:after': {
       borderBottomColor: '#DADDE3',
       borderBottomStyle: 'solid',
     },
-
     '& .MuiSelect-select.Mui-disabled': {
       color: '#9AA0A6',
-      WebkitTextFillColor: '#9AA0A6', // مهم جداً
+      WebkitTextFillColor: '#9AA0A6',
     },
-    // nativeSelect?
-    '& .MuiInputLabel-root': {
-      color: '#8c9ea0', // لون اللابل
-      fontFamily: 'Cairo',
-    },
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: 'var(--main-color)', // لون اللابل عند focus
-    },
-    // placeholder
+    '& .MuiInputLabel-root': { color: '#8c9ea0', fontFamily: 'Cairo' },
+    '& .MuiInputLabel-root.Mui-focused': { color: 'var(--main-color)' },
     '& .MuiInputBase-input::placeholder': {
-      fontSize: '14px', // 👈 حجم الخط
+      fontSize: '14px',
       color: '#9AA0A6',
-      opacity: 1, // مهم لأن MUI بيخفف الشفافية
+      opacity: 1,
     },
     ...styles,
   };
 
   return (
-    <div>
+    <div
+      style={
+        inline ? { display: 'flex', alignItems: 'center', gap: '16px' } : {}
+      }
+    >
       {/* 🔹 LABEL */}
       {inputType !== 'nativeSelect' && (
         <Typography
           sx={{
-            mb: 1,
+            mb: inline ? 0 : 1,
             fontFamily: 'Cairo',
             fontSize: '16px',
             color: '#374151',
+            whiteSpace: 'nowrap',
           }}
         >
           {label}
@@ -163,8 +184,9 @@ export default function CustomInput({
         variant='standard'
         disabled={isDisabled}
         sx={inputsStyles}
+        error={!!errorMsg}
       >
-        {inputType == 'select' ? (
+        {inputType === 'select' ? (
           <Select
             sx={{ minHeight: '48px' }}
             value={value}
@@ -178,17 +200,46 @@ export default function CustomInput({
                   </span>
                 );
               }
-              return selected;
+
+              const selectedChild = Array.isArray(children)
+                ? children.find((child) => child.props.value === selected)
+                : children;
+
+              return selectedChild?.props.children || selected;
             }}
           >
             {children}
           </Select>
-        ) : inputType == 'input' ? (
+        ) : inputType === 'input' ||
+          inputType === 'password' ||
+          inputType === 'email' ? (
           <Input
+            type={
+              inputType === 'password'
+                ? showPassword
+                  ? 'text'
+                  : 'password'
+                : inputType === 'email'
+                  ? 'email'
+                  : 'text'
+            }
             sx={{ minHeight: '48px' }}
             placeholder={placeholder ?? 'ادخل قيمة'}
             value={value}
             onChange={handleChange}
+            endAdornment={
+              inputType === 'password' && (
+                <InputAdornment position='end'>
+                  <IconButton
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    edge='end'
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }
+            required
           />
         ) : inputType === 'nativeSelect' ? (
           <>
@@ -196,36 +247,25 @@ export default function CustomInput({
               {label}
             </InputLabel>
             <NativeSelect
-              defaultValue=''
-              inputProps={{
-                name: label,
-                id: label,
-              }}
+              inputProps={{ name: label, id: label }}
               sx={{
                 minWidth: '100px',
-                '& .MuiInput-underline:before': {
-                  borderBottomColor: '#ccc', // الخط قبل الفوكاس
-                },
+                '& .MuiInput-underline:before': { borderBottomColor: '#ccc' },
                 '& .MuiInput-underline:hover:before': {
-                  borderBottomColor: 'var(--secondary-color)', // عند hover
+                  borderBottomColor: 'var(--secondary-color)',
                 },
                 '& .MuiInput-underline:after': {
-                  borderBottomColor: 'var(--secondary-color)', // عند focus
+                  borderBottomColor: 'var(--secondary-color)',
                 },
-                '& .MuiInputBase-input': {
-                  color: '#333', // لون النص داخل select
-                  fontFamily: 'Cairo',
-                },
+                '& .MuiInputBase-input': { color: '#333', fontFamily: 'Cairo' },
                 '& .MuiInputLabel-root': {
-                  color: '#8c9ea0', // لون اللابل
+                  color: '#8c9ea0',
                   fontFamily: 'Cairo',
                 },
                 '& .MuiInputLabel-root.Mui-focused': {
-                  color: 'var(--main-color)', // لون اللابل عند focus
+                  color: 'var(--main-color)',
                 },
-                '& .MuiSelect-select': {
-                  padding: '8px 0', // تباعد النص داخل select
-                },
+                '& .MuiSelect-select': { padding: '8px 0' },
               }}
               value={value}
               onChange={handleChange}
@@ -271,10 +311,14 @@ export default function CustomInput({
           />
         )}
       </FormControl>
+
       {/* 🔹 Helper text */}
-      {helperText && (
-        <FormHelperText sx={{ color: '#9AA0A6' }}>{helperText}</FormHelperText>
-      )}
+      {helperText ||
+        (errorMsg && (
+          <FormHelperText error={!!errorMsg} sx={{ color: '#9AA0A6' }}>
+            {helperText ? helperText : errorMsg}
+          </FormHelperText>
+        ))}
     </div>
   );
 }

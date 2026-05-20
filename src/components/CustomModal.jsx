@@ -2,12 +2,15 @@ import { Modal, Box, Typography, Button, IconButton } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 
 export default function CustomModal({
-  setIsOpen,
+  closeHandler,
   isOpen,
   modalTitle,
   children,
   submitBtnTitle,
   styles,
+  onSubmit,
+  isLoading,
+  isDisabled,
 }) {
   const style = {
     position: 'absolute',
@@ -24,11 +27,9 @@ export default function CustomModal({
     ...styles,
   };
 
-  const handleClose = () => setIsOpen(false);
-
   return (
-    <Modal open={isOpen} onClose={handleClose}>
-      <Box sx={style}>
+    <Modal open={isOpen} onClose={closeHandler}>
+      <Box component='form' onSubmit={onSubmit} sx={style}>
         {/* 🔹 HEADER */}
         <Box
           sx={{
@@ -43,7 +44,7 @@ export default function CustomModal({
             {modalTitle}
           </Typography>
 
-          <IconButton onClick={handleClose}>
+          <IconButton onClick={closeHandler}>
             <CloseRounded />
           </IconButton>
         </Box>
@@ -76,19 +77,22 @@ export default function CustomModal({
           <Button
             variant='contained'
             sx={{
+              minWidth: '85px',
               backgroundColor: '#014a5b',
-              borderRadius: '8px',
+              borderRadius: '999px',
               padding: '8px 24px',
             }}
             className='btn'
+            type='submit'
+            disabled={isLoading || isDisabled}
           >
-            {submitBtnTitle}
+            {isLoading ? <span className='btn-loader'></span> : submitBtnTitle}
           </Button>
           <Button
             variant='outlined'
-            onClick={handleClose}
+            onClick={closeHandler}
             sx={{
-              borderRadius: '8px',
+              borderRadius: '999px',
               padding: '8px 24px',
               border: 'none',
               color: '#8c9ea0',
