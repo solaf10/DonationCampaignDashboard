@@ -181,10 +181,12 @@ export default function ProjectCard({ project, isTrash }) {
               <DeleteOutlinedIcon fontSize='small' />
             </IconButton>
           </Box>
-
+         
           <Button
-            variant='contained'
-            size='small'
+            variant="contained"
+            size="small"
+            onClick={() =>navigate(`/content/projects/${project.id}`)}
+
             sx={{
               backgroundColor: 'var(--main-color)',
               color: 'white',

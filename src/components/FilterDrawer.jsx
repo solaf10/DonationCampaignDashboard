@@ -35,13 +35,14 @@ export default function FilterDrawer({ open, onClose }) {
     stopped: false,
   });
 
-  // ❌ شلت التكرار داخل filters (كان فيه خربطة)
+
   const [filters, setFilters] = useState({
     governorate: '',
     city: '',
     region: '',
     sector: '',
-    executor: '', // ✔️ أضفناها فقط
+    executor: '', 
+
   });
 
   const [funders, setFunders] = useState({
@@ -51,7 +52,7 @@ export default function FilterDrawer({ open, onClose }) {
 
   const [search, setSearch] = useState('');
 
-  // ✔️ نفس فكرتك لكن من المشاريع لاحقاً
+ 
   const executors = [
     'شركة البناء الحديثة',
     'مؤسسة التطوير',
@@ -121,7 +122,7 @@ export default function FilterDrawer({ open, onClose }) {
           <FilterListIcon />
         </Box>
 
-        {/* الموقع */}
+        
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography fontWeight='bold'>الموقع</Typography>
