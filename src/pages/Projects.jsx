@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Grid, Box, Container, TextField, IconButton, InputAdornment } from '@mui/material';
+
+import { Grid, Box, Container, TextField, IconButton, InputAdornment, Pagination } from '@mui/material';
 
 import ProjectCard from '../components/ProjectCard/ProjectCard';
 import Title from '../components/Title';
@@ -7,97 +7,33 @@ import FilterDrawer from '../components/FilterDrawer';
 
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
-
-const projectsData = [
-  {
-    id: 1,
-    title: "مشروع ترميم المنازل",
-    category: "القطاع الإنساني",
-    price: "3000.00",
-    location: "دمشق",
-    progress: 40,
-    executor: "شركة البناء الحديثة",
-    image: "../../public/houses-destroyed.jpg"
-  },
-  {
-    id: 2,
-    title: "مشروع دعم المستشفيات",
-    category: "القطاع الصحي",
-    price: "5000.00",
-    location: "حلب",
-    progress: 75,
-    executor: "مؤسسة التطوير",
-    image: "../../public/hospital.jpg"
-  },
-  {
-    id: 3,
-    title: "مشروع إعادة تأهيل المدارس",
-    category: "القطاع التعليمي",
-    price: "2000.00",
-    location: "إدلب",
-    progress: 60,
-    executor: "شركة الإعمار",
-    image: "../../public/school.jpeg"
-  },
-  {
-    id: 4,
-    title: "مشروع توزيع سلال غذائية",
-    category: "القطاع الإغاثي",
-    price: "1500.00",
-    location: "حمص",
-    progress: 85,
-    executor: "جمعية الأمل",
-    image: "../../public/food-basketss.jpg"
-  },
-  {
-    id: 5,
-    title: "مشروع تأمين مياه الشرب",
-    category: "قطاع المياه",
-    price: "2500.00",
-    location: "درعا",
-    progress: 50,
-    executor: "شركة البناء الحديثة",
-    image: "../../public/water.jpg"
-  },
-  {
-    id: 6,
-    title: "مشروع دعم الأيتام",
-    category: "القطاع الاجتماعي",
-    price: "4000.00",
-    location: "اللاذقية",
-    progress: 30,
-    executor: "جمعية الأمل",
-    image: "../../public/orphans.jpg"
-  },
-  {
-    id: 7,
-    title: "تأمين مواقف ثابتة للنقل الداخلي",
-    category: "القطاع الخدمي",
-    price: "4000.00",
-    location: "حمص",
-    progress: 30,
-    executor: "مؤسسة التطوير",
-    image: "../../public/مواقف-ذكية.webp"
-  }
-];
+import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import projectsData from "../components/data/ProjectsData";
 
 
 export default function Projects() {
-
-  
   const [openFilter, setOpenFilter] = useState(false);
+  const [page, setPage] = useState(1);
+
+  const itemsPerPage = 6;
+  const navigate = useNavigate();
+
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const paginatedProjects = projectsData.slice(startIndex, endIndex);
 
   return (
     <Container maxWidth="lg" sx={{ px: 2 }}>
 
-      
       <Title pageTitle='إدارة المشاريع'>
         <button className='btn'>
           <span> + إضافة مشروع</span>
         </button>
       </Title>
 
-     
+      {/* Search + Filter */}
       <Box
         sx={{
           width: "100%",
@@ -109,8 +45,6 @@ export default function Projects() {
           mb: 3.5
         }}
       >
-
-        {/*  البحث */}
         <TextField
           fullWidth
           placeholder="ابحث حسب الاسم"
@@ -126,53 +60,38 @@ export default function Projects() {
           sx={{ px: 2 }}
         />
 
-        {/*  زر الفلترة */}
         <IconButton
-          onClick={() => setOpenFilter(true)} 
-          sx={{
-            backgroundColor: "#eeeeee",
-            borderRadius: 2,
-            m: 1
-          }}
+          onClick={() => setOpenFilter(true)}
+          sx={{ backgroundColor: "#eeeeee", borderRadius: 2, m: 1 }}
         >
           <FilterListIcon />
         </IconButton>
       </Box>
 
-      
-      <FilterDrawer
-        open={openFilter}
-        onClose={() => setOpenFilter(false)} 
-      />
+      <FilterDrawer open={openFilter} onClose={() => setOpenFilter(false)} />
 
-   
-      <Box
-        sx={{
-          width: "100%",
-          direction: "ltr",
-          display: "flex",
-          justifyContent: "center"
-        }}
-      >
-        <Grid
-          container
-          spacing={4}
-          alignItems="stretch"
-          sx={{ width: "100%" }}
-        >
-          {projectsData.map((project, index) => (
-            <Grid
-              item
-              xs={12}   
-              sm={6}    
-              md={4}    
-              key={index}
-              sx={{ display: "flex" }}
-            >
-              <ProjectCard project={project} />
+      {/* Projects Grid */}
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        <Grid container spacing={4} sx={{ width: "100%" }}>
+          {paginatedProjects.map((project) => (
+            <Grid item xs={12} sm={6} md={4} key={project.id} sx={{ display: "flex" }}>
+              <ProjectCard
+                project={project}
+                onDetailsClick={() => navigate(`/projects/${project.id}`)}
+              />
             </Grid>
           ))}
         </Grid>
+      </Box>
+
+      {/* Pagination */}
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+        <Pagination
+          count={Math.ceil(projectsData.length / itemsPerPage)}
+          page={page}
+          onChange={(e, value) => setPage(value)}
+          color="primary"
+        />
       </Box>
 
     </Container>

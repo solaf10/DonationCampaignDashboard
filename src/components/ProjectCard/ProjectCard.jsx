@@ -157,7 +157,7 @@ export default function ProjectCard({ project }) {
           }}
         >
 
-          {/* تعديل / حذف */}
+       
           <Box sx={{ display: "flex", gap: 1 }}>
             <IconButton size="small" sx={{ color: "#607d8b", border: '1px solid #e0e0e0' }}>
               <EditOutlinedIcon fontSize="small" />
@@ -168,11 +168,11 @@ export default function ProjectCard({ project }) {
             </IconButton>
           </Box>
 
-          {/* زر التفاصيل (التصحيح المهم) */}
+         
           <Button
             variant="contained"
             size="small"
-            onClick={() => navigate(`/project/${project.id}`)}
+            onClick={() =>navigate(`/content/projects/${project.id}`)}
             sx={{
               backgroundColor: "var(--main-color)",
               color: 'white',

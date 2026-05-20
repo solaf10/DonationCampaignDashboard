@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
         element: <Governments />,
       },
       { path: 'projects', element: <Projects/> },
-      { path: 'projectsDetails/:id', element: <ProjectsDetails/> },
+      { path: 'projects/:id', element: <ProjectsDetails/> },
       { path: 'cities', element: <Cities /> },
       { path: 'areas', element: <Areas /> },
       { path: 'campaigns', element: <Campaigns /> },
