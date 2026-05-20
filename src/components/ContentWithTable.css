@@ -81,12 +81,14 @@
     border-radius: 50%;
     background-color: #d1d5db;
     background-color: var(--secondary-color);
+    background-color: #eee;
     cursor: pointer;
     transition: 0.5s;
     backdrop-filter: blur(4px);
     .icon {
       color: #374151;
       color: white;
+      color: var(--secondary-color);
       font-size: 18px;
       transition: 0.5s;
     }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Grid,
   Box,
@@ -6,87 +6,88 @@ import {
   TextField,
   IconButton,
   InputAdornment,
-} from "@mui/material";
+} from '@mui/material';
 
-import ProjectCard from "../components/ProjectCard/ProjectCard";
-import Title from "../components/Title";
-import FilterDrawer from "../components/FilterDrawer";
+import ProjectCard from '../components/ProjectCard/ProjectCard';
+import Title from '../components/Title';
+import FilterDrawer from '../components/FilterDrawer';
 
-import SearchIcon from "@mui/icons-material/Search";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { Link } from "react-router-dom";
-import { AddRounded } from "@mui/icons-material";
+import SearchIcon from '@mui/icons-material/Search';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { Link } from 'react-router-dom';
+import { AddRounded } from '@mui/icons-material';
+import CustomInput from '../components/locations/CustomInput';
 
 const projectsData = [
   {
     id: 1,
-    title: "مشروع ترميم المنازل",
-    category: "القطاع الإنساني",
-    price: "3000.00",
-    location: "دمشق",
+    title: 'مشروع ترميم المنازل',
+    category: 'القطاع الإنساني',
+    price: '3000.00',
+    location: 'دمشق',
     progress: 40,
-    executor: "شركة البناء الحديثة",
-    image: "../../public/houses-destroyed.jpg",
+    executor: 'شركة البناء الحديثة',
+    image: '../../public/houses-destroyed.jpg',
   },
   {
     id: 2,
-    title: "مشروع دعم المستشفيات",
-    category: "القطاع الصحي",
-    price: "5000.00",
-    location: "حلب",
+    title: 'مشروع دعم المستشفيات',
+    category: 'القطاع الصحي',
+    price: '5000.00',
+    location: 'حلب',
     progress: 75,
-    executor: "مؤسسة التطوير",
-    image: "../../public/hospital.jpg",
+    executor: 'مؤسسة التطوير',
+    image: '../../public/hospital.jpg',
   },
   {
     id: 3,
-    title: "مشروع إعادة تأهيل المدارس",
-    category: "القطاع التعليمي",
-    price: "2000.00",
-    location: "إدلب",
+    title: 'مشروع إعادة تأهيل المدارس',
+    category: 'القطاع التعليمي',
+    price: '2000.00',
+    location: 'إدلب',
     progress: 60,
-    executor: "شركة الإعمار",
-    image: "../../public/school.jpeg",
+    executor: 'شركة الإعمار',
+    image: '../../public/school.jpeg',
   },
   {
     id: 4,
-    title: "مشروع توزيع سلال غذائية",
-    category: "القطاع الإغاثي",
-    price: "1500.00",
-    location: "حمص",
+    title: 'مشروع توزيع سلال غذائية',
+    category: 'القطاع الإغاثي',
+    price: '1500.00',
+    location: 'حمص',
     progress: 85,
-    executor: "جمعية الأمل",
-    image: "../../public/food-basketss.jpg",
+    executor: 'جمعية الأمل',
+    image: '../../public/food-basketss.jpg',
   },
   {
     id: 5,
-    title: "مشروع تأمين مياه الشرب",
-    category: "قطاع المياه",
-    price: "2500.00",
-    location: "درعا",
+    title: 'مشروع تأمين مياه الشرب',
+    category: 'قطاع المياه',
+    price: '2500.00',
+    location: 'درعا',
     progress: 50,
-    executor: "شركة البناء الحديثة",
-    image: "../../public/water.jpg",
+    executor: 'شركة البناء الحديثة',
+    image: '../../public/water.jpg',
   },
   {
     id: 6,
-    title: "مشروع دعم الأيتام",
-    category: "القطاع الاجتماعي",
-    price: "4000.00",
-    location: "اللاذقية",
+    title: 'مشروع دعم الأيتام',
+    category: 'القطاع الاجتماعي',
+    price: '4000.00',
+    location: 'اللاذقية',
     progress: 30,
-    executor: "جمعية الأمل",
-    image: "../../public/orphans.jpg",
+    executor: 'جمعية الأمل',
+    image: '../../public/orphans.jpg',
   },
   {
     id: 7,
-    title: "تأمين مواقف ثابتة للنقل الداخلي",
-    category: "القطاع الخدمي",
-    price: "4000.00",
-    location: "حمص",
+    title: 'تأمين مواقف ثابتة للنقل الداخلي',
+    category: 'القطاع الخدمي',
+    price: '4000.00',
+    location: 'حمص',
     progress: 30,
-    executor: "مؤسسة التطوير",
-    image: "../../public/مواقف-ذكية.webp",
+    executor: 'مؤسسة التطوير',
+    image: '../../public/مواقف-ذكية.webp',
   },
 ];
 
@@ -94,70 +95,60 @@ export default function Projects({ isTrash = false }) {
   const [openFilter, setOpenFilter] = useState(false);
 
   return (
-    <Container maxWidth="lg" sx={{ px: 2 }}>
+    <Container className='projects' maxWidth='lg' sx={{ px: 2 }}>
       <Title
-        pageTitle={isTrash ? "سلة مهملات المشاريع" : "إدارة المشاريع"}
-        subtitle={isTrash ? "يمكنك استعادة أو حذف العناصر نهائياً" : null}
+        pageTitle={isTrash ? 'سلة مهملات المشاريع' : 'إدارة المشاريع'}
+        subtitle={isTrash ? 'يمكنك استعادة أو حذف العناصر نهائياً' : null}
       >
         {!isTrash && (
-          <Link to="/content/projects/add" className="btn">
+          <Link to='/content/projects/add' className='btn'>
             <span>إضافة مشروع</span>
             <AddRounded />
           </Link>
         )}
       </Title>
 
-      <Box
-        sx={{
-          width: "100%",
-          border: "1px solid #e0e0e0",
-          borderRadius: 3,
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "#f9f9f9",
-          mb: 3.5,
-        }}
-      >
-        {/*  البحث */}
-        <TextField
-          fullWidth
-          placeholder="ابحث حسب الاسم"
-          variant="standard"
-          InputProps={{
-            disableUnderline: true,
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: "gray" }} />
-              </InputAdornment>
-            ),
-          }}
-          sx={{ px: 2 }}
-        />
+      <div className='filters-holder'>
+        {/* filter holder */}
+        <div className='input-holder'>
+          <CustomInput
+            inputType='textField'
+            placeholder='ابحث حسب الاسم'
+            styles={{
+              width: '400px',
+              height: 'auto',
+              '& .MuiInputLabel-root.Mui-focused': {
+                color: 'var(--main-color)', // لون اللابل عند focus
+              },
+            }}
+          />
 
-        {/*  زر الفلترة */}
+          <p style={{ fontSize: '14px' }}>عدد الحملات: {projectsData.length}</p>
+        </div>
         <IconButton
           onClick={() => setOpenFilter(true)}
           sx={{
-            backgroundColor: "#eeeeee",
+            backgroundColor: '#eeeeee',
             borderRadius: 2,
             m: 1,
           }}
+          className='filter-btn'
         >
-          <FilterListIcon />
+          <FilterListIcon className='icon' />
         </IconButton>
-      </Box>
+      </div>
 
       <FilterDrawer open={openFilter} onClose={() => setOpenFilter(false)} />
 
       <Box
         sx={{
-          width: "100%",
-          direction: "ltr",
-          display: "flex",
-          justifyContent: "center",
+          width: '100%',
+          direction: 'ltr',
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
-        <Grid container spacing={4} alignItems="stretch" sx={{ width: "100%" }}>
+        <Grid container spacing={4} alignItems='stretch' sx={{ width: '100%' }}>
           {projectsData.map((project, index) => (
             <Grid
               item
@@ -166,7 +157,7 @@ export default function Projects({ isTrash = false }) {
               md={4}
               size={3}
               key={index}
-              sx={{ display: "flex" }}
+              sx={{ display: 'flex' }}
             >
               <ProjectCard project={project} isTrash={isTrash} />
             </Grid>

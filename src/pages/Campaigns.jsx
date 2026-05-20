@@ -20,6 +20,7 @@ import {
   controlControlLocationModal,
   controlMoreInfoMenu,
 } from '../redux/slices/ModalContollerSlice';
+import { IconButton } from '@mui/material';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
@@ -141,12 +142,12 @@ const Campaigns = ({ isTrash = false }) => {
           <p style={{ fontSize: '14px' }}>عدد الحملات: {rows.length}</p>
         </div>
         {/* filter Model btn */}
-        <button
+        <IconButton
           className='filter-btn'
           onClick={() => dispatch(controlControlLocationModal())}
         >
           <FilterAltOutlined className='icon' />
-        </button>
+        </IconButton>
       </ContentWithTable>
       {/* Edit Modal */}
       <ControlLocationModal
