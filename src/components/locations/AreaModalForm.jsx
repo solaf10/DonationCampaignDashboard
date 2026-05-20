@@ -1,17 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MenuItem } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 
 import CustomInput from '../locations/CustomInput';
 import CustomModal from '../CustomModal';
 
 import { controlControlLocationModal } from '../../redux/slices/ModalContollerSlice';
 
-import useEditCity from '../../customHooks/mutations/useEditCity';
-import { useFilterCitiesByGovernment } from '../../customHooks/queries/useCities';
-import useAddArea from '../../customHooks/mutations/useAddArea';
-import useEditArea from '../../customHooks/mutations/useEditArea';
+import useSubmitAreaForm from '../../customHooks/useSubmitAreaForm';
 
 const AreaModalForm = ({ governments, areas }) => {
   const [government, setGovernment] = useState('');
@@ -33,36 +29,30 @@ const AreaModalForm = ({ governments, areas }) => {
     (state) => state.modalController.controlLocationModalType,
   );
 
-  const areaId = useSelector(
-    (state) => state.modalController.selectedLocationID,
-  );
+  const governmentState = { government, setGovernment };
+  const cityState = { city, setCity };
+  const areaState = { area, setArea };
+  const errorState = { error, setError };
 
   const isEdit = operationType === 'edit';
 
-  const existingArea = areas.find((area) => area.uuid === areaId);
-
-  const existingAreaName = existingArea?.district_name || '';
-
-  const existingGovernmentId = existingArea?.governorate_uuid || '';
-
-  const existingCityId = existingArea?.city_uuid || '';
-
-  const dispatch = useDispatch();
-
   const {
-    data: filteredCities,
-    isPending: isFetchingCities,
-    error: citiesFetchingError,
-  } = useFilterCitiesByGovernment(government !== '' ? government : null);
-
-  const { mutate: addArea, isPending: isAdding } = useAddArea();
-
-  const { mutate: editArea, isPending: isEditing } = useEditArea();
-
-  const isSubmitting = isAdding || isEditing;
-  const hasValidationErrors = Boolean(
-    error.government || error.city || error.area,
-  );
+    handleSubmit,
+    isSubmitting,
+    hasValidationErrors,
+    isFetchingCities,
+    citiesFetchingError,
+    filteredCities,
+  } = useSubmitAreaForm({
+    isEdit,
+    areas,
+    setFormError,
+    governmentState,
+    cityState,
+    areaState,
+    errorState,
+    isModalOpen,
+  });
 
   const handleGovernmentChange = (value) => {
     setGovernment(value);
@@ -93,90 +83,7 @@ const AreaModalForm = ({ governments, areas }) => {
     setFormError('');
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormError('');
-
-    const errors = {
-      government: null,
-      city: null,
-      area: null,
-    };
-
-    if (!government) {
-      errors.government = 'الرجاء اختيار المحافظة';
-    }
-
-    if (!city.trim()) {
-      errors.city = 'الرجاء اختيار اسم المدينة';
-    }
-
-    if (!area.trim()) {
-      errors.area = 'الرجاء إدخال اسم المنطقة';
-    }
-
-    if (
-      isEdit &&
-      area.trim() === existingAreaName.trim() &&
-      government === existingGovernmentId &&
-      city === existingCityId
-    ) {
-      errors.area = 'الرجاء إدخال بيانات مختلفة عن الحالية';
-    }
-
-    setError(errors);
-
-    if (errors.government || errors.city || errors.area) return;
-
-    const data = {
-      district_name: area.trim(),
-      city_uuid: city,
-    };
-
-    const mutationOptions = {
-      onSuccess: () => {
-        toast.success(
-          isEdit ? 'تم تعديل المنطقة بنجاح' : 'تمت إضافة المنطقة بنجاح',
-        );
-      },
-      onError: (err) => {
-        const message = err?.message || 'حدث خطأ أثناء حفظ البيانات';
-        setFormError(message);
-      },
-    };
-
-    if (isEdit) {
-      editArea({ id: areaId, data }, mutationOptions);
-      return;
-    }
-
-    addArea(data, mutationOptions);
-  };
-
-  useEffect(() => {
-    if (!isModalOpen) {
-      setGovernment('');
-      setCity('');
-      setArea('');
-      setFormError('');
-
-      setError({
-        government: null,
-        city: null,
-        area: null,
-      });
-    } else {
-      setGovernment(isEdit ? existingGovernmentId : '');
-      setCity(isEdit ? existingCityId : '');
-      setArea(isEdit ? existingAreaName : '');
-    }
-  }, [
-    isModalOpen,
-    isEdit,
-    existingGovernmentId,
-    existingCityId,
-    existingAreaName,
-  ]);
+  const dispatch = useDispatch();
 
   return (
     <CustomModal
@@ -228,7 +135,7 @@ const AreaModalForm = ({ governments, areas }) => {
 
       <CustomInput
         inputType='select'
-        label='المدينة'
+        label='الحي'
         value={city}
         setValue={handleCityChange}
         errorMsg={error.city}
@@ -239,7 +146,7 @@ const AreaModalForm = ({ governments, areas }) => {
         }
         helperText={
           isEdit && citiesFetchingError
-            ? 'فشل جلب المدن، حاول مرة أخرى'
+            ? 'فشل جلب الأحياء، حاول مرة أخرى'
             : government === ''
               ? 'يتم تفعيل هذا الحقل بعد اختيار المحافظة'
               : ''
@@ -259,7 +166,7 @@ const AreaModalForm = ({ governments, areas }) => {
         setValue={handleAreaChange}
         errorMsg={error.area}
         isDisabled={city === ''}
-        helperText={city === '' ? 'يتم تفعيل هذا الحقل بعد اختيار المدينة' : ''}
+        helperText={city === '' ? 'يتم تفعيل هذا الحقل بعد اختيار الحي' : ''}
       />
     </CustomModal>
   );

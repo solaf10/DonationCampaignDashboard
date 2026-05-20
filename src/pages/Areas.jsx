@@ -14,7 +14,7 @@ import AreaModalForm from '../components/locations/AreaModalForm';
 
 const columns = [
   { id: 'district_name', label: 'المنطقة' },
-  { id: 'city_name', label: 'المدينة' },
+  { id: 'city_name', label: 'الحي' },
   { id: 'governorate_name', label: 'المحافظة' },
   { id: 'action', label: 'الإجراءات' },
 ];
@@ -100,7 +100,7 @@ const Areas = () => {
             ))}
           </CustomInput>
           <CustomInput
-            label='المدينة'
+            label='الحي'
             inputType='nativeSelect'
             styles={nativeSelectStyles}
             value={city}

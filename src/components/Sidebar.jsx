@@ -52,7 +52,7 @@ const links = [
     ),
     children: [
       { id: 21, href: '/content/governments', label: 'المحافظات' },
-      { id: 22, href: '/content/cities', label: 'المدن' },
+      { id: 22, href: '/content/cities', label: 'الأحياء' },
       { id: 23, href: '/content/areas', label: 'المناطق' },
     ],
   },
@@ -206,7 +206,7 @@ const Sidebar = () => {
             const isActiveAccordion =
               link.isAccordion &&
               link.children?.some((child) =>
-                location.pathname.includes(child.href)
+                location.pathname.includes(child.href),
               );
 
             if (!link.isAccordion) {

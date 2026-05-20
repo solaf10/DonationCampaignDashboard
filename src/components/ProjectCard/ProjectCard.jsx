@@ -15,13 +15,12 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { RecyclingRounded } from '@mui/icons-material';
-
 import { useNavigate } from 'react-router-dom';
 
 export default function ProjectCard({ project, isTrash }) {
-  if (!project) return null;
-
   const navigate = useNavigate();
+
+  if (!project) return null;
 
   return (
     <Card
@@ -181,12 +180,11 @@ export default function ProjectCard({ project, isTrash }) {
               <DeleteOutlinedIcon fontSize='small' />
             </IconButton>
           </Box>
-         
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() =>navigate(`/content/projects/${project.id}`)}
 
+          <Button
+            variant='contained'
+            size='small'
+            onClick={() => navigate(`/content/projects/${project.id}`)}
             sx={{
               backgroundColor: 'var(--main-color)',
               color: 'white',

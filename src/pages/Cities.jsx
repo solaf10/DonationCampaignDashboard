@@ -11,7 +11,7 @@ import useGovernments from '../customHooks/queries/useGovernments';
 import useGetCitiesLogic from '../customHooks/useGetCitiesLogic';
 
 const columns = [
-  { id: 'city_name', label: 'المدينة' },
+  { id: 'city_name', label: 'الحي' },
   { id: 'governorate_name', label: 'المحافظة' },
   { id: 'action', label: 'الإجراءات' },
 ];
@@ -44,14 +44,14 @@ const Cities = () => {
   const nativeSelectStyles = { minWidth: '100px' };
   return (
     <PageContainer>
-      <Title pageTitle='إدارة الموقع(المكان)' subtitle='المدن'>
+      <Title pageTitle='إدارة الموقع(المكان)' subtitle='الأحياء'>
         <button
           onClick={() =>
             dispatch(controlControlLocationModal({ type: 'add', id: null }))
           }
           className='btn'
         >
-          <span>إضافة مدينة</span>
+          <span>إضافة حي</span>
           <AddRounded />
         </button>
       </Title>
@@ -61,7 +61,7 @@ const Cities = () => {
         <div className='input-holder'>
           <CustomInput
             inputType='textField'
-            placeholder='ابحث في المدن'
+            placeholder='ابحث في الأحياء'
             styles={{
               width: '400px',
               height: 'auto',
@@ -90,7 +90,7 @@ const Cities = () => {
           </CustomInput>
         </div>
 
-        <p>عدد المدن: {rows.length}</p>
+        <p>عدد الأحياء: {rows.length}</p>
       </ContentWithTable>
       <CityModalForm cities={rows} governments={governments} />
     </PageContainer>
