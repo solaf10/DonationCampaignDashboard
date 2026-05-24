@@ -1,100 +1,61 @@
-import { TablePagination, IconButton, Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 
-const CustomPagination = ({
-  count,
-  page,
-  rowsPerPage,
-  onPageChange,
-  onRowsPerPageChange,
-}) => {
+const CustomPagination = ({ count, page, rowsPerPage, onPageChange }) => {
   const totalPages = Math.ceil(count / rowsPerPage);
 
-  const handleClickPage = (newPage) => {
-    onPageChange(null, newPage);
-  };
+  if (totalPages <= 1) return null;
 
-  const Actions = () => {
-    if (totalPages === 1) {
-      return (
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 1,
+        mt: 4,
+      }}
+    >
+      {/* السابق */}
+      <IconButton onClick={() => onPageChange(page - 1)} disabled={page === 0}>
+        <KeyboardArrowRight />
+      </IconButton>
+
+      {/* الأرقام */}
+      {[...Array(totalPages)].map((_, index) => (
         <Box
+          key={index}
+          onClick={() => onPageChange(index)}
           sx={{
-            minWidth: '400px',
+            cursor: 'pointer',
+            width: '34px',
+            height: '34px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            py: 1,
-            color: 'var(--secondary-color)',
-            fontFamily: 'Cairo',
+            borderRadius: '50%',
+            bgcolor: index === page ? 'var(--main-color)' : 'transparent',
+            color: index === page ? 'white' : 'var(--main-color)',
+            fontWeight: 500,
+            transition: '0.2s',
+            '&:hover': {
+              bgcolor:
+                index === page ? 'var(--main-color)' : 'rgba(1,74,91,0.1)',
+            },
           }}
         >
-          هذه الصفحة الوحيدة
+          {index + 1}
         </Box>
-      );
-    }
-    return (
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        {/* سهم الصفحة السابقة */}
-        <IconButton
-          onClick={() => handleClickPage(page - 1)}
-          disabled={page === 0}
-          aria-label='previous page'
-        >
-          <KeyboardArrowRight />
-        </IconButton>
+      ))}
 
-        {/* أرقام الصفحات */}
-        {[...Array(totalPages)].map((_, index) => (
-          <Box
-            key={index}
-            onClick={() => handleClickPage(index)}
-            sx={{
-              cursor: 'pointer',
-              width: '34px',
-              height: '34px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: '50%',
-              bgcolor: index === page ? 'var(--main-color)' : 'transparent',
-              color: index === page ? 'white' : 'var(--main-color)',
-              fontWeight: 500,
-              transition: '0.2s',
-              '&:hover': {
-                bgcolor:
-                  index === page ? 'var(--main-color)' : 'rgba(1,74,91,0.1)',
-              },
-            }}
-          >
-            {index + 1}
-          </Box>
-        ))}
-
-        {/* سهم الصفحة التالية */}
-        <IconButton
-          onClick={() => handleClickPage(page + 1)}
-          disabled={page >= totalPages - 1}
-          aria-label='next page'
-        >
-          <KeyboardArrowLeft />
-        </IconButton>
-      </Box>
-    );
-  };
-
-  return (
-    <TablePagination
-      rowsPerPageOptions={[5, 10, 25]}
-      component='div'
-      count={count}
-      rowsPerPage={rowsPerPage}
-      page={page}
-      onPageChange={onPageChange}
-      onRowsPerPageChange={onRowsPerPageChange}
-      labelRowsPerPage='عدد الصفوف'
-      labelDisplayedRows={() => ''}
-      ActionsComponent={Actions} // نعرض أرقام الصفحات هنا
-    />
+      {/* التالي */}
+      <IconButton
+        onClick={() => onPageChange(page + 1)}
+        disabled={page >= totalPages - 1}
+      >
+        <KeyboardArrowLeft />
+      </IconButton>
+    </Box>
   );
 };
 

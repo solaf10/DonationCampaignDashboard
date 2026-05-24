@@ -6,6 +6,7 @@ const initialState = {
   isMoreInfoMenuShown: false,
   isSuccessDialogOpen: false,
   controlLocationModalType: 'add',
+  clickedDialogID: null,
   selectedLocationID: null,
 };
 
@@ -24,8 +25,9 @@ const modalControllerSlice = createSlice({
     controlMoreInfoMenu: (state) => {
       state.isMoreInfoMenuShown = !state.isMoreInfoMenuShown;
     },
-    controlSuccessDialog: (state) => {
+    controlSuccessDialog: (state, action) => {
       state.isSuccessDialogOpen = !state.isSuccessDialogOpen;
+      state.clickedDialogID = action.payload;
     },
   },
 });

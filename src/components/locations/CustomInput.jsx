@@ -14,6 +14,128 @@ import {
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
 
+const inputsStyles = {
+  '& .MuiInputBase-input': {
+    color: '#333',
+  },
+
+  /* ===== DEFAULT BORDER ===== */
+  '& .MuiInput-underline:before': {
+    borderBottomColor: '#ccc',
+  },
+
+  '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+    borderBottomColor: 'var(--secondary-color)',
+  },
+
+  '& .MuiInput-underline:after': {
+    borderBottomColor: 'var(--secondary-color)',
+  },
+
+  /* ===== ERROR STATE ===== */
+  '& .Mui-error:before': {
+    borderBottomColor: 'var(--error-color)',
+  },
+
+  '& .Mui-error:hover:not(.Mui-disabled):before': {
+    borderBottomColor: 'var(--error-color)',
+  },
+
+  '& .Mui-error:after': {
+    borderBottomColor: 'var(--error-color)',
+  },
+
+  '& .MuiFormLabel-root.Mui-error': {
+    color: 'var(--error-color)',
+  },
+
+  '& .MuiFormHelperText-root.Mui-error': {
+    color: 'var(--error-color)',
+    fontFamily: 'Cairo',
+  },
+
+  /* ===== SELECT ===== */
+  '& .MuiSelect-select': {
+    color: '#333',
+    fontFamily: 'Cairo',
+    padding: '8px 0',
+  },
+
+  /* ===== DISABLED ===== */
+  '& .Mui-disabled': {
+    backgroundColor: '#F5F6F8',
+    cursor: 'not-allowed',
+  },
+
+  '& .Mui-disabled:before': {
+    borderBottomColor: '#DADDE3',
+    borderBottomStyle: 'solid',
+  },
+
+  '& .Mui-disabled:after': {
+    borderBottomColor: '#DADDE3',
+    borderBottomStyle: 'solid',
+  },
+
+  '& .MuiSelect-select.Mui-disabled': {
+    color: '#9AA0A6',
+    WebkitTextFillColor: '#9AA0A6',
+  },
+
+  /* ===== LABEL ===== */
+  '& .MuiInputLabel-root': {
+    color: '#8c9ea0',
+    fontFamily: 'Cairo',
+  },
+
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: 'var(--main-color)',
+  },
+
+  /* ===== PLACEHOLDER ===== */
+  '& .MuiInputBase-input::placeholder': {
+    fontSize: '14px',
+    color: '#9AA0A6',
+    opacity: 1,
+  },
+};
+
+const pickerStyles = {
+  '& .MuiPickersInputBase-root': { minHeight: '48px', color: '#333' },
+  '& .MuiPickersInputBase-root:before': { borderBottomColor: '#ccc' },
+  '& .MuiPickersInputBase-root:hover:not(.Mui-disabled):before': {
+    borderBottomColor: 'var(--secondary-color)',
+  },
+  '& .MuiPickersInputBase-root:after': {
+    borderBottomColor: 'var(--secondary-color)',
+  },
+  '& .MuiSelect-select': {
+    color: '#333',
+    fontFamily: 'Cairo',
+    padding: '8px 0',
+  },
+  '& .Mui-disabled': { backgroundColor: '#F5F6F8', cursor: 'not-allowed' },
+  '& .Mui-disabled:before': {
+    borderBottomColor: '#DADDE3',
+    borderBottomStyle: 'solid',
+  },
+  '& .Mui-disabled:after': {
+    borderBottomColor: '#DADDE3',
+    borderBottomStyle: 'solid',
+  },
+  '& .MuiSelect-select.Mui-disabled': {
+    color: '#9AA0A6',
+    WebkitTextFillColor: '#9AA0A6',
+  },
+  '& .MuiInputLabel-root': { color: '#8c9ea0', fontFamily: 'Cairo' },
+  '& .MuiInputLabel-root.Mui-focused': { color: 'var(--main-color)' },
+  '& .MuiInputBase-input::placeholder': {
+    fontSize: '14px',
+    color: '#9AA0A6',
+    opacity: 1,
+  },
+};
+
 export default function CustomInput({
   label,
   isDisabled,
@@ -26,137 +148,15 @@ export default function CustomInput({
   setValue,
   inline,
   errorMsg,
+  isNestedState,
+  isRequired = true,
 }) {
   const handleChange = (e) => {
-    setValue(e.target.value);
+    if (isNestedState) setValue(e);
+    else setValue(e.target.value);
   };
 
   const [showPassword, setShowPassword] = useState(false);
-
-  const inputsStyles = {
-    '& .MuiInputBase-input': {
-      color: '#333',
-    },
-
-    /* ===== DEFAULT BORDER ===== */
-    '& .MuiInput-underline:before': {
-      borderBottomColor: '#ccc',
-    },
-
-    '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-      borderBottomColor: 'var(--secondary-color)',
-    },
-
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'var(--secondary-color)',
-    },
-
-    /* ===== ERROR STATE ===== */
-    '& .Mui-error:before': {
-      borderBottomColor: 'var(--error-color)',
-    },
-
-    '& .Mui-error:hover:not(.Mui-disabled):before': {
-      borderBottomColor: 'var(--error-color)',
-    },
-
-    '& .Mui-error:after': {
-      borderBottomColor: 'var(--error-color)',
-    },
-
-    '& .MuiFormLabel-root.Mui-error': {
-      color: 'var(--error-color)',
-    },
-
-    '& .MuiFormHelperText-root.Mui-error': {
-      color: 'var(--error-color)',
-      fontFamily: 'Cairo',
-    },
-
-    /* ===== SELECT ===== */
-    '& .MuiSelect-select': {
-      color: '#333',
-      fontFamily: 'Cairo',
-      padding: '8px 0',
-    },
-
-    /* ===== DISABLED ===== */
-    '& .Mui-disabled': {
-      backgroundColor: '#F5F6F8',
-      cursor: 'not-allowed',
-    },
-
-    '& .Mui-disabled:before': {
-      borderBottomColor: '#DADDE3',
-      borderBottomStyle: 'solid',
-    },
-
-    '& .Mui-disabled:after': {
-      borderBottomColor: '#DADDE3',
-      borderBottomStyle: 'solid',
-    },
-
-    '& .MuiSelect-select.Mui-disabled': {
-      color: '#9AA0A6',
-      WebkitTextFillColor: '#9AA0A6',
-    },
-
-    /* ===== LABEL ===== */
-    '& .MuiInputLabel-root': {
-      color: '#8c9ea0',
-      fontFamily: 'Cairo',
-    },
-
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: 'var(--main-color)',
-    },
-
-    /* ===== PLACEHOLDER ===== */
-    '& .MuiInputBase-input::placeholder': {
-      fontSize: '14px',
-      color: '#9AA0A6',
-      opacity: 1,
-    },
-
-    ...styles,
-  };
-
-  const pickerStyles = {
-    '& .MuiPickersInputBase-root': { minHeight: '48px', color: '#333' },
-    '& .MuiPickersInputBase-root:before': { borderBottomColor: '#ccc' },
-    '& .MuiPickersInputBase-root:hover:not(.Mui-disabled):before': {
-      borderBottomColor: 'var(--secondary-color)',
-    },
-    '& .MuiPickersInputBase-root:after': {
-      borderBottomColor: 'var(--secondary-color)',
-    },
-    '& .MuiSelect-select': {
-      color: '#333',
-      fontFamily: 'Cairo',
-      padding: '8px 0',
-    },
-    '& .Mui-disabled': { backgroundColor: '#F5F6F8', cursor: 'not-allowed' },
-    '& .Mui-disabled:before': {
-      borderBottomColor: '#DADDE3',
-      borderBottomStyle: 'solid',
-    },
-    '& .Mui-disabled:after': {
-      borderBottomColor: '#DADDE3',
-      borderBottomStyle: 'solid',
-    },
-    '& .MuiSelect-select.Mui-disabled': {
-      color: '#9AA0A6',
-      WebkitTextFillColor: '#9AA0A6',
-    },
-    '& .MuiInputLabel-root': { color: '#8c9ea0', fontFamily: 'Cairo' },
-    '& .MuiInputLabel-root.Mui-focused': { color: 'var(--main-color)' },
-    '& .MuiInputBase-input::placeholder': {
-      fontSize: '14px',
-      color: '#9AA0A6',
-      opacity: 1,
-    },
-    ...styles,
-  };
 
   return (
     <div
@@ -183,7 +183,7 @@ export default function CustomInput({
         fullWidth
         variant='standard'
         disabled={isDisabled}
-        sx={inputsStyles}
+        sx={styles ? { ...inputsStyles, ...styles } : inputsStyles}
         error={!!errorMsg}
       >
         {inputType === 'select' ? (
@@ -192,6 +192,7 @@ export default function CustomInput({
             value={value}
             onChange={handleChange}
             displayEmpty
+            required={isRequired}
             renderValue={(selected) => {
               if (!selected) {
                 return (
@@ -202,10 +203,13 @@ export default function CustomInput({
               }
 
               const selectedChild = Array.isArray(children)
-                ? children.find((child) => child.props.value === selected)
-                : children;
+                ? children.find((child) => {
+                    if (!child?.props) return false;
+                    return child.props.value === selected;
+                  })
+                : null;
 
-              return selectedChild?.props.children || selected;
+              return selectedChild?.props?.children || selected;
             }}
           >
             {children}
@@ -239,7 +243,7 @@ export default function CustomInput({
                 </InputAdornment>
               )
             }
-            required
+            required={isRequired}
           />
         ) : inputType === 'nativeSelect' ? (
           <>
@@ -282,7 +286,7 @@ export default function CustomInput({
                 variant: 'standard',
                 fullWidth: true,
                 placeholder: 'يوم/شهر/سنة',
-                sx: pickerStyles,
+                sx: styles ? { ...pickerStyles, ...styles } : pickerStyles,
               },
             }}
             format='YYYY/MM/DD'
@@ -296,7 +300,7 @@ export default function CustomInput({
                 variant: 'standard',
                 fullWidth: true,
                 placeholder,
-                sx: pickerStyles,
+                sx: styles ? { ...pickerStyles, ...styles } : pickerStyles,
               },
             }}
             format='HH:mm'
@@ -315,7 +319,7 @@ export default function CustomInput({
       {/* 🔹 Helper text */}
       {((helperText && isDisabled) || errorMsg) && (
         <FormHelperText error={!!errorMsg} sx={{ color: '#9AA0A6' }}>
-          {helperText ? helperText : errorMsg}
+          {errorMsg || helperText}
         </FormHelperText>
       )}
     </div>

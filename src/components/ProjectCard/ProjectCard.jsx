@@ -16,11 +16,27 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { RecyclingRounded } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { controlSuccessDialog } from '../../redux/slices/ModalContollerSlice';
+import SuccessMessageDialog from '../SuccessMessageDialog';
 
-export default function ProjectCard({ project, isTrash }) {
+export default function ProjectCard({
+  uuid,
+  name,
+  governorate_name,
+  estimated_cost,
+  progress_percentage,
+  cover_image,
+  sector,
+  isTrash,
+}) {
   const navigate = useNavigate();
 
-  if (!project) return null;
+  const progressValue = parseInt(progress_percentage) || 0;
+
+  const remainingPrecentage = 100 - progressValue;
+
+  const dispatch = useDispatch();
 
   return (
     <Card
@@ -40,7 +56,7 @@ export default function ProjectCard({ project, isTrash }) {
       <CardMedia
         component='img'
         height='180'
-        image={project.image || 'https://via.placeholder.com/300'}
+        image={cover_image || 'https://via.placeholder.com/300'}
         alt='project'
         sx={{
           aspectRatio: '16/11',
@@ -75,7 +91,7 @@ export default function ProjectCard({ project, isTrash }) {
             lineHeight: 1.6,
           }}
         >
-          {project.title}
+          {name}
         </Typography>
 
         {/* الموقع */}
@@ -94,7 +110,7 @@ export default function ProjectCard({ project, isTrash }) {
             sx={{ color: 'var(--main-color)' }}
           />
           <Typography variant='body2' sx={{ fontSize: 16 }}>
-            {project.location}
+            {governorate_name}
           </Typography>
         </Box>
 
@@ -109,12 +125,12 @@ export default function ProjectCard({ project, isTrash }) {
           }}
         >
           <Typography sx={{ color: '#ed6c02', fontWeight: 600, fontSize: 13 }}>
-            {project.category}
+            {sector}
           </Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <Typography fontWeight='bold' fontSize={15}>
-              {project.price}
+              {estimated_cost}
             </Typography>
             <AttachMoneyIcon fontSize='small' />
           </Box>
@@ -124,7 +140,7 @@ export default function ProjectCard({ project, isTrash }) {
         <Box sx={{ pt: 1, borderTop: '1px solid #eee', direction: 'rtl' }}>
           <LinearProgress
             variant='determinate'
-            value={project.progress}
+            value={progressValue}
             sx={{
               height: 7,
               borderRadius: 5,
@@ -138,10 +154,10 @@ export default function ProjectCard({ project, isTrash }) {
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant='caption'>
-              % متبقي {100 - project.progress}
+              % متبقي {remainingPrecentage}
             </Typography>
             <Typography variant='caption'>
-              {project.progress} % نسبة إنجاز المشروع
+              {progressValue} % نسبة إنجاز المشروع
             </Typography>
           </Box>
         </Box>
@@ -176,6 +192,7 @@ export default function ProjectCard({ project, isTrash }) {
                 border: '1px solid #ffcccc',
                 backgroundColor: '#fff5f5',
               }}
+              onClick={() => dispatch(controlSuccessDialog(uuid))}
             >
               <DeleteOutlinedIcon fontSize='small' />
             </IconButton>
@@ -184,7 +201,7 @@ export default function ProjectCard({ project, isTrash }) {
           <Button
             variant='contained'
             size='small'
-            onClick={() => navigate(`/content/projects/${project.id}`)}
+            onClick={() => navigate(`/content/projects/${uuid}`)}
             sx={{
               backgroundColor: 'var(--main-color)',
               color: 'white',

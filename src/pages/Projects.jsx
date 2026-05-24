@@ -16,22 +16,36 @@ import FilterDrawer from '../components/FilterDrawer';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useNavigate } from 'react-router-dom';
-import projectsData from '../components/data/ProjectsData';
 import { Link } from 'react-router-dom';
 import { AddRounded } from '@mui/icons-material';
 import CustomInput from '../components/locations/CustomInput';
+import useProjects from '../customHooks/queries/useProjects';
+import SuccessMessageDialog from '../components/SuccessMessageDialog';
+import DeleteProjectLogic from '../components/DeleteProjectLogic';
+import CustomPagination from '../components/CustomPagination';
+import config from '../constants/enviroment';
 
 export default function Projects({ isTrash = false }) {
   const [openFilter, setOpenFilter] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
+
+  const {
+    data: projectsData,
+    isPending: isFetchingProjects,
+    error: projectsError,
+  } = useProjects();
+
+  const projects = projectsData?.data || [];
 
   const itemsPerPage = 6;
   const navigate = useNavigate();
 
-  const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  const startIndex = page * itemsPerPage;
 
-  const paginatedProjects = projectsData.slice(startIndex, endIndex);
+  const paginatedProjects = projects.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
 
   return (
     <Container className='projects' maxWidth='lg' sx={{ px: 2 }}>
@@ -62,7 +76,7 @@ export default function Projects({ isTrash = false }) {
             }}
           />
 
-          <p style={{ fontSize: '14px' }}>عدد الحملات: {projectsData.length}</p>
+          <p style={{ fontSize: '14px' }}>عدد الحملات: {projects.length}</p>
         </div>
         <IconButton
           onClick={() => setOpenFilter(true)}
@@ -88,20 +102,32 @@ export default function Projects({ isTrash = false }) {
         }}
       >
         <Grid container spacing={4} alignItems='stretch' sx={{ width: '100%' }}>
-          {paginatedProjects.map((project, index) => (
+          {paginatedProjects.map((project) => (
             <Grid
               item
               xs={12}
               sm={6}
               md={4}
               size={3}
-              key={index}
+              key={project.uuid}
               sx={{ display: 'flex' }}
             >
               <ProjectCard
-                project={project}
+                name={project.name}
+                governorate_name={
+                  project.district.city.governorate.governorate_name
+                }
+                cover_image={config.baseUrl + project.cover_image}
+                progress_precentage={project.progress_percentage}
+                estimated_cost={project.estimated_cost}
+                sector={
+                  project.on_the_other_hand
+                    ? project.on_the_other_hand
+                    : project.sector
+                }
+                uuid={project.uuid}
                 isTrash={isTrash}
-                onDetailsClick={() => navigate(`/projects/${project.id}`)}
+                onDetailsClick={() => navigate(`/projects/${project.uuid}`)}
               />
             </Grid>
           ))}
@@ -110,13 +136,14 @@ export default function Projects({ isTrash = false }) {
 
       {/* Pagination */}
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-        <Pagination
-          count={Math.ceil(projectsData.length / itemsPerPage)}
+        <CustomPagination
+          count={projects.length}
           page={page}
-          onChange={(e, value) => setPage(value)}
-          color='primary'
+          rowsPerPage={6}
+          onPageChange={setPage}
         />
       </Box>
+      <DeleteProjectLogic />
     </Container>
   );
 }

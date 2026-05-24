@@ -1,10 +1,9 @@
-import ContentWithTable from '../components/ContentWithTable';
 import { useState } from 'react';
-import ControlLocationModal from './ControlLocationModal';
 import CustomInput from '../components/locations/CustomInput';
 import { AddRounded } from '@mui/icons-material';
 import Title from '../components/Title';
 import PageContainer from '../components/PageContainer';
+import PageTable from '../components/PageTable';
 
 const columns = [
   { id: 'name', label: 'الاسم' },
@@ -42,55 +41,58 @@ const IndividualDonars = () => {
       <Title pageTitle='إدارة المتبرعين' subtitle='الأفراد' />
 
       {/* Table & filter */}
-      <ContentWithTable
-        columns={columns}
-        rows={rows}
-        className='individuals'
-        pageLink='/content/individuals'
-      >
+      <div className='table-content individuals'>
         {/* filter holder */}
-        <div className='input-holder'>
-          <CustomInput
-            inputType='textField'
-            placeholder='ابحث حسب الاسم'
-            styles={{
-              width: '400px',
-              height: 'auto',
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: 'var(--main-color)', // لون اللابل عند focus
-              },
-            }}
-            value={searchedKey}
-            setValue={setSearchedKey}
-          />
-          <CustomInput
-            label='الترتيب'
-            inputType='nativeSelect'
-            styles={nativeSelectStyles}
-            value={order}
-            setValue={setOrder}
-          >
-            <option value='' disabled style={{ display: 'none' }}></option>
-            <option value='all'>الكل</option>
-            <option value='Alhamra'>حمص</option>
-            <option value='Alghuta'>حماة</option>
-          </CustomInput>
-          <CustomInput
-            label='طريقة التبرع'
-            inputType='nativeSelect'
-            styles={nativeSelectStyles}
-            value={donationType}
-            setValue={setDonationType}
-          >
-            <option value='' disabled style={{ display: 'none' }}></option>
-            <option value='all'>الكل</option>
-            <option value='Alhamra'>الحمراء</option>
-            <option value='Alghuta'>الغوطة</option>
-          </CustomInput>
+        <div className='filters-holder'>
+          <div className='input-holder'>
+            <CustomInput
+              inputType='textField'
+              placeholder='ابحث حسب الاسم'
+              styles={{
+                width: '400px',
+                height: 'auto',
+                '& .MuiInputLabel-root.Mui-focused': {
+                  color: 'var(--main-color)', // لون اللابل عند focus
+                },
+              }}
+              value={searchedKey}
+              setValue={setSearchedKey}
+            />
+            <CustomInput
+              label='الترتيب'
+              inputType='nativeSelect'
+              styles={nativeSelectStyles}
+              value={order}
+              setValue={setOrder}
+            >
+              <option value='' disabled style={{ display: 'none' }}></option>
+              <option value='all'>الكل</option>
+              <option value='Alhamra'>حمص</option>
+              <option value='Alghuta'>حماة</option>
+            </CustomInput>
+            <CustomInput
+              label='طريقة التبرع'
+              inputType='nativeSelect'
+              styles={nativeSelectStyles}
+              value={donationType}
+              setValue={setDonationType}
+            >
+              <option value='' disabled style={{ display: 'none' }}></option>
+              <option value='all'>الكل</option>
+              <option value='Alhamra'>الحمراء</option>
+              <option value='Alghuta'>الغوطة</option>
+            </CustomInput>
+          </div>
+
+          <p>عدد المتبرعين: {rows.length}</p>
         </div>
 
-        <p>عدد المتبرعين: {rows.length}</p>
-      </ContentWithTable>
+        <PageTable
+          rows={rows}
+          columns={columns}
+          pageLink='/content/individuals'
+        />
+      </div>
     </PageContainer>
   );
 };

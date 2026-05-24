@@ -2,7 +2,7 @@ import axios from 'axios';
 import config from '../constants/enviroment';
 
 const api = axios.create({
-  baseURL: config.baseUrl,
+  baseURL: config.baseUrl + '/api',
 });
 
 // Request interceptor
@@ -26,7 +26,9 @@ api.interceptors.response.use(
       localStorage.removeItem('token');
 
       // تحويل للوغ إن
-      window.location.href = '/';
+      if (window.location.pathname !== '/') {
+        window.location.href = '/';
+      }
     }
 
     return Promise.reject(error);

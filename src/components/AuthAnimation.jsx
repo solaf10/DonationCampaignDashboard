@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import './AuthAnimation.css';
 
-export default function AuthAnimation() {
+function AuthAnimation() {
   const particles = Array.from({ length: 25 });
 
   return (
@@ -21,3 +22,4 @@ export default function AuthAnimation() {
     </div>
   );
 }
+export default memo(AuthAnimation);

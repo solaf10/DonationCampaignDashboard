@@ -1,6 +1,4 @@
-import ContentWithTable from '../components/ContentWithTable';
 import { useState } from 'react';
-import ControlLocationModal from './ControlLocationModal';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomInput from '../components/locations/CustomInput';
 import PageContainer from '../components/PageContainer';
@@ -21,22 +19,36 @@ import {
   controlMoreInfoMenu,
 } from '../redux/slices/ModalContollerSlice';
 import { IconButton } from '@mui/material';
+import useGetCampaignsLogic from '../customHooks/useGetCampaignsLogic';
+import PageTable from '../components/PageTable';
+import '../components/ContentWithTable.css';
+import FilterCampaignsModal from '../components/FilterCampaignsModal';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
-  { id: 'projects', label: 'عدد المشاريع' },
-  { id: 'location', label: 'الموقع الجغرافي' },
-  { id: 'target', label: 'المبلغ المستهدف' },
-  { id: 'collected', label: 'المبلغ المجموع' },
+  { id: 'projectsNum', label: 'عدد المشاريع' },
+  { id: 'target_amount', label: 'المبلغ المستهدف' },
+  { id: 'collected_amount', label: 'المبلغ المجموع' },
+  { id: 'end_date', label: 'تاريخ النهاية' },
+  { id: 'status', label: 'الحالة' },
   { id: 'actions', label: '' },
 ];
 
 const Campaigns = ({ isTrash = false }) => {
-  const [isEditOpen, setIsEditOpen] = useState(false);
   const [searchedKey, setSearchedKey] = useState('');
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const {
+    rows,
+    isSearching,
+    searchError,
+    /* isFiltering,
+    filterError, */
+    isFetchingCampaigns,
+    campaignsError,
+  } = useGetCampaignsLogic(searchedKey);
 
   const actions = [
     {
@@ -63,44 +75,8 @@ const Campaigns = ({ isTrash = false }) => {
       danger: true,
     },
   ];
+  console.log(searchError);
 
-  const rows = [
-    {
-      name: 'حملة رمضان',
-      projects: 12,
-      location: 'دمشق',
-      target: '50,000$',
-      collected: '32,000$',
-    },
-    {
-      name: 'حملة الشتاء',
-      projects: 8,
-      location: 'حلب',
-      target: '30,000$',
-      collected: '25,000$',
-    },
-    {
-      name: 'حملة التعليم',
-      projects: 15,
-      location: 'حمص',
-      target: '70,000$',
-      collected: '40,000$',
-    },
-    {
-      name: 'حملة الصحة',
-      projects: 10,
-      location: 'اللاذقية',
-      target: '45,000$',
-      collected: '20,000$',
-    },
-    {
-      name: 'حملة الغذاء',
-      projects: 6,
-      location: 'درعا',
-      target: '20,000$',
-      collected: '18,000$',
-    },
-  ];
   return (
     <PageContainer>
       <Title
@@ -115,57 +91,46 @@ const Campaigns = ({ isTrash = false }) => {
         )}
       </Title>
       {/* filter & table */}
-      <ContentWithTable
-        columns={columns}
-        rows={rows}
-        className='campaigns'
-        pageLink='/content/campaigns'
-      >
+      <div className='table-content campaigns'>
         {/* filter holder */}
-        <div className='input-holder'>
-          <CustomInput
-            inputType='textField'
-            placeholder='ابحث حسب الاسم'
-            styles={{
-              width: '400px',
-              height: 'auto',
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: 'var(--main-color)', // لون اللابل عند focus
-              },
-            }}
-            value={searchedKey}
-            setValue={setSearchedKey}
+        <div className='filters-holder'>
+          <div className='input-holder'>
+            <CustomInput
+              inputType='textField'
+              placeholder='ابحث حسب الاسم'
+              styles={{
+                width: '400px',
+                height: 'auto',
+                '& .MuiInputLabel-root.Mui-focused': {
+                  color: 'var(--main-color)', // لون اللابل عند focus
+                },
+              }}
+              value={searchedKey}
+              setValue={setSearchedKey}
+            />
+
+            <p style={{ fontSize: '14px' }}>عدد الحملات: {rows.length}</p>
+          </div>
+          {/* filter Model btn */}
+          <IconButton
+            className='filter-btn'
+            onClick={() =>
+              dispatch(controlControlLocationModal({ type: 'add', id: 'null' }))
+            }
           >
-            nothing
-          </CustomInput>
-
-          <p style={{ fontSize: '14px' }}>عدد الحملات: {rows.length}</p>
+            <FilterAltOutlined className='icon' />
+          </IconButton>
         </div>
-        {/* filter Model btn */}
-        <IconButton
-          className='filter-btn'
-          onClick={() => dispatch(controlControlLocationModal())}
-        >
-          <FilterAltOutlined className='icon' />
-        </IconButton>
-      </ContentWithTable>
-      {/* Edit Modal */}
-      <ControlLocationModal
-        isOpen={isEditOpen}
-        setIsOpen={setIsEditOpen}
-        title='تعديل المنطقة'
-        locationType='areas'
-        isEdit={true}
-      />
+      </div>
 
-      {/* filterModal */}
-      <ControlLocationModal title='تصفية متقدمة' locationType='projects' />
+      <PageTable rows={rows} columns={columns} pageLink='/content/campaigns' />
 
       {/* MoreInfoMenu */}
       <MoreMenu
         handleCloseMenu={() => dispatch(controlMoreInfoMenu())}
         actions={actions}
       />
+      <FilterCampaignsModal />
     </PageContainer>
   );
 };

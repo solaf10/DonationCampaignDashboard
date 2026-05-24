@@ -1,6 +1,4 @@
-import ContentWithTable from '../components/ContentWithTable';
 import { useState } from 'react';
-import ControlLocationModal from './ControlLocationModal';
 import CustomInput from '../components/locations/CustomInput';
 import { AddRounded } from '@mui/icons-material';
 import Title from '../components/Title';
@@ -11,6 +9,7 @@ import useGovernments from '../customHooks/queries/useGovernments';
 import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
 import useGetAreasLogic from '../customHooks/useGetAreasLogic';
 import AreaModalForm from '../components/locations/AreaModalForm';
+import PageTable from '../components/PageTable';
 
 const columns = [
   { id: 'district_name', label: 'المنطقة' },
@@ -69,54 +68,58 @@ const Areas = () => {
         </button>
       </Title>
       {/* Table & filter */}
-      <ContentWithTable columns={columns} rows={rows} className='areas'>
-        {/* filter holder */}
-        <div className='input-holder'>
-          <CustomInput
-            inputType='textField'
-            placeholder='ابحث في المناطق'
-            styles={{
-              width: '400px',
-              height: 'auto',
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: 'var(--main-color)', // لون اللابل عند focus
-              },
-            }}
-            value={area}
-            setValue={setArea}
-          />
-          <CustomInput
-            label='المحافظة'
-            inputType='nativeSelect'
-            styles={nativeSelectStyles}
-            value={government}
-            setValue={setGovernment}
-          >
-            <option value='all'>الكل</option>
-            {governments.map((government) => (
-              <option key={government.uuid} value={government.uuid}>
-                {government.governorate_name}
-              </option>
-            ))}
-          </CustomInput>
-          <CustomInput
-            label='الحي'
-            inputType='nativeSelect'
-            styles={nativeSelectStyles}
-            value={city}
-            setValue={setCity}
-          >
-            <option value='all'>الكل</option>
-            {cities?.data.map((city) => (
-              <option key={city.uuid} value={city.uuid}>
-                {city.city_name}
-              </option>
-            ))}
-          </CustomInput>
-        </div>
+      <div className='table-content areas'>
+        <div className='filters-holder'>
+          {/* filter holder */}
+          <div className='input-holder'>
+            <CustomInput
+              inputType='textField'
+              placeholder='ابحث في المناطق'
+              styles={{
+                width: '400px',
+                height: 'auto',
+                '& .MuiInputLabel-root.Mui-focused': {
+                  color: 'var(--main-color)', // لون اللابل عند focus
+                },
+              }}
+              value={area}
+              setValue={setArea}
+            />
+            <CustomInput
+              label='المحافظة'
+              inputType='nativeSelect'
+              styles={nativeSelectStyles}
+              value={government}
+              setValue={setGovernment}
+            >
+              <option value='all'>الكل</option>
+              {governments.map((government) => (
+                <option key={government.uuid} value={government.uuid}>
+                  {government.governorate_name}
+                </option>
+              ))}
+            </CustomInput>
+            <CustomInput
+              label='الحي'
+              inputType='nativeSelect'
+              styles={nativeSelectStyles}
+              value={city}
+              setValue={setCity}
+            >
+              <option value='all'>الكل</option>
+              {cities?.data.map((city) => (
+                <option key={city.uuid} value={city.uuid}>
+                  {city.city_name}
+                </option>
+              ))}
+            </CustomInput>
+          </div>
 
-        <p>عدد المناطق: {rows.length}</p>
-      </ContentWithTable>
+          <p>عدد المناطق: {rows.length}</p>
+        </div>
+        <PageTable rows={rows} columns={columns} />
+      </div>
+
       <AreaModalForm governments={governments} areas={rows} />
     </PageContainer>
   );

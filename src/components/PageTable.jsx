@@ -8,10 +8,10 @@ import {
   Paper,
   IconButton,
   Button,
+  Chip,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
-import CustomPagination from './CustomPagination';
 import './PageTable.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -21,6 +21,23 @@ import {
   controlMoreInfoMenu,
 } from '../redux/slices/ModalContollerSlice';
 import { EditCalendarRounded } from '@mui/icons-material';
+import CustomTablePagination from './CustomTablePagination';
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case 'نشطة':
+      return '#6B9E8A';
+
+    case 'متوقفة':
+      return '#C97B6E';
+
+    case 'مكتملة':
+      return '#E8A87C';
+
+    default:
+      return '#9A8F87';
+  }
+};
 
 const PageTable = ({ columns, rows, pageLink }) => {
   const [page, setPage] = useState(0);
@@ -109,10 +126,31 @@ const PageTable = ({ columns, rows, pageLink }) => {
                             </TableCell>
                           );
                         }
+                        if (column.id === 'status') {
+                          return (
+                            <TableCell key={column.id}>
+                              <Chip
+                                label={row[column.id]}
+                                sx={{
+                                  backgroundColor: getStatusColor(
+                                    row[column.id],
+                                  ),
+                                  color: '#E5E7EB',
+                                  fontWeight: 500,
+                                  minWidth: '75px',
+                                }}
+                              />
+                            </TableCell>
+                          );
+                        }
 
                         return (
                           <TableCell key={column.id}>
-                            {row[column.id]}
+                            {row[column.id] === null ? (
+                              <span style={{ color: '#8a8a8a' }}>&mdash;</span>
+                            ) : (
+                              row[column.id]
+                            )}
                           </TableCell>
                         );
                       })}
@@ -122,20 +160,7 @@ const PageTable = ({ columns, rows, pageLink }) => {
           </Table>
         </TableContainer>
 
-        {/* <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component='div'
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            labelRowsPerPage='عدد الصفوف'
-            labelDisplayedRows={({ from, to, count }) =>
-              `عرض العناصر من ${from} إلى ${to} من أصل ${count} عنصر`
-            }
-          /> */}
-        <CustomPagination
+        <CustomTablePagination
           count={rows?.length || 3}
           page={page}
           rowsPerPage={rowsPerPage}

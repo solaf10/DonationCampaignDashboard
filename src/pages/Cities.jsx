@@ -1,4 +1,3 @@
-import ContentWithTable from '../components/ContentWithTable';
 import CustomInput from '../components/locations/CustomInput';
 import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
@@ -9,6 +8,7 @@ import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice
 import CityModalForm from '../components/locations/CityModalForm';
 import useGovernments from '../customHooks/queries/useGovernments';
 import useGetCitiesLogic from '../customHooks/useGetCitiesLogic';
+import PageTable from '../components/PageTable';
 
 const columns = [
   { id: 'city_name', label: 'الحي' },
@@ -56,42 +56,46 @@ const Cities = () => {
         </button>
       </Title>
       {/* Fitler & table */}
-      <ContentWithTable columns={columns} rows={rows} className='cities'>
+      <div className='table-content cities'>
         {/* filter holder */}
-        <div className='input-holder'>
-          <CustomInput
-            inputType='textField'
-            placeholder='ابحث في الأحياء'
-            styles={{
-              width: '400px',
-              height: 'auto',
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: 'var(--main-color)', // لون اللابل عند focus
-              },
-            }}
-            value={city}
-            setValue={setCity}
-          />
+        <div className='filters-holder'>
+          <div className='input-holder'>
+            <CustomInput
+              inputType='textField'
+              placeholder='ابحث في الأحياء'
+              styles={{
+                width: '400px',
+                height: 'auto',
+                '& .MuiInputLabel-root.Mui-focused': {
+                  color: 'var(--main-color)', // لون اللابل عند focus
+                },
+              }}
+              value={city}
+              setValue={setCity}
+            />
 
-          <CustomInput
-            label='المحافظة'
-            inputType='nativeSelect'
-            styles={nativeSelectStyles}
-            value={government}
-            setValue={setGovernment}
-          >
-            <option value='' disabled style={{ display: 'none' }}></option>
-            <option value='all'>الكل</option>
-            {governments.map((government) => (
-              <option key={government.uuid} value={government.uuid}>
-                {government.governorate_name}
-              </option>
-            ))}
-          </CustomInput>
+            <CustomInput
+              label='المحافظة'
+              inputType='nativeSelect'
+              styles={nativeSelectStyles}
+              value={government}
+              setValue={setGovernment}
+            >
+              <option value='' disabled style={{ display: 'none' }}></option>
+              <option value='all'>الكل</option>
+              {governments.map((government) => (
+                <option key={government.uuid} value={government.uuid}>
+                  {government.governorate_name}
+                </option>
+              ))}
+            </CustomInput>
+          </div>
+
+          <p>عدد الأحياء: {rows.length}</p>
         </div>
+        <PageTable rows={rows} columns={columns} />
+      </div>
 
-        <p>عدد الأحياء: {rows.length}</p>
-      </ContentWithTable>
       <CityModalForm cities={rows} governments={governments} />
     </PageContainer>
   );

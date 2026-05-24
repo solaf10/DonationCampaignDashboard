@@ -20,19 +20,44 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import CategoryIcon from '@mui/icons-material/Category';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloseIcon from '@mui/icons-material/Close';
-import projectsData from '../components/data/ProjectsData';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useSingleProject } from '../customHooks/queries/useProjects';
+import MediaSection from '../components/MediaSection';
+import { ChevronLeft } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
+import DeleteProjectLogic from '../components/DeleteProjectLogic';
+import config from '../constants/enviroment';
 
 export default function ProjectDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const project = projectsData.find((p) => p.id === parseInt(id));
-  const [lightboxImg, setLightboxImg] = useState(null);
-  const [billItems, setBillItems] = useState(project.bill || []);
+  const {
+    data: projectData,
+    isPending: isFetchingProjectDetails,
+    error: projectDetailsError,
+  } = useSingleProject(id);
+
+  const project = projectData?.data || {};
+
+  const progressValue = parseInt(project.progress_percentage) || 0;
+
+  const requirements = project.requirements
+    ?.split(/[،,\n]/)
+    .map((item) =>
+      item
+        .replace(/^\d+_/, '') // يحذف 1_ أو 2_
+        .trim(),
+    )
+    .filter(Boolean);
+
+  /* const [billItems, setBillItems] = useState(project.bill || []); */
+  const [billItems, setBillItems] = useState([]);
+
+  const dispatch = useDispatch();
 
   if (!project) {
     return (
@@ -79,7 +104,7 @@ export default function ProjectDetails() {
               إدارة المشاريع
             </Typography>
 
-            <ChevronRightIcon
+            <ChevronLeft
               sx={{
                 color: '#C7BFB6',
                 fontSize: 32,
@@ -92,7 +117,7 @@ export default function ProjectDetails() {
                 color: 'var(--main-color)',
               }}
             >
-              {project.title}
+              {project.name}
             </Typography>
           </Box>
 
@@ -114,7 +139,6 @@ export default function ProjectDetails() {
             <Button
               variant='outlined'
               startIcon={<DeleteIcon />}
-              onClick={handleDelete}
               sx={{
                 color: '#d32f2f',
                 borderColor: '#d32f2f',
@@ -123,6 +147,7 @@ export default function ProjectDetails() {
                   bgcolor: '#fff5f5',
                 },
               }}
+              onClick={() => dispatch(controlSuccessDialog(project.uuid))}
             >
               حذف
             </Button>
@@ -141,8 +166,8 @@ export default function ProjectDetails() {
         >
           <Box
             component='img'
-            src={project.image}
-            alt={project.title}
+            src={config.baseUrl + project.cover_image}
+            alt={project.name}
             sx={{
               width: '100%',
               height: '100%',
@@ -188,7 +213,7 @@ export default function ProjectDetails() {
                 lineHeight: 1.1,
               }}
             >
-              {project.title}
+              {project.name}
             </Typography>
 
             <Box
@@ -206,7 +231,7 @@ export default function ProjectDetails() {
                     }}
                   />
                 }
-                label={project.location}
+                label={project.district?.district_name}
                 sx={{
                   bgcolor: 'rgba(255,255,255,0.14)',
                   color: 'white',
@@ -215,7 +240,11 @@ export default function ProjectDetails() {
               />
 
               <Chip
-                label={project.category}
+                label={
+                  project.on_the_other_hand
+                    ? project.on_the_other_hand
+                    : project.sector
+                }
                 sx={{
                   bgcolor: 'rgba(255,255,255,0.14)',
                   color: 'white',
@@ -228,58 +257,62 @@ export default function ProjectDetails() {
 
         {/* INFO CARDS */}
         <Grid container spacing={2} mb={4}>
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+          <Grid item xs={12} md={6} lg={4}>
             <InfoCard
               icon={<LocationOnIcon />}
               title='الموقع'
-              value={project.location}
+              value={project.district?.district_name}
               bg='#e8f5e9'
               color='#457461'
             />
           </Grid>
 
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+          <Grid item xs={12} md={6} lg={4}>
             <InfoCard
               icon={<CategoryIcon />}
               title='القطاع'
-              value={project.category}
+              value={
+                project.on_the_other_hand
+                  ? project.on_the_other_hand
+                  : project.sector
+              }
               bg='#e3f2fd'
               color='#1565c0'
             />
           </Grid>
 
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+          <Grid item xs={12} md={6} lg={4}>
             <InfoCard
               icon={<BusinessIcon />}
               title='الجهة المنفذة'
-              value={project.executor}
+              value={project.funding_source}
               bg='#fff3e0'
               color='#ef6c00'
             />
           </Grid>
 
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+          <Grid item xs={12} md={6} lg={4}>
             <InfoCard
               icon={<AccountBalanceIcon />}
               title='الجهة الممولة'
-              value={project.funder}
+              value={project.Implementing_party}
               bg='#fce4ec'
               color='#c2185b'
             />
           </Grid>
 
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+          <Grid item xs={12} md={6} lg={4}>
             <InfoCard
               icon={<AttachMoneyIcon />}
               title='الكلفة'
-              value={`$${project.price}`}
+              value={`${project.estimated_cost}`}
               bg='#e8f5e9'
               color='#2e7d32'
             />
           </Grid>
 
           {/* Progress */}
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+          <Grid item xs={12} md={6} lg={4}>
             <Card
               sx={{
                 p: 2.5,
@@ -302,11 +335,11 @@ export default function ProjectDetails() {
                 <Box sx={{ width: '100%' }}>
                   <Typography variant='caption'>نسبة الإنجاز</Typography>
 
-                  <Typography fontWeight={700}>{project.progress}%</Typography>
+                  <Typography fontWeight={700}>{progressValue}%</Typography>
 
                   <LinearProgress
                     variant='determinate'
-                    value={project.progress}
+                    value={progressValue}
                     sx={{
                       mt: 1,
                       height: 8,
@@ -341,7 +374,7 @@ export default function ProjectDetails() {
                   flexDirection: 'column',
                 }}
               >
-                {project.requirements?.map((item, index) => (
+                {requirements?.map((item, index) => (
                   <Box
                     key={index}
                     sx={{
@@ -455,7 +488,7 @@ export default function ProjectDetails() {
           </Grid>
         </Grid>
 
-        {/* GALLERY */}
+        {/* Image GALLERY */}
         <Card
           sx={{
             mt: 4,
@@ -468,63 +501,35 @@ export default function ProjectDetails() {
             صور المشروع
           </Typography>
 
-          <Grid container spacing={4}>
-            {project.images?.map((img, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Box
-                  component='img'
-                  src={img}
-                  alt={`project-${index}`}
-                  onClick={() => setLightboxImg(img)}
-                  sx={{
-                    width: 350,
-                    height: 260,
-                    borderRadius: 4,
-                    objectFit: 'cover',
-                    cursor: 'pointer',
-                    transition: '0.3s',
+          <MediaSection
+            mediaType='image'
+            mediaItems={project.images}
+            altBase={project.name}
+          />
+        </Card>
+        {/* Videos GALLERY */}
+        <Card
+          sx={{
+            mt: 4,
+            p: 4,
+            borderRadius: 5,
+            boxShadow: '0 4px 18px rgba(0,0,0,0.07)',
+          }}
+        >
+          <Typography variant='h5' fontWeight={800} mb={4}>
+            فيديوهات المشروع
+          </Typography>
 
-                    '&:hover': {
-                      transform: 'scale(1.03)',
-                      boxShadow: '0 12px 35px rgba(0,0,0,0.2)',
-                    },
-                  }}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <MediaSection
+            mediaType='video'
+            mediaItems={project.videos}
+            altBase={project.name}
+          />
         </Card>
       </Box>
 
-      {/* LIGHTBOX */}
-      {lightboxImg && (
-        <Box
-          onClick={() => setLightboxImg(null)}
-          sx={{
-            position: 'fixed',
-            inset: 0,
-            bgcolor: 'rgba(0,0,0,0.9)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            cursor: 'zoom-out',
-            p: 3,
-          }}
-        >
-          <Box
-            component='img'
-            src={lightboxImg}
-            alt='preview'
-            sx={{
-              maxWidth: '90vw',
-              maxHeight: '90vh',
-              borderRadius: 4,
-              boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
-            }}
-          />
-        </Box>
-      )}
+      {/* lightBox */}
+      <DeleteProjectLogic />
     </Box>
   );
 }

@@ -12,33 +12,8 @@ import { Grid, Typography } from '@mui/material';
 import './CampaignsForm.css';
 import AddBySelectionModal from './AddBySelectionModal';
 import SuccessMessageDialog from './SuccessMessageDialog';
-const steps = ['معلومات الحملة', 'جدولة للحملة', 'التمويل والوسائط'];
-
-const projects = [
-  {
-    id: 1,
-    name: 'مشروع التخرج',
-    location: 'حمص-الحمراء',
-  },
-  {
-    id: 2,
-    name: 'تعليم إلكتروني',
-    location: 'حمص-الحميدية',
-  },
-  {
-    id: 3,
-    name: 'متجر إلكتروني',
-    location: 'دمشق-الحميدية',
-  },
-  {
-    id: 4,
-    name: 'تطبيق حجوزات',
-    location: 'حماة-ابن رشد',
-  },
-];
 
 const CampaignsForm = () => {
-  const { activeStep } = useActiveStep();
   const [name, setName] = useState('');
   const [purpose, setPurpose] = useState('');
   //   second step
@@ -50,90 +25,9 @@ const CampaignsForm = () => {
   const [targetFunding, setTargetFunding] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
 
-  const icons = {
-    1: <InfoOutline fontSize='small' />,
-    2: <EventOutlined fontSize='small' />,
-    3: <PaymentsOutlined fontSize='small' />,
-  };
-  // custom input custom styles
-  const styles = {
-    marginBottom: '24px',
-  };
-
-  // first step content
-  const infoForm = (
-    <div className='form-holder'>
-      <CustomInput
-        label='اسم الحملة'
-        inputType='input'
-        placeholder='اسم الحملة'
-        value={name}
-        setValue={setName}
-        styles={styles}
-      />
-      <Textarea
-        label='أهداف الحملة'
-        placeholder='اكتب أهداف الحملة باختصار...'
-        value={purpose}
-        setValue={setPurpose}
-        inputType='textarea'
-      />
-    </div>
-  );
-
-  // second step content
-  const timingForm = (
-    <Grid container spacing={3}>
-      <Grid size={6}>
-        <CustomInput
-          label='تاريخ البدء'
-          inputType='date'
-          value={startDate}
-          setValue={setStartDate}
-        />
-      </Grid>
-      <Grid size={6}>
-        <CustomInput
-          label='تاريخ الانتهاء'
-          placeholder='يوم/شهر/سنة'
-          inputType='date'
-          value={endDate}
-          setValue={setEndDate}
-        />
-      </Grid>
-      <Grid size={6}>
-        <CustomInput
-          label='وقت البدء'
-          inputType='time'
-          placeholder='مثال: 00:00'
-          value={startTime}
-          setValue={setStartTime}
-        />
-      </Grid>
-      <Grid size={6}>
-        <CustomInput
-          label='وقت الإنتهاء'
-          inputType='time'
-          placeholder='مثال: 00:00'
-          value={endTime}
-          setValue={setEndTime}
-        />
-      </Grid>
-    </Grid>
-  );
-
   // last step content
   const paymentForm = (
     <div className='form-holder'>
-      <CustomInput
-        label='التمويل المستهدف (ل.س)'
-        inputType='input'
-        placeholder='مثال: 50,000,000'
-        helperText='سيتم عرض المبلغ المجموع تلقائيًا بعد بدء الحملة'
-        value={targetFunding}
-        setValue={setTargetFunding}
-        styles={{ ...styles, marginBottom: '8px' }}
-      />
       <div className='image-upload' style={{ marginTop: '24px' }}>
         <Typography
           sx={{
@@ -196,28 +90,7 @@ const CampaignsForm = () => {
     </div>
   );
 
-  return (
-    <>
-      <StepperForm icons={icons} submitBtnTitle='إضافة الحملة' steps={steps}>
-        {activeStep === 0
-          ? infoForm
-          : activeStep === 1
-          ? timingForm
-          : paymentForm}
-      </StepperForm>
-      {/* Projects Modal */}
-      <SuccessMessageDialog
-        title='تم إنشاء الحملة بنجاح!'
-        desc='تم إنشاء حملتك بنجاح. يمكنك الآن إضافة مشاريع مرتبطة أو القيام بذلك لاحقًا.'
-        btnTitle='إضافة مشاريع الآن'
-      />
-      <AddBySelectionModal
-        entriesType='projects'
-        entries={projects}
-        modalTitle='إضافة مشاريع مرتبطة'
-      />
-    </>
-  );
+  return <></>;
 };
 
 export default CampaignsForm;

@@ -1,4 +1,9 @@
-import { FormControl, TextField, Typography } from '@mui/material';
+import {
+  FormControl,
+  FormHelperText,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 const Textarea = ({
   label,
@@ -7,6 +12,8 @@ const Textarea = ({
   setValue,
   inputType,
   styles,
+  isNestedState,
+  errorMsg,
 }) => {
   const customStyles = {
     width: '100%',
@@ -20,12 +27,12 @@ const Textarea = ({
         borderColor: '#d1d5db',
       },
 
-      '&:hover fieldset': {
+      '&:hover:not(.Mui-error) fieldset': {
         borderWidth: '2px',
         borderColor: 'var(--secondary-color)',
       },
 
-      '&.Mui-focused fieldset': {
+      '&.Mui-focused:not(.Mui-error) fieldset': {
         borderColor: 'var(--secondary-color)',
         borderWidth: '2px',
       },
@@ -73,7 +80,10 @@ const Textarea = ({
           variant='outlined'
           fullWidth
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) =>
+            isNestedState ? setValue(e) : setValue(e.target.value)
+          }
+          error={!!errorMsg}
         />
       ) : (
         <TextField
@@ -81,8 +91,19 @@ const Textarea = ({
           variant='standard'
           fullWidth
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) =>
+            isNestedState ? setValue(e) : setValue(e.target.value)
+          }
+          error={!!errorMsg}
         />
+      )}
+      {errorMsg && (
+        <FormHelperText
+          error={!!errorMsg}
+          sx={{ color: '#9AA0A6', marginLeft: '0px' }}
+        >
+          {errorMsg}
+        </FormHelperText>
       )}
     </FormControl>
   );

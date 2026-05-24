@@ -2,28 +2,35 @@ import { Stepper, Step, StepLabel, Box, Button } from '@mui/material';
 import StepperIcon from './StepperIcon';
 import './StepperForm.css';
 import { useActiveStep } from '../../contexts/ActiveStepContext';
-import { useDispatch } from 'react-redux';
-import { controlSuccessDialog } from '../../redux/slices/ModalContollerSlice';
 
 export default function StepperForm({
   icons,
-  submitBtnTitle,
+  actionBtnTitle = 'التالي',
+  backBtnTitle = 'رجوع',
   steps,
   children,
+  isDisabled,
+  onBackwardAction,
+  onForwardAction,
+  onSubmit,
+  isSubmit,
 }) {
   const { activeStep, setActiveStep } = useActiveStep();
-  const handleNext = (e) => {
-    e.preventDefault();
-    setActiveStep((prev) => prev + 1);
-  };
 
   const handleBack = () => {
     setActiveStep((prev) => prev - 1);
   };
-  const dispatch = useDispatch();
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(controlSuccessDialog());
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (!isDisabled) {
+        if (isSubmit) {
+          onSubmit?.(e);
+        } else {
+          onForwardAction(e);
+        }
+      }
+    }
   };
 
   return (
@@ -79,7 +86,8 @@ export default function StepperForm({
           }}
         >
           <form
-            onSubmit={handleSubmit}
+            onSubmit={onSubmit}
+            onKeyDown={handleKeyDown}
             style={{
               height: '100%',
               display: 'flex',
@@ -98,10 +106,8 @@ export default function StepperForm({
               }}
             >
               <Button
-                type={activeStep === steps.length - 1 ? 'submit' : 'button'}
-                onClick={
-                  activeStep === steps.length - 1 ? undefined : handleNext
-                }
+                type={isSubmit ? 'submit' : 'button'}
+                onClick={isSubmit ? undefined : onForwardAction}
                 variant='contained'
                 sx={{
                   backgroundColor: '#014a5b',
@@ -109,12 +115,13 @@ export default function StepperForm({
                   padding: '8px 24px',
                 }}
                 className='btn'
+                disabled={isDisabled}
               >
-                {activeStep === steps.length - 1 ? submitBtnTitle : 'التالي'}
+                {actionBtnTitle}
               </Button>
               <Button
                 disabled={activeStep === 0}
-                onClick={handleBack}
+                onClick={onBackwardAction ? onBackwardAction : handleBack}
                 sx={{
                   borderRadius: '8px',
                   padding: '8px 24px',
@@ -122,7 +129,7 @@ export default function StepperForm({
                   color: '#8c9ea0',
                 }}
               >
-                رجوع
+                {backBtnTitle}
               </Button>
             </Box>
           </form>

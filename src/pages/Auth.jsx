@@ -8,15 +8,23 @@ import useLogin from '../customHooks/mutations/useLogin';
 const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const { mutate, isPending } = useLogin();
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    mutate({
-      email,
-      password,
-    });
+    mutate(
+      {
+        email,
+        password,
+      },
+      {
+        onError: (err) => {
+          setError(err.message);
+        },
+      },
+    );
   };
 
   return (
@@ -34,6 +42,24 @@ const Auth = () => {
             إدارة التبرعات والأنشطة بكل سهولة وأمان.
           </p> */}
         </div>
+
+        {error && (
+          <div
+            style={{
+              backgroundColor: '#ffebee',
+              color: '#b71c1c',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              fontSize: '14px',
+              lineHeight: 1.6,
+              fontFamily: 'Cairo',
+              boxShadow: '0 2px 8px rgba(244, 67, 54, 0.12)',
+              marginBottom: '16px',
+            }}
+          >
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className='email'>
@@ -67,7 +93,7 @@ const Auth = () => {
               setValue={setPassword}
             />
           </div>
-          <button className='btn' disabled={isPending}>
+          <button type='submit' className='btn' disabled={isPending}>
             {isPending ? <span className='btn-loader'></span> : 'تسجيل الدخول'}
           </button>
         </form>

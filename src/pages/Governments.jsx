@@ -1,4 +1,3 @@
-import ContentWithTable from '../components/ContentWithTable';
 import CustomInput from '../components/locations/CustomInput';
 import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
@@ -11,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
 import CustomModal from '../components/CustomModal';
 import GovernmentModalForm from '../components/locations/GovernmentModalForm';
+import PageTable from '../components/PageTable';
 
 const columns = [
   { id: 'governorate_name', label: 'الاسم' },
@@ -53,23 +53,26 @@ const Governments = () => {
         </button>
       </Title>
       {/* Filter & Table */}
-      <ContentWithTable columns={columns} rows={rows} className='governments'>
-        <CustomInput
-          inputType='textField'
-          placeholder='ابحث في المحافظات'
-          styles={{
-            width: '400px',
-            height: 'auto',
-            '& .MuiInputLabel-root.Mui-focused': {
-              color: 'var(--main-color)', // لون اللابل عند focus
-            },
-          }}
-          value={government}
-          setValue={setGovernment}
-        />
+      <div className='table-content governments'>
+        <div className='filters-holder'>
+          <CustomInput
+            inputType='textField'
+            placeholder='ابحث في المحافظات'
+            styles={{
+              width: '400px',
+              height: 'auto',
+              '& .MuiInputLabel-root.Mui-focused': {
+                color: 'var(--main-color)', // لون اللابل عند focus
+              },
+            }}
+            value={government}
+            setValue={setGovernment}
+          />
 
-        <p>عدد المحافظات: {rows?.length}</p>
-      </ContentWithTable>
+          <p>عدد المحافظات: {rows?.length}</p>
+        </div>
+        <PageTable rows={rows} columns={columns} />
+      </div>
 
       <GovernmentModalForm governments={rows} />
     </PageContainer>

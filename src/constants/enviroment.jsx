@@ -1,5 +1,5 @@
 const config = {
-  baseUrl: 'http://127.0.0.1:8000/api',
+  baseUrl: 'http://127.0.0.1:8000',
   login: 'login',
   governments: {
     all: 'governorates/all',
@@ -20,6 +20,25 @@ const config = {
     add: 'district/add',
     edit: 'district/update',
     filter: 'district/filter',
+  },
+  campaigns: {
+    all: 'campaign/index',
+    search: 'campaign/searchByname',
+    add: 'campaign/add',
+    edit: 'campaign/update',
+    filter: 'campaign/filter',
+  },
+  projects: {
+    all: 'project/index',
+    search: 'project/searchByname',
+    add: 'project/add',
+    edit: 'project/update',
+    filter: 'project/filter',
+    projectDetails: 'project/show',
+    delete: 'project/delete',
+    fundingSources: 'project/fundingsource',
+    sectors: 'project/sectors',
+    status: 'project/status',
   },
   activities: 'api/activities',
   contact: 'api/contactForms/contact-us/',
