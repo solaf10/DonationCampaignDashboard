@@ -7,7 +7,6 @@
   border: 2px dashed #ccc;
   border-radius: 8px;
   transition: 0.5s;
-  width: 70%;
   position: relative;
   overflow: hidden;
   label {

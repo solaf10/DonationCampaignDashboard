@@ -21,7 +21,7 @@ export const addGovernment = async (body) => {
       const status = error.response.status;
 
       // أخطاء إدخال/فاليديشن
-      if ([400, 401, 403, 404, 422].includes(status)) {
+      if (status >= 400 && status < 500) {
         throw new Error(
           error.response.data?.error || 'البيانات المدخلة غير صحيحة',
         );
@@ -52,7 +52,7 @@ export const editGovernment = async (id, body) => {
       const status = error.response.status;
 
       // أخطاء إدخال/فاليديشن
-      if ([400, 401, 403, 404, 422].includes(status)) {
+      if (status >= 400 && status < 500) {
         throw new Error(
           error.response.data?.error || 'البيانات المدخلة غير صحيحة',
         );

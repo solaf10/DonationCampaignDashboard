@@ -8,21 +8,28 @@ import {
   DeleteOutline,
   EditOutlined,
   FilterAltOutlined,
+  PauseCircleOutline,
   RecyclingRounded,
   VisibilityOutlined,
 } from '@mui/icons-material';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { Link, useNavigate } from 'react-router-dom';
 import MoreMenu from '../components/MoreMenu';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
+  closeMoreInfoMenu,
   controlControlLocationModal,
-  controlMoreInfoMenu,
+  controlSuccessDialog,
 } from '../redux/slices/ModalContollerSlice';
 import { IconButton } from '@mui/material';
 import useGetCampaignsLogic from '../customHooks/useGetCampaignsLogic';
 import PageTable from '../components/PageTable';
 import '../components/ContentWithTable.css';
 import FilterCampaignsModal from '../components/FilterCampaignsModal';
+import DeleteItemLogic from '../components/DeleteItemLogic';
+import config from '../constants/enviroment';
+import useControlState from '../customHooks/mutations/useControlState';
+import { toast } from 'react-toastify';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
@@ -36,6 +43,10 @@ const columns = [
 
 const Campaigns = ({ isTrash = false }) => {
   const [searchedKey, setSearchedKey] = useState('');
+  const [anchorEl, setAnchorEl] = useState(null);
+  const selectedCampaignId = useSelector(
+    (state) => state.modalController.selectedMoreInfoModal,
+  );
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,36 +57,88 @@ const Campaigns = ({ isTrash = false }) => {
     searchError,
     /* isFiltering,
     filterError, */
-    isFetchingCampaigns,
+    isLoading,
     campaignsError,
-  } = useGetCampaignsLogic(searchedKey);
+  } = useGetCampaignsLogic(isTrash, searchedKey);
+
+  const isSelectedCampaignNew =
+    rows?.find((row) => row.uuid === selectedCampaignId)?.status === 'جديدة';
+  const isSelectedCampaignStopped =
+    rows?.find((row) => row.uuid === selectedCampaignId)?.status === 'متوقفة';
+
+  const { mutate: stopCampaign, isPending: isStopping } = useControlState(
+    `/${config.campaigns.stop}/${selectedCampaignId}`,
+    ['campaigns'],
+  );
+  const { mutate: resumeCampaign, isPending: isResumming } = useControlState(
+    `/${config.campaigns.resume}/${selectedCampaignId}`,
+    ['campaigns'],
+  );
 
   const actions = [
+    // 👇 يظهر فقط إذا الحملة جديدة
+    ...(isSelectedCampaignNew
+      ? [
+          {
+            label: 'إيقاف مؤقت للحملة',
+            icon: <PauseCircleOutline fontSize='small' />,
+            onClick: () =>
+              stopCampaign(undefined, {
+                onSuccess: () => {
+                  toast.success('تم إيقاف الحملة بنجاح!');
+                },
+                onError: (err) => {
+                  toast.error(err?.message || `حدث خطأ أثناء إيقاف الحملة`);
+                },
+              }),
+            warning: true,
+          },
+        ]
+      : []),
+    ...(isSelectedCampaignStopped
+      ? [
+          {
+            label: 'استئناف الحملة',
+            icon: <PlayCircleOutlineIcon fontSize='small' />,
+            onClick: () =>
+              resumeCampaign(undefined, {
+                onSuccess: () => {
+                  toast.success('تم اسئناف الحملة بنجاح!');
+                },
+                onError: (err) => {
+                  toast.error(err?.message || `حدث خطأ أثناء استئناف الحملة`);
+                },
+              }),
+            success: true,
+          },
+        ]
+      : []),
+
     {
       label: 'عرض التفاصيل',
       icon: <VisibilityOutlined fontSize='small' />,
-      onClick: () => navigate('/content/campaigns/3'),
+      onClick: () => navigate(`/content/campaigns/${selectedCampaignId}`),
     },
+
     {
-      label: isTrash ? 'استعادة' : 'تعديل',
-      icon: isTrash ? (
-        <RecyclingRounded fontSize='small' />
-      ) : (
-        <EditOutlined fontSize='small' />
-      ),
-      onClick: () =>
-        isTrash
-          ? console.log('recycle')
-          : navigate('/content/campaigns/edit/3'),
+      label: 'تعديل',
+      icon: <EditOutlined fontSize='small' />,
+      onClick: () => navigate(`/content/campaigns/edit/${selectedCampaignId}`),
     },
+
     {
       label: 'حذف',
       icon: <DeleteOutline fontSize='small' />,
-      onClick: () => console.log('delete'),
+      onClick: () => dispatch(controlSuccessDialog(selectedCampaignId)),
       danger: true,
     },
   ];
-  console.log(searchError);
+
+  const deletedItemID = useSelector(
+    (state) => state.modalController.clickedDialogID,
+  );
+
+  const deletedItemUrl = `/${config.campaigns.delete}/${deletedItemID}`;
 
   return (
     <PageContainer>
@@ -109,7 +172,7 @@ const Campaigns = ({ isTrash = false }) => {
               setValue={setSearchedKey}
             />
 
-            <p style={{ fontSize: '14px' }}>عدد الحملات: {rows.length}</p>
+            <p style={{ fontSize: '14px' }}>عدد الحملات: {rows?.length}</p>
           </div>
           {/* filter Model btn */}
           <IconButton
@@ -123,12 +186,35 @@ const Campaigns = ({ isTrash = false }) => {
         </div>
       </div>
 
-      <PageTable rows={rows} columns={columns} pageLink='/content/campaigns' />
+      <PageTable
+        rows={rows}
+        columns={columns}
+        pageLink={!isTrash ? '/content/campaigns' : null}
+        isLoading={isSearching || isLoading || isStopping || isResumming}
+        setAnchorEl={setAnchorEl}
+      />
 
       {/* MoreInfoMenu */}
       <MoreMenu
-        handleCloseMenu={() => dispatch(controlMoreInfoMenu())}
+        menuId={selectedCampaignId}
+        handleCloseMenu={() => {
+          dispatch(closeMoreInfoMenu());
+          setAnchorEl(null);
+        }}
         actions={actions}
+        anchorEl={anchorEl}
+      />
+      {/* DeleteDialog */}
+      <DeleteItemLogic
+        deletedItemTitle='الحملة'
+        baseQuery={['campaigns']}
+        url={deletedItemUrl}
+        /* onSuccess={() => {
+          setPage((prev) => {
+            const newTotal = Math.ceil((projects.length - 1) / itemsPerPage);
+            return prev > newTotal - 1 ? Math.max(newTotal - 1, 0) : prev;
+          });
+        }} */
       />
       <FilterCampaignsModal />
     </PageContainer>

@@ -6,7 +6,7 @@ import useGovernments from '../../../customHooks/queries/useGovernments';
 import useCities from '../../../customHooks/queries/useCities';
 import useAreas from '../../../customHooks/queries/useAreas';
 
-const Location = ({ formData, setFormData, errors, styles }) => {
+const Location = ({ formData, setFormData, errors, styles, isRequired }) => {
   /* ================= GOVERNMENTS ================= */
   const {
     data: governmentsData,
@@ -39,7 +39,7 @@ const Location = ({ formData, setFormData, errors, styles }) => {
     areasData?.data?.filter((area) => area?.city?.uuid === formData.city) || [];
 
   return (
-    <div className='form-holder'>
+    <>
       {/* المحافظة */}
       <div className='input-holder' style={styles}>
         <CustomInput
@@ -62,6 +62,7 @@ const Location = ({ formData, setFormData, errors, styles }) => {
               : errors?.government || null
           }
           helperText={isFetchingGovernments ? 'جار جلب المحافظات...' : ''}
+          isRequired={isRequired}
         >
           {governments.map((government) => (
             <MenuItem key={government?.uuid} value={government?.uuid}>
@@ -100,6 +101,7 @@ const Location = ({ formData, setFormData, errors, styles }) => {
           errorMsg={
             citiesError ? 'حدث خطأ أثناء جلب الأحياء' : errors?.city || null
           }
+          isRequired={isRequired}
         >
           {cities.map((city) => (
             <MenuItem key={city?.uuid} value={city?.uuid}>
@@ -137,6 +139,7 @@ const Location = ({ formData, setFormData, errors, styles }) => {
               ? 'حدث خطأ أثناء جلب المناطق'
               : errors?.district_uuid || null
           }
+          isRequired={isRequired}
         >
           {areas.map((area) => (
             <MenuItem key={area?.uuid} value={area?.uuid}>
@@ -145,7 +148,7 @@ const Location = ({ formData, setFormData, errors, styles }) => {
           ))}
         </CustomInput>
       </div>
-    </div>
+    </>
   );
 };
 

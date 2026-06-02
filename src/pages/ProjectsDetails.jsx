@@ -26,10 +26,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useSingleProject } from '../customHooks/queries/useProjects';
 import MediaSection from '../components/MediaSection';
 import { ChevronLeft } from '@mui/icons-material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
-import DeleteProjectLogic from '../components/DeleteProjectLogic';
 import config from '../constants/enviroment';
+import ProjectsBill from '../components/ProjectsBill';
+import DeleteItemLogic from '../components/DeleteItemLogic';
+import Requirements from '../components/Requirements';
 
 export default function ProjectDetails() {
   const { id } = useParams();
@@ -54,10 +56,12 @@ export default function ProjectDetails() {
     )
     .filter(Boolean);
 
-  /* const [billItems, setBillItems] = useState(project.bill || []); */
-  const [billItems, setBillItems] = useState([]);
-
   const dispatch = useDispatch();
+
+  const deletedItemID = useSelector(
+    (state) => state.modalController.clickedDialogID,
+  );
+  const deletedItemUrl = `/${config.projects.delete}/${deletedItemID}`;
 
   if (!project) {
     return (
@@ -66,10 +70,6 @@ export default function ProjectDetails() {
       </Box>
     );
   }
-
-  const handleDelete = (indexToDelete) => {
-    setBillItems(billItems.filter((_, index) => index !== indexToDelete));
-  };
 
   return (
     <Box
@@ -231,7 +231,11 @@ export default function ProjectDetails() {
                     }}
                   />
                 }
-                label={project.district?.district_name}
+                label={
+                  project?.district?.city?.governorate?.governorate_name +
+                  ' - ' +
+                  project?.district?.city?.city_name
+                }
                 sx={{
                   bgcolor: 'rgba(255,255,255,0.14)',
                   color: 'white',
@@ -355,137 +359,13 @@ export default function ProjectDetails() {
         {/* REQUIREMENTS + BILL */}
         <Grid container spacing={3}>
           {/* REQUIREMENTS */}
-          <Grid size={6}>
-            <Card
-              sx={{
-                p: 4,
-                borderRadius: 5,
-                boxShadow: '0 4px 18px rgba(0,0,0,0.07)',
-                height: '100%',
-              }}
-            >
-              <Typography variant='h5' fontWeight={800} mb={3}>
-                متطلبات المشروع
-              </Typography>
-
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                {requirements?.map((item, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: 'flex',
-                      gap: 1.5,
-                      alignItems: 'flex-start',
-                      bgcolor: '#f8fafb',
-                      py: 1.5,
-                      borderRadius: 4,
-                      border: '1px solid #edf0f4',
-                    }}
-                  >
-                    <CheckCircleOutlineIcon
-                      sx={{
-                        color: '#6B9E8A',
-                        mt: 0.2,
-                      }}
-                    />
-
-                    <Typography lineHeight={1.8}>{item}</Typography>
-                  </Box>
-                ))}
-              </Box>
-            </Card>
-          </Grid>
+          <Requirements
+            secTitle='متطلبات المشروع'
+            requirements={requirements}
+          />
 
           {/* BILL */}
-          <Grid size={6}>
-            <Card
-              sx={{
-                p: 4,
-                borderRadius: 5,
-                boxShadow: '0 4px 18px rgba(0,0,0,0.07)',
-                height: '100%',
-              }}
-            >
-              <Typography variant='h5' fontWeight={800} mb={3}>
-                التفاصيل
-              </Typography>
-
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                {billItems.map((item, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      bgcolor: '#f8fafb',
-                      py: 1.5,
-                      gap: 1.5,
-                      borderRadius: 4,
-                      border: '1px solid #edf0f4',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        width: 200,
-                      }}
-                    >
-                      {/* DELETE BUTTON */}
-                      <IconButton
-                        size='small'
-                        onClick={() => handleDelete(index)}
-                        sx={{
-                          color: '#d32f2f',
-                        }}
-                      >
-                        <CloseIcon fontSize='small' />
-                      </IconButton>
-
-                      <Typography fontSize={15}>{item.name}</Typography>
-                    </Box>
-
-                    {/* PRICE */}
-                    <Typography fontWeight={700} color='#2e7d32'>
-                      ${item.price}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-
-              {/* TOTAL */}
-              <Box
-                sx={{
-                  mt: 3,
-                  p: 2,
-                  borderRadius: 3,
-                  bgcolor: '#eaf6ef',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Typography fontWeight={800}>المجموع</Typography>
-
-                <Typography fontWeight={900} color='#2e7d32'>
-                  $
-                  {billItems
-                    .reduce((sum, item) => sum + Number(item.price), 0)
-                    .toFixed(2)}
-                </Typography>
-              </Box>
-            </Card>
-          </Grid>
+          <ProjectsBill details={project.details} projectID={project.uuid} />
         </Grid>
 
         {/* Image GALLERY */}
@@ -528,8 +408,14 @@ export default function ProjectDetails() {
         </Card>
       </Box>
 
-      {/* lightBox */}
-      <DeleteProjectLogic />
+      {!deletedItemID?.includes('/') && (
+        <DeleteItemLogic
+          deletedItemTitle='المشروع'
+          baseQuery={['projects']}
+          url={deletedItemUrl}
+          onSuccess={() => navigate('/content/projects')}
+        />
+      )}
     </Box>
   );
 }

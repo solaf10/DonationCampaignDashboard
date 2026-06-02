@@ -15,6 +15,7 @@ const Basic = ({ formData, setFormData, errors, styles }) => {
           }
           isNestedState={true}
           errorMsg={errors?.name || null}
+          isRequired={true}
         />
       </div>
       <Textarea
@@ -27,6 +28,7 @@ const Basic = ({ formData, setFormData, errors, styles }) => {
         isNestedState={true}
         inputType='textarea'
         errorMsg={errors?.purposes || null}
+        isRequired={true}
       />
     </div>
   );

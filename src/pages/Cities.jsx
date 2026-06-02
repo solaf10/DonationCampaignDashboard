@@ -22,12 +22,12 @@ const Cities = () => {
 
   const {
     rows,
-    /* isSearchLoading,
+    isSearchLoading,
     searchError,
     isFiltering,
     filterError,
     isFetchingCities,
-    citiesError, */
+    citiesError,
   } = useGetCitiesLogic(city, government);
 
   // fetch governments
@@ -93,7 +93,11 @@ const Cities = () => {
 
           <p>عدد الأحياء: {rows.length}</p>
         </div>
-        <PageTable rows={rows} columns={columns} />
+        <PageTable
+          rows={rows}
+          columns={columns}
+          isLoading={isFetchingCities || isFiltering || isSearchLoading}
+        />
       </div>
 
       <CityModalForm cities={rows} governments={governments} />

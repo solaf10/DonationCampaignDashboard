@@ -2,11 +2,34 @@ import { useQuery } from '@tanstack/react-query';
 import {
   filterCampaigns,
   getCampaigns,
+  getCampaignsTrash,
+  getSingleCampaign,
+  getStatus,
   searchCampaigns,
 } from '../../services/campaigns';
 
 export default function useCampaigns() {
   return useQuery({ queryKey: ['campaigns'], queryFn: getCampaigns });
+}
+export function useCampaignsTrash() {
+  return useQuery({
+    queryKey: ['campaigns-trash'],
+    queryFn: getCampaignsTrash,
+  });
+}
+
+export function useSingleCampaign(id) {
+  return useQuery({
+    queryKey: ['campaigns', id],
+    queryFn: () => getSingleCampaign(id),
+  });
+}
+
+export function useGetStatus() {
+  return useQuery({
+    queryKey: ['status'],
+    queryFn: getStatus,
+  });
 }
 
 export const useSearchCampaigns = (search) => {

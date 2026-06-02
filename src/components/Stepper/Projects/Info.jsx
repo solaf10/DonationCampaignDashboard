@@ -55,6 +55,7 @@ const Info = ({ styles, formData, setFormData, errors }) => {
                       : ''
               }
               errorMsg={errors?.funding_source || null}
+              isRequired={true}
             >
               {fundingSources.map((src) => (
                 <MenuItem key={src} value={src}>
@@ -79,6 +80,7 @@ const Info = ({ styles, formData, setFormData, errors }) => {
               }
               isNestedState={true}
               errorMsg={errors?.Implementing_party || null}
+              isRequired={true}
             />
           </div>
 
@@ -101,6 +103,7 @@ const Info = ({ styles, formData, setFormData, errors }) => {
               }}
               isNestedState={true}
               errorMsg={errors?.estimated_cost || null}
+              isRequired={true}
             />
           </div>
         </Grid>

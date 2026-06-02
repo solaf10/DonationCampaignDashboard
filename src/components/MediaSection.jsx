@@ -57,7 +57,7 @@ const MediaSection = ({ mediaType = 'image', mediaItems, altBase }) => {
                 alt={`${altBase}-${index + 1}`}
                 onClick={() => setLightboxMedia(item.url)}
                 sx={{
-                  width: '100%',
+                  width: '300px',
                   height: 260,
                   borderRadius: 4,
                   objectFit: 'cover',

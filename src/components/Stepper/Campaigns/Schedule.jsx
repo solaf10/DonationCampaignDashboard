@@ -17,6 +17,7 @@ const Schedule = ({ formData, setFormData, errors }) => {
           }
           isNestedState={true}
           errorMsg={errors?.start_date || null}
+          isRequired={true}
         />
       </Grid>
       <Grid size={6}>
@@ -33,6 +34,7 @@ const Schedule = ({ formData, setFormData, errors }) => {
           }
           isNestedState={true}
           errorMsg={errors?.end_date || null}
+          isRequired={true}
         />
       </Grid>
       <Grid size={6}>
@@ -49,6 +51,7 @@ const Schedule = ({ formData, setFormData, errors }) => {
           }
           isNestedState={true}
           errorMsg={errors?.start_time || null}
+          isRequired={true}
         />
       </Grid>
       <Grid size={6}>
@@ -65,20 +68,7 @@ const Schedule = ({ formData, setFormData, errors }) => {
           }
           isNestedState={true}
           errorMsg={errors?.end_time || null}
-        />
-      </Grid>
-      <Grid size={12}>
-        <CustomInput
-          label='التمويل المستهدف (ل.س)'
-          inputType='input'
-          placeholder='مثال: 50,000,000'
-          helperText='سيتم عرض المبلغ المجموع تلقائيًا بعد بدء الحملة'
-          value={formData.target_amount}
-          setValue={(e) =>
-            setFormData((prev) => ({ ...prev, target_amount: e.target.value }))
-          }
-          isNestedState={true}
-          errorMsg={errors?.target_amount || null}
+          isRequired={true}
         />
       </Grid>
     </Grid>

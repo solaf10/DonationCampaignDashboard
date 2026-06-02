@@ -122,6 +122,7 @@ export default function ProjectCard({
             alignItems: 'center',
             width: '100%',
             direction: 'rtl',
+            border: 'none',
           }}
         >
           <Typography sx={{ color: '#ed6c02', fontWeight: 600, fontSize: 13 }}>
@@ -137,7 +138,7 @@ export default function ProjectCard({
         </Box>
 
         {/* التقدم */}
-        <Box sx={{ pt: 1, borderTop: '1px solid #eee', direction: 'rtl' }}>
+        <Box sx={{ pt: 1, border: 'none', direction: 'rtl' }}>
           <LinearProgress
             variant='determinate'
             value={progressValue}
@@ -168,9 +169,9 @@ export default function ProjectCard({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderTop: '1px solid #eeeeee',
             pt: 2,
             direction: 'rtl',
+            border: 'none',
           }}
         >
           {/* أيقونات التعديل والحذف */}

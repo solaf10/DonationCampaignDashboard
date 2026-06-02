@@ -99,6 +99,41 @@ body {
   transition: 0.2s;
 }
 
+.status-conditions {
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-conditions.success-status {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+}
+
+/* 🟣 مكتملة (نجاح أقوى) */
+.status-conditions.completed-status {
+  color: #6a1b9a;
+  background-color: #f3e5f5;
+}
+
+/* 🟠 متوقفة */
+.status-conditions.warning-status {
+  color: #ed6c02;
+  background-color: #fff3e0;
+}
+
+/* 🔴 منتهية */
+.status-conditions.error-status {
+  color: #d32f2f;
+  background-color: #fdecec;
+}
+
+/* 🔵 جديدة / draft */
+.status-conditions.draft-status {
+  color: #35618f;
+  background-color: #eaf2ff;
+}
 /* .btn:hover {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.6),
     0 0 25px rgba(255, 255, 255, 0.3);

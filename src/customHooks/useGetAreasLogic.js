@@ -3,19 +3,19 @@ import useAreas, { useFilterAreas, useSearchAreas } from './queries/useAreas';
 const useGetAreasLogic = (area, city, government) => {
   const {
     data: areasData,
-    isPending: isFetchingAreas,
+    isFetching: isFetchingAreas,
     error: areasError,
   } = useAreas();
 
   const {
     data: searchedAreas,
-    isPending: isSearching,
+    isFetching: isSearching,
     error: searchError,
   } = useSearchAreas(area);
 
   const {
     data: filteredAreas,
-    isPending: isFiltering,
+    isFetching: isFiltering,
     error: filterError,
   } = useFilterAreas(
     government !== 'all' ? government : null,

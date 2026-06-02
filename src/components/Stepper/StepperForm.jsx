@@ -14,6 +14,7 @@ export default function StepperForm({
   onForwardAction,
   onSubmit,
   isSubmit,
+  isBackBtnDisabled,
 }) {
   const { activeStep, setActiveStep } = useActiveStep();
 
@@ -120,7 +121,7 @@ export default function StepperForm({
                 {actionBtnTitle}
               </Button>
               <Button
-                disabled={activeStep === 0}
+                disabled={isBackBtnDisabled ?? activeStep === 0}
                 onClick={onBackwardAction ? onBackwardAction : handleBack}
                 sx={{
                   borderRadius: '8px',

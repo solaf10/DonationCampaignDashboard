@@ -22,15 +22,15 @@ const Governments = () => {
   // fetch governments
   const {
     data: governments,
-    /* isPending: isGovernmentFetching,
-    error, */
+    isFetching: isGovernmentFetching,
+    error: governmentError,
   } = useGovernments();
 
   // enableSearch when there is a search value, otherwise use the all governments query
   const {
     data: searchedGovernments,
-    /* isPending: isSearchLoading,
-    error: searchError, */
+    isFetching: isSearchLoading,
+    error: searchError,
   } = useSearchGovernments(government);
 
   const rows = government.trim()
@@ -71,7 +71,11 @@ const Governments = () => {
 
           <p>عدد المحافظات: {rows?.length}</p>
         </div>
-        <PageTable rows={rows} columns={columns} />
+        <PageTable
+          rows={rows}
+          columns={columns}
+          isLoading={isGovernmentFetching || isSearchLoading}
+        />
       </div>
 
       <GovernmentModalForm governments={rows} />

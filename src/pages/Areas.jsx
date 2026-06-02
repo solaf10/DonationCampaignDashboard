@@ -26,25 +26,25 @@ const Areas = () => {
   // fetch & filter areas logic
   const {
     rows,
-    /* isSearching,
+    isSearching,
     searchError,
     isFiltering,
     filterError,
     isFetchingAreas,
-    areasError, */
+    areasError,
   } = useGetAreasLogic(area, city, government);
 
   const {
     data: cities,
-    /* isPending: isFetchingCities,
-    error: citiesError, */
+    isPending: isFetchingCities,
+    error: citiesError,
   } = useCities();
 
   // fetch governments
   const {
     data: governmentsData,
-    /* isPending: isGovernmentFetching,
-    error: governmentsError, */
+    isPending: isGovernmentFetching,
+    error: governmentsError,
   } = useGovernments();
 
   const governments = governmentsData?.data || [];
@@ -117,7 +117,11 @@ const Areas = () => {
 
           <p>عدد المناطق: {rows.length}</p>
         </div>
-        <PageTable rows={rows} columns={columns} />
+        <PageTable
+          rows={rows}
+          columns={columns}
+          isLoading={isSearching || isFetchingAreas || isFiltering}
+        />
       </div>
 
       <AreaModalForm governments={governments} areas={rows} />

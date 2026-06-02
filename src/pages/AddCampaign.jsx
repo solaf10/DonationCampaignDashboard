@@ -14,36 +14,18 @@ import {
 import AddBySelectionModal from '../components/AddBySelectionModal';
 import SuccessMessageDialog from '../components/SuccessMessageDialog';
 import { useDispatch } from 'react-redux';
-import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
+import {
+  controlAddBySelectionModal,
+  controlSuccessDialog,
+} from '../redux/slices/ModalContollerSlice';
 import useAddCampaign from '../customHooks/mutations/useAddCampaign';
+import FundingMedia from '../components/Stepper/Campaigns/FundingMedia';
 
 const steps = ['معلومات الحملة', 'جدولة للحملة', 'التمويل والوسائط'];
 
-const projects = [
-  {
-    id: 1,
-    name: 'مشروع التخرج',
-    location: 'حمص-الحمراء',
-  },
-  {
-    id: 2,
-    name: 'تعليم إلكتروني',
-    location: 'حمص-الحميدية',
-  },
-  {
-    id: 3,
-    name: 'متجر إلكتروني',
-    location: 'دمشق-الحميدية',
-  },
-  {
-    id: 4,
-    name: 'تطبيق حجوزات',
-    location: 'حماة-ابن رشد',
-  },
-];
-
 const AddCampaign = () => {
   const { activeStep, setActiveStep } = useActiveStep();
+  const [campaignId, setCampaignId] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     purposes: '',
@@ -52,6 +34,7 @@ const AddCampaign = () => {
     end_time: null,
     start_date: null,
     end_date: null,
+    image: null,
   });
   const [errors, setErrors] = useState({
     name: null,
@@ -61,6 +44,7 @@ const AddCampaign = () => {
     end_time: null,
     start_date: null,
     end_date: null,
+    image: null,
   });
   const hasErrors = false;
 
@@ -68,12 +52,13 @@ const AddCampaign = () => {
     activeStep === 0
       ? formData.name.trim() === '' || formData.purposes.trim() === ''
       : activeStep === 1
-        ? !formData.target_amount ||
-          !formData.start_date ||
+        ? !formData.start_date ||
           !formData.end_date ||
           !formData.start_time ||
           !formData.end_time
-        : false;
+        : activeStep === 2
+          ? !formData.target_amount || !formData.image
+          : false;
 
   const icons = {
     1: <InfoOutline fontSize='small' />,
@@ -92,18 +77,28 @@ const AddCampaign = () => {
   } = useAddCampaign();
 
   const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const payload = {
-      ...formData,
-      start_date: formData.start_date?.format('YYYY-MM-DD'),
-      end_date: formData.end_date?.format('YYYY-MM-DD'),
-      start_time: formData.start_time?.format('HH:mm'),
-      end_time: formData.end_time?.format('HH:mm'),
-    };
+    const payload = new FormData();
+
+    payload.append('name', formData.name);
+    payload.append('purposes', formData.purposes);
+    payload.append('target_amount', formData.target_amount);
+
+    payload.append('start_date', formData.start_date?.format('YYYY-MM-DD'));
+
+    payload.append('end_date', formData.end_date?.format('YYYY-MM-DD'));
+
+    payload.append('start_time', formData.start_time?.format('HH:mm'));
+
+    payload.append('end_time', formData.end_time?.format('HH:mm'));
+
+    payload.append('image', formData.image);
     const mutationOptions = {
-      onSuccess: () => {
+      onSuccess: (data) => {
         dispatch(controlSuccessDialog(null));
+        setCampaignId(data?.data?.uuid);
       },
       onError: (err) => {
         const message = err?.message || 'حدث خطأ أثناء حفظ البيانات';
@@ -181,12 +176,12 @@ const AddCampaign = () => {
         icons={icons}
         steps={steps}
         isDisabled={hasErrors || isDisabled || isAdding}
-        isSubmit={activeStep === 1}
-        onForwardAction={activeStep === 1 ? handleSubmit : handleNext}
+        isSubmit={activeStep === 2}
+        onForwardAction={activeStep === 2 ? handleSubmit : handleNext}
         actionBtnTitle={
           isAdding ? (
             <div className='btn-loader'></div>
-          ) : activeStep === 1 ? (
+          ) : activeStep === 2 ? (
             'إضافة الحملة'
           ) : (
             'التالي'
@@ -203,8 +198,15 @@ const AddCampaign = () => {
             styles={styles}
             errors={errors}
           />
-        ) : (
+        ) : activeStep === 1 ? (
           <Schedule
+            formData={formData}
+            setFormData={setFormData}
+            styles={styles}
+            errors={errors}
+          />
+        ) : (
+          <FundingMedia
             formData={formData}
             setFormData={setFormData}
             styles={styles}
@@ -217,10 +219,10 @@ const AddCampaign = () => {
         title='تم إنشاء الحملة بنجاح!'
         desc='تم إنشاء حملتك بنجاح. يمكنك الآن إضافة مشاريع مرتبطة أو القيام بذلك لاحقًا.'
         btnTitle='إضافة مشاريع الآن'
+        onConfirm={() => dispatch(controlAddBySelectionModal(campaignId))}
       />
       <AddBySelectionModal
         entriesType='projects'
-        entries={projects}
         modalTitle='إضافة مشاريع مرتبطة'
       />
     </PageContainer>

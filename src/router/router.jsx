@@ -18,6 +18,8 @@ import Organizations from '../pages/Organizations';
 import BusinessDonars from '../pages/businessDonars';
 import Donars from '../pages/Donars';
 import ProtectedRoute from '../utils/ProtectedRoute';
+import AddProjectAdditionalSteps from '../pages/AddProjectAdditionalSteps';
+import InKindDonations from '../pages/InKindDonation';
 
 export const router = createBrowserRouter([
   {
@@ -27,7 +29,11 @@ export const router = createBrowserRouter([
 
   // Protected Routes
   {
-    element: <ProtectedRoute />,
+    element: (
+      <ActiveStepProvider>
+        <ProtectedRoute />
+      </ActiveStepProvider>
+    ),
     children: [
       {
         path: '/content',
@@ -51,11 +57,7 @@ export const router = createBrowserRouter([
 
           {
             path: 'campaigns/add',
-            element: (
-              <ActiveStepProvider>
-                <AddCampaign />
-              </ActiveStepProvider>
-            ),
+            element: <AddCampaign />,
           },
 
           {
@@ -65,12 +67,17 @@ export const router = createBrowserRouter([
 
           {
             path: 'projects/add',
+            element: <AddProject />,
+          },
+          {
+            path: 'projects/add/additional/:id',
             element: (
               <ActiveStepProvider>
-                <AddProject />
+                <AddProjectAdditionalSteps />
               </ActiveStepProvider>
             ),
           },
+          { path: 'inKindDonation', element: <InKindDonations /> },
 
           /* Trash */
           {

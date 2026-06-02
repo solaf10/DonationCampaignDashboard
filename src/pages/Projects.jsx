@@ -21,9 +21,10 @@ import { AddRounded } from '@mui/icons-material';
 import CustomInput from '../components/locations/CustomInput';
 import useProjects from '../customHooks/queries/useProjects';
 import SuccessMessageDialog from '../components/SuccessMessageDialog';
-import DeleteProjectLogic from '../components/DeleteProjectLogic';
+import DeleteItemLogic from '../components/DeleteItemLogic';
 import CustomPagination from '../components/CustomPagination';
 import config from '../constants/enviroment';
+import { useSelector } from 'react-redux';
 
 export default function Projects({ isTrash = false }) {
   const [openFilter, setOpenFilter] = useState(false);
@@ -37,7 +38,7 @@ export default function Projects({ isTrash = false }) {
 
   const projects = projectsData?.data || [];
 
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
   const navigate = useNavigate();
 
   const startIndex = page * itemsPerPage;
@@ -46,6 +47,11 @@ export default function Projects({ isTrash = false }) {
     startIndex,
     startIndex + itemsPerPage,
   );
+
+  const deletedItemID = useSelector(
+    (state) => state.modalController.clickedDialogID,
+  );
+  const deletedItemUrl = `/${config.projects.delete}/${deletedItemID}`;
 
   return (
     <Container className='projects' maxWidth='lg' sx={{ px: 2 }}>
@@ -139,11 +145,21 @@ export default function Projects({ isTrash = false }) {
         <CustomPagination
           count={projects.length}
           page={page}
-          rowsPerPage={6}
+          rowsPerPage={8}
           onPageChange={setPage}
         />
       </Box>
-      <DeleteProjectLogic />
+      <DeleteItemLogic
+        deletedItemTitle='المشروع'
+        baseQuery={['projects']}
+        url={deletedItemUrl}
+        onSuccess={() => {
+          setPage((prev) => {
+            const newTotal = Math.ceil((projects.length - 1) / itemsPerPage);
+            return prev > newTotal - 1 ? Math.max(newTotal - 1, 0) : prev;
+          });
+        }}
+      />
     </Container>
   );
 }

@@ -1,4 +1,7 @@
-import useCampaigns, { useSearchCampaigns } from './queries/useCampaigns';
+import useCampaigns, {
+  useCampaignsTrash,
+  useSearchCampaigns,
+} from './queries/useCampaigns';
 
 export const formatDate = (date) => {
   if (!date) return '-';
@@ -10,29 +13,36 @@ export const formatDate = (date) => {
   });
 };
 
-const useGetCampaignsLogic = (campaign, area, city, government) => {
+const useGetCampaignsLogic = (isTrash, campaign, area, city, government) => {
   const {
     data: campaignsData,
-    isPending: isFetchingCampaigns,
+    isFetching: isFetchingCampaigns,
     error: campaignsError,
   } = useCampaigns();
+  const {
+    data: campaignsTrashData,
+    isFetching: isFetchingCampaignsTrash,
+    error: campaignsTrashError,
+  } = useCampaignsTrash();
 
   const {
     data: searchedCampaigns,
-    isPending: isSearching,
+    isFetching: isSearching,
     error: searchError,
   } = useSearchCampaigns(campaign);
 
   /* const {
     data: filteredCampaigns,
-    isPending: isFiltering,
+    isFetching: isFiltering,
     error: filterError,
   } = useFilterCampaigns(
     government !== 'all' ? government : null,
     city !== 'all' ? city : null,
   ); */
 
-  const allCampaigns = campaignsData?.data || [];
+  const allCampaigns = isTrash
+    ? campaignsTrashData?.data
+    : campaignsData?.data || [];
   const searchCampaigns = searchedCampaigns?.data || [];
   /* const filteredCampaignsData = filteredCampaigns?.data || []; */
 
@@ -50,13 +60,12 @@ const useGetCampaignsLogic = (campaign, area, city, government) => {
   } else if (isFilterEnabled) {
     rawData = filteredCampaignsData;
   } */
-
-  const rows =
-    campaignsData?.data.map((c) => ({
-      ...c,
-      projectsNum: c.projects.length == 0 ? null : c.projects.length,
-      end_date: formatDate(c.end_date),
-    })) || [];
+  const rawData = searchCampaigns.length > 0 ? searchCampaigns : allCampaigns;
+  const rows = rawData?.map((c) => ({
+    ...c,
+    projectsNum: c.projects?.length || null,
+    end_date: formatDate(c.end_date),
+  }));
 
   return {
     rows,
@@ -64,7 +73,7 @@ const useGetCampaignsLogic = (campaign, area, city, government) => {
     searchError,
     /* isFiltering,
     filterError, */
-    isFetchingCampaigns,
+    isLoading: isFetchingCampaigns || isFetchingCampaignsTrash,
     campaignsError,
   };
 };

@@ -1,143 +1,309 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import PageContainer from '../components/PageContainer';
 import {
   AccountBalanceWalletOutlined,
   AddRounded,
   ArrowBackOutlined,
   CalendarTodayOutlined,
+  ChevronLeft,
   Delete,
   EditCalendarRounded,
   FlagOutlined,
-  GroupOutlined,
   TrendingUpOutlined,
+  WorkOutlineOutlined,
 } from '@mui/icons-material';
+import PauseCircleOutline from '@mui/icons-material/PauseCircleOutline';
+import PlayCircleOutline from '@mui/icons-material/PlayCircleOutline';
 import './CampaignsDetails.css';
-import { Box, Grid } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { controlAddBySelectionModal } from '../redux/slices/ModalContollerSlice';
+import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import AddModal from '../components/AddBySelectionModal';
 import DonorsInfoCard from '../components/DonorsInfoCard';
 import AddBySelectionModal from '../components/AddBySelectionModal';
-
-const relatedProjects = [
-  { id: 1, name: 'مشروع التعليم الرقمي', location: 'دمشق، المزة' },
-  { id: 2, name: 'منصة التبرعات الذكية', location: 'حلب، الفرقان' },
-];
-
-const infos = [
-  {
-    id: 1,
-    icon: <FlagOutlined className='icon' />,
-    label: 'المبلغ المستهدف',
-    value: '500000000 ل.س',
-  },
-  {
-    id: 2,
-    icon: <AccountBalanceWalletOutlined className='icon' />,
-    label: 'المبلغ المجموع',
-    value: '500000000 ل.س',
-  },
-  {
-    id: 3,
-    icon: <GroupOutlined className='icon' />,
-    label: 'عدد المتبرعين',
-    value: '500',
-  },
-  {
-    id: 4,
-    icon: <TrendingUpOutlined className='icon' />,
-    label: 'نسبة الإنجاز',
-    value: '100%',
-  },
-];
-
-const projects = [
-  {
-    id: 1,
-    name: 'مشروع التخرج',
-    location: 'حمص-الحمراء',
-  },
-  {
-    id: 2,
-    name: 'تعليم إلكتروني',
-    location: 'حمص-الحميدية',
-  },
-  {
-    id: 3,
-    name: 'متجر إلكتروني',
-    location: 'دمشق-الحميدية',
-  },
-  {
-    id: 4,
-    name: 'تطبيق حجوزات',
-    location: 'حماة-ابن رشد',
-  },
-];
+import Requirements from '../components/Requirements';
+import CampaignRelatedProjects from '../components/CampaignRelatedProjects';
+import { useSingleCampaign } from '../customHooks/queries/useCampaigns';
+import config from '../constants/enviroment';
+import {
+  formatArabicDate,
+  formatArabicTime,
+  getCampaignStatusText,
+  getStatusColor,
+} from '../utils/methods';
+import useControlState from '../customHooks/mutations/useControlState';
+import { toast } from 'react-toastify';
+import DeleteItemLogic from '../components/DeleteItemLogic';
+import { useDispatch } from 'react-redux';
+import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
+import CampaignDetailsSkeleton from '../components/Skeletons/CampaignDetailsSkeleton';
 
 const CampaignsDetails = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams();
 
-  const remainingDays = 3;
-  const status = 'ongoing';
+  const {
+    data: campaignData,
+    isFetching,
+    error: campaignError,
+  } = useSingleCampaign(params.id);
+
+  const campaign = campaignData?.data || {};
+
+  const infos = [
+    {
+      id: 1,
+      icon: <FlagOutlined className='icon' />,
+      label: 'المبلغ المستهدف',
+      value: campaign?.target_amount ?? '0$',
+    },
+    {
+      id: 2,
+      icon: <AccountBalanceWalletOutlined className='icon' />,
+      label: 'المبلغ المجموع',
+      value: campaign?.collected_amount ?? '0$',
+    },
+    {
+      id: 3,
+      icon: <WorkOutlineOutlined className='icon' />,
+      label: 'عدد المشاريع المرتبطة',
+      value: campaign?.projects?.length ?? 0,
+    },
+    {
+      id: 4,
+      icon: <TrendingUpOutlined className='icon' />,
+      label: 'نسبة الإنجاز',
+      value: campaign?.progress_percentage ?? '0%',
+    },
+  ];
+
+  const { mutate: stopCampaign, isPending: isStopping } = useControlState(
+    `/${config.campaigns.stop}/${params.id}`,
+    ['campaigns', params.id],
+  );
+
+  const { mutate: resumeCampaign, isPending: isResumming } = useControlState(
+    `/${config.campaigns.resume}/${params.id}`,
+    ['campaigns'],
+  );
+
+  const handlePause = () => {
+    stopCampaign(undefined, {
+      onSuccess: () => {
+        toast.success('تم إيقاف الحملة بنجاح!');
+      },
+      onError: (err) => {
+        toast.error(err?.message || 'حدث خطأ أثناء إيقاف الحملة');
+      },
+    });
+  };
+  const handleResume = () => {
+    resumeCampaign(undefined, {
+      onSuccess: () => {
+        toast.success('تم استئناف الحملة بنجاح!');
+      },
+      onError: (err) => {
+        toast.error(err?.message || 'حدث خطأ أثناء استئناف الحملة');
+      },
+    });
+  };
+
+  /* const handleResume = () => {
+    resumeCampaign(undefined, {
+      onSuccess: () => {
+        toast.success('تم استئناف الحملة بنجاح!');
+      },
+      onError: (err) => {
+        toast.error(err?.message || 'حدث خطأ أثناء الاستئناف');
+      },
+    });
+  }; */
+
+  const deletedItemUrl = `/${config.campaigns.delete}/${params.id}`;
+
+  if (isFetching || isStopping || isResumming)
+    return <CampaignDetailsSkeleton />;
 
   return (
     <div className='campaign-details'>
       <PageContainer>
-        {/* 🔥 HERO IMAGE */}
-        <div className='image-wrapper'>
-          <img src='/campaignLogo1.png' alt='' />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            mb: 3,
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography
+              fontWeight={700}
+              onClick={() => navigate(-1)}
+              sx={{
+                color: '#C7BFB6',
+                cursor: 'pointer',
+              }}
+            >
+              إدارة الحملات
+            </Typography>
 
-          <div className='overlay' />
+            <ChevronLeft
+              sx={{
+                color: '#C7BFB6',
+                fontSize: 32,
+              }}
+            />
 
-          {/* 🔥 الأزرار فوق يسار */}
-          <div className='image-actions'>
-            <Link to='/content/campaigns/edit/1' className='button'>
+            <Typography
+              fontWeight={700}
+              sx={{
+                color: 'var(--main-color)',
+              }}
+            >
+              {campaign?.name}
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {/* 🟠 إيقاف الحملة */}
+            {campaign?.status === 'جديدة' && (
+              <button className='button warning' onClick={handlePause}>
+                <PauseCircleOutline className='icon' />
+                إيقاف
+              </button>
+            )}
+
+            {/* 🟢 استئناف الحملة */}
+            {campaign?.status === 'متوقفة' && (
+              <button className='button success' onClick={handleResume}>
+                <PlayCircleOutline className='icon' />
+                استئناف
+              </button>
+            )}
+            <Link
+              to={`/content/campaigns/edit/${params.id}`}
+              className='button'
+            >
               <EditCalendarRounded className='icon' />
               تعديل
             </Link>
 
-            <button className='button delete'>
+            <button
+              className='button delete'
+              onClick={() => dispatch(controlSuccessDialog(params.id))}
+            >
               <Delete className='icon' />
               حذف
             </button>
-          </div>
+          </Box>
+        </Box>
+        {/* 🔥 HERO IMAGE */}
+        <Box
+          sx={{
+            position: 'relative',
+            height: { xs: 320, md: '72vh' },
+            borderRadius: 5,
+            overflow: 'hidden',
+            mb: 4,
+            boxShadow: '0 15px 50px rgba(0,0,0,0.08)',
+          }}
+        >
+          <Box
+            component='img'
+            src={config.baseUrl + campaign?.image}
+            alt=''
+            sx={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              background: ' rgba(0, 0, 0, 0.45);',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              p: { xs: 3, md: 6 },
+              color: 'white',
+            }}
+          >
+            <Chip
+              label={campaign?.status}
+              size='small'
+              sx={{
+                width: 'fit-content',
+                mb: 1,
+                py: 2,
+                px: 1,
+                fontWeight: 700,
+              }}
+              className={
+                'status-conditions ' + getStatusColor(campaign?.status || '')
+              }
+            />
 
-          {/* 🔥 المحتوى */}
-          <div className='image-content'>
-            <h2>حملة التعليم</h2>
+            <Typography
+              variant='h2'
+              fontWeight={700}
+              sx={{
+                mb: 1.5,
+                fontSize: {
+                  xs: 26,
+                  md: 58,
+                },
+                lineHeight: 1.1,
+              }}
+            >
+              {campaign?.name}
+            </Typography>
 
-            <div className='date'>
-              <span>
+            <div className='date-block'>
+              <div className='date-item'>
                 <CalendarTodayOutlined className='icon' />
-                12 مايو 2026
-              </span>
+                <div>
+                  <span className='label'>تاريخ البداية</span>
+                  <span className='value'>
+                    {formatArabicDate(campaign?.start_date)} -{' '}
+                    {formatArabicTime(campaign?.start_time)}
+                  </span>
+                </div>
+              </div>
 
-              <span className='separator'>
-                <ArrowBackOutlined className='arrow-icon' />
-              </span>
+              <div className='date-divider' />
 
-              <span>
+              <div className='date-item'>
                 <CalendarTodayOutlined className='icon' />
-                20 مايو 2026
-              </span>
+                <div>
+                  <span className='label'>تاريخ النهاية</span>
+                  <span className='value'>
+                    {formatArabicDate(campaign?.end_date)} -{' '}
+                    {formatArabicTime(campaign?.end_time)}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* 🔥 استخدام status + remainingDays */}
-            {status === 'ongoing' && (
-              <span className='badge'>متبقي {remainingDays} أيام</span>
-            )}
-
-            {status === 'upcoming' && (
-              <span className='badge upcoming'>
-                تبدأ خلال {remainingDays} أيام
-              </span>
-            )}
-
-            {status === 'finished' && (
-              <span className='badge finished'>انتهت الحملة</span>
-            )}
-          </div>
-        </div>
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 1.5,
+                flexWrap: 'wrap',
+              }}
+            >
+              <Chip
+                className='ongoing'
+                label={getCampaignStatusText(campaign)?.text}
+                sx={{
+                  bgcolor: 'rgba(255,255,255,0.14)',
+                  color: 'white',
+                  backdropFilter: 'blur(10px)',
+                }}
+              />
+            </Box>
+          </Box>
+        </Box>
 
         {/* 🔥 infos */}
         <Grid container spacing={2} mt={3} className='infos-holder'>
@@ -154,55 +320,29 @@ const CampaignsDetails = () => {
 
         {/* 🔥 desc + projects */}
         <Grid container spacing={3} mt={3}>
-          <Grid size={6}>
-            <Box className='box desc'>
-              <img src='/Goal.png' alt='' className='icon' />
-              <p>
-                تهدف الحملة الى إعادة إعمار سوريا عملية ضخمة ومتعددة الأوجه
-                تتطلب استثمارات تقدر بمئات المليارات من الدولارات (تقديرات البنك
-                الدولي تشير إلى 216 مليار دولار كحد أدنى، بينما التوقعات قد تصل
-                إلى 900 مليار دولار)، وتشمل بناء البنية التحتية (مدارس،
-                مستشفيات، طرق، شبكات كهرباء ومياه)، وتطوير الاقتصاد والقطاعات
-                الإنتاجية (صناعة وزراعة)، وإعادة بناء النسيج الاجتماعي .
-              </p>
-            </Box>
-          </Grid>
+          <Requirements
+            secTitle='أهداف الحملة'
+            requirements={campaign?.purposes?.trim().split(/,|،/)}
+          />
 
-          <Grid size={6}>
-            <Box className='related-projects'>
-              <div className='section-header'>
-                <h3>المشاريع المرتبطة</h3>
-              </div>
-
-              <div className='projects-table'>
-                {relatedProjects.map((project) => (
-                  <Link
-                    key={project.id}
-                    to={`/content/projects/${project.id}`}
-                    className='table-row'
-                  >
-                    <div className='name'>{project.name}</div>
-                    <div className='location'>📍 {project.location}</div>
-                  </Link>
-                ))}
-
-                <button
-                  className='add-row'
-                  onClick={() => dispatch(controlAddBySelectionModal())}
-                >
-                  <AddRounded className='icon' />
-                  إضافة مشروع
-                </button>
-              </div>
-            </Box>
-          </Grid>
+          <CampaignRelatedProjects
+            campaignId={campaign?.uuid}
+            projects={campaign?.projects}
+          />
         </Grid>
       </PageContainer>
 
       <AddBySelectionModal
         entriesType='projects'
-        entries={projects}
         modalTitle='إضافة مشاريع مرتبطة'
+      />
+      <DeleteItemLogic
+        deletedItemTitle='الحملة'
+        baseQuery={['campaigns']}
+        url={deletedItemUrl}
+        onSuccess={() => {
+          navigate(-1);
+        }}
       />
     </div>
   );

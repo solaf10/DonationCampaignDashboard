@@ -14,6 +14,7 @@ const Textarea = ({
   styles,
   isNestedState,
   errorMsg,
+  isRequired = false,
 }) => {
   const customStyles = {
     width: '100%',
@@ -71,6 +72,7 @@ const Textarea = ({
         }}
       >
         {label}
+        {isRequired && <span style={{ color: 'var(--error-color)' }}>*</span>}
       </Typography>
       {inputType === 'textarea' ? (
         <TextField

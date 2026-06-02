@@ -6,14 +6,14 @@ import useCities, {
 const useGetCitiesLogic = (city, government) => {
   const {
     data: cities,
-    isPending: isFetchingCities,
+    isFetching: isFetchingCities,
     error: citiesError,
   } = useCities();
 
   // enableSearch when there is a search value, otherwise use the all cities query
   const {
     data: searchedCities,
-    isPending: isSearchLoading,
+    isFetching: isSearchLoading,
     error: searchError,
   } = useSearchCities(city);
 

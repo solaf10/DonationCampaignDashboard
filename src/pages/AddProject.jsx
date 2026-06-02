@@ -30,17 +30,27 @@ import {
   isArabicOnly,
   isWithinLength,
 } from '../utils/validation/common.validation';
+import { useNavigate } from 'react-router-dom';
 
 const steps = [
   'المعلومات الأساسية',
   'الموقع',
   'التمويل والتنفيذ',
-  'مؤشرات المشروع',
-  'الوسائط',
+  'تفاصيل المشروع',
 ];
+
+const icons = {
+  1: <FolderOutlined fontSize='small' />,
+  2: <LocationOnOutlined fontSize='small' />,
+  3: <RequestQuoteOutlined fontSize='small' />,
+  4: <InsightsOutlined fontSize='small' />,
+  5: <PhotoLibraryOutlined fontSize='small' />,
+  6: <FactCheckOutlined fontSize='small' />,
+};
 
 const AddProject = () => {
   const { activeStep, setActiveStep } = useActiveStep();
+  const [projectId, setProjectId] = useState('');
 
   /* ================= FORM DATA ================= */
   const [formData, setFormData] = useState({
@@ -61,6 +71,7 @@ const AddProject = () => {
     sector: '',
     on_the_other_hand: '',
     progress_percentage: '',
+    cover_image: null,
   });
 
   const isDisabled =
@@ -73,7 +84,9 @@ const AddProject = () => {
             !formData.Implementing_party ||
             !formData.estimated_cost
           : activeStep == 3
-            ? !formData.sector || !formData.status
+            ? !formData.sector ||
+              !formData.status ||
+              formData.cover_image === null
             : false;
 
   /* ================= ERRORS ================= */
@@ -100,22 +113,6 @@ const AddProject = () => {
   });
   const hasErrors = Object.values(errors).some((err) => err !== null);
 
-  /* ================= ICONS ================= */
-  const icons = {
-    1: <FolderOutlined fontSize='small' />,
-    2: <LocationOnOutlined fontSize='small' />,
-    3: <RequestQuoteOutlined fontSize='small' />,
-    4: <InsightsOutlined fontSize='small' />,
-    5: <PhotoLibraryOutlined fontSize='small' />,
-  };
-  /* const icons = {
-    1: <FolderOutlined fontSize='small' />,
-    2: <LocationOnOutlined fontSize='small' />,
-    3: <RequestQuoteOutlined fontSize='small' />,
-    4: <PhotoLibraryOutlined fontSize='small' />,
-    5: <FactCheckOutlined fontSize='small' />,
-  }; */
-
   /* ================= SHARED STYLES ================= */
   const styles = {
     marginBottom: '24px',
@@ -130,18 +127,30 @@ const AddProject = () => {
   } = useAddProject();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('requirements', formData.requirements);
+    data.append('district_uuid', formData.district_uuid);
+    data.append('funding_source', formData.funding_source);
+    data.append('Implementing_party', formData.Implementing_party);
+    data.append('estimated_cost', formData.estimated_cost);
+    data.append('status', formData.status);
+    data.append('sector', formData.sector);
+    data.append('on_the_other_hand', formData.on_the_other_hand);
+    data.append('progress_percentage', formData.progress_percentage);
+    data.append('cover_image', formData.cover_image);
+
     const mutationOptions = {
-      onSuccess: () => {
+      onSuccess: (data) => {
         dispatch(controlSuccessDialog(null));
-      },
-      onError: (err) => {
-        const message = err?.message || 'حدث خطأ أثناء حفظ البيانات';
-        /* setFormError(message); */
+        setProjectId(data.data.uuid);
       },
     };
-    submitForm(formData, mutationOptions);
+    submitForm(data, mutationOptions);
   };
   const handleNext = (e) => {
     e.preventDefault();
@@ -247,12 +256,15 @@ const AddProject = () => {
           />
         ) : activeStep === 1 ? (
           /* ================= LOCATION ================= */
-          <Location
-            formData={formData}
-            setFormData={setFormData}
-            styles={styles}
-            errors={errors}
-          />
+          <div className='form-holder'>
+            <Location
+              formData={formData}
+              setFormData={setFormData}
+              styles={styles}
+              errors={errors}
+              isRequired={true}
+            />
+          </div>
         ) : activeStep === 2 ? (
           /* ================= Funding ================= */
           <Funding
@@ -275,16 +287,19 @@ const AddProject = () => {
       {/* ================= SUCCESS MODAL ================= */}
       <SuccessMessageDialog
         title='تم إنشاء المشروع بنجاح!'
-        desc='تم إنشاء مشروعك بنجاح. يمكنك الآن إضافة وسائط أو ربط المشروع بحملة لاحقاً.'
-        btnTitle='إضافة إلى حملة'
+        desc='تم إنشاء مشروعك بنجاح. يمكنك متابعة إعداد المشروع بإكمال الخطوات الإضافية (إضافة الوسائط وربط المشروع بحملة).'
+        btnTitle='المتابعة الآن'
+        onConfirm={() =>
+          navigate(`/content/projects/add/additional/${projectId}`)
+        }
       />
 
       {/* ================= ADD TO CAMPAIGN ================= */}
-      <AddBySelectionModal
+      {/* <AddBySelectionModal
         entriesType='campaigns'
         entries={[]}
         modalTitle='إضافة المشروع إلى حملة'
-      />
+      /> */}
     </PageContainer>
   );
 };

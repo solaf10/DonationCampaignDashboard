@@ -1,13 +1,15 @@
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-const MoreMenu = ({ handleCloseMenu, actions }) => {
+const MoreMenu = ({ menuId, handleCloseMenu, actions, anchorEl }) => {
   const isOpen = useSelector(
-    (state) => state.modalController.isMoreInfoMenuShown
+    (state) => state.modalController.isMoreInfoMenuShown,
   );
-  const anchorEl = useSelector((state) => state.menuAnchorEl.anchorEl);
+
   return (
     <Menu
+      key={menuId}
+      keepMounted={false}
       anchorEl={anchorEl}
       open={isOpen}
       onClose={handleCloseMenu}
@@ -41,7 +43,13 @@ const MoreMenu = ({ handleCloseMenu, actions }) => {
             flexDirection: 'row-reverse', // 🔥 أيقونة يمين
             gap: 1,
             fontSize: '14px',
-            color: action.danger ? '#d32f2f' : '#374151',
+            color: action.success
+              ? '#2e7d32'
+              : action.danger
+                ? '#d32f2f'
+                : action.warning
+                  ? '#ed6c02'
+                  : '#374151',
 
             '&:hover': {
               backgroundColor: action.danger
@@ -55,7 +63,13 @@ const MoreMenu = ({ handleCloseMenu, actions }) => {
           <ListItemIcon
             sx={{
               minWidth: 'auto',
-              color: action.danger ? '#d32f2f' : 'var(--main-color)',
+              color: action.success
+                ? '#2e7d32'
+                : action.danger
+                  ? '#d32f2f'
+                  : action.warning
+                    ? '#ed6c02'
+                    : '#374151',
             }}
           >
             {action.icon}

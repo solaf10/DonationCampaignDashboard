@@ -10,6 +10,7 @@ import {
   NativeSelect,
   IconButton,
   InputAdornment,
+  Autocomplete,
 } from '@mui/material';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
@@ -149,7 +150,7 @@ export default function CustomInput({
   inline,
   errorMsg,
   isNestedState,
-  isRequired = true,
+  isRequired = false,
 }) {
   const handleChange = (e) => {
     if (isNestedState) setValue(e);
@@ -176,6 +177,7 @@ export default function CustomInput({
           }}
         >
           {label}
+          {isRequired && <span style={{ color: 'var(--error-color)' }}>*</span>}
         </Typography>
       )}
 
@@ -214,6 +216,39 @@ export default function CustomInput({
           >
             {children}
           </Select>
+        ) : inputType === 'autocomplete' ? (
+          <Autocomplete
+            options={children || []}
+            getOptionLabel={(option) => option?.name || ''}
+            value={value || null}
+            onChange={handleChange}
+            disabled={isDisabled}
+            isRequired={isRequired}
+            sx={{
+              ...inputsStyles,
+
+              // 🔥 أهم جزء
+              '& .MuiInputBase-root': {
+                padding: '6px 0',
+              },
+
+              '& .MuiAutocomplete-inputRoot': {
+                padding: '6px 0 !important',
+              },
+
+              '& .MuiInputBase-input': {
+                padding: '8px 0 !important',
+              },
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant='standard'
+                placeholder={placeholder}
+                sx={{ backgroundColor: 'transparent' }}
+              />
+            )}
+          />
         ) : inputType === 'input' ||
           inputType === 'password' ||
           inputType === 'email' ? (

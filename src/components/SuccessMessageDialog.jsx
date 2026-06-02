@@ -14,10 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
-import {
-  controlAddBySelectionModal,
-  controlSuccessDialog,
-} from '../redux/slices/ModalContollerSlice';
+import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
 
 export default function SuccessMessageDialog({
   title,
@@ -51,16 +48,6 @@ export default function SuccessMessageDialog({
     if (!isWarning) {
       navigate(-1);
     }
-  };
-
-  const handlePrimaryAction = () => {
-    if (isWarning && onConfirm) {
-      onConfirm();
-      return;
-    }
-
-    dispatch(controlSuccessDialog());
-    dispatch(controlAddBySelectionModal());
   };
 
   return (
@@ -111,7 +98,7 @@ export default function SuccessMessageDialog({
       <DialogActions sx={{ padding: '16px' }}>
         <Button
           variant='contained'
-          onClick={handlePrimaryAction}
+          onClick={() => onConfirm()}
           disabled={isLoading}
           sx={{
             backgroundColor: isWarning ? '#b3261e' : '#014a5b',
