@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomModal from './CustomModal';
 import CustomInput from './locations/CustomInput';
 import {
@@ -35,12 +35,6 @@ const FilterCampaignsModal = ({
 }) => {
   const { formData, setFormData, isFiltered, setIsFiltered } =
     useFilteredCampaigns();
-  const [project, setProject] = useState('');
-  /* const [status, setStatus] = useState({
-    upcoming: false,
-    finished: false,
-    ongoing: false,
-  }); */
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState({
     government: null,
@@ -102,7 +96,10 @@ const FilterCampaignsModal = ({
     }
     setIsFiltered(true);
     refilterCampaigns();
-    if (isFilterSuccess) {
+  };
+
+  useEffect(() => {
+    if (isFilterSuccess && isModalOpen) {
       dispatch(
         controlControlLocationModal({
           type: 'add',
@@ -111,7 +108,7 @@ const FilterCampaignsModal = ({
       );
       setIsFiltered(false);
     }
-  };
+  }, [isFilterSuccess, setIsFiltered, isModalOpen]);
 
   const handleResetFilters = () => {
     setFormData((prev) => ({

@@ -21,7 +21,7 @@ import {
   controlControlLocationModal,
   controlSuccessDialog,
 } from '../redux/slices/ModalContollerSlice';
-import { IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import useGetCampaignsLogic from '../customHooks/useGetCampaignsLogic';
 import PageTable from '../components/PageTable';
 import '../components/ContentWithTable.css';
@@ -31,6 +31,7 @@ import config from '../constants/enviroment';
 import useControlState from '../customHooks/mutations/useControlState';
 import { toast } from 'react-toastify';
 import { useFilteredCampaigns } from '../contexts/FilterCampaignsContext';
+import useRestore from '../customHooks/mutations/useRestore';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
@@ -52,8 +53,7 @@ const Campaigns = ({ isTrash = false }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isFiltered, setIsFiltered, setFormData, formData } =
-    useFilteredCampaigns();
+  const { isFiltered, setIsFiltered, setFormData } = useFilteredCampaigns();
 
   const {
     rows,
@@ -125,18 +125,27 @@ const Campaigns = ({ isTrash = false }) => {
       onClick: () => navigate(`/content/campaigns/${selectedCampaignId}`),
     },
 
-    {
-      label: 'تعديل',
-      icon: <EditOutlined fontSize='small' />,
-      onClick: () => navigate(`/content/campaigns/edit/${selectedCampaignId}`),
-    },
+    ...(isSelectedCampaignNew
+      ? [
+          {
+            label: 'تعديل',
+            icon: <EditOutlined fontSize='small' />,
+            onClick: () =>
+              navigate(`/content/campaigns/edit/${selectedCampaignId}`),
+          },
+        ]
+      : []),
 
-    {
-      label: 'حذف',
-      icon: <DeleteOutline fontSize='small' />,
-      onClick: () => dispatch(controlSuccessDialog(selectedCampaignId)),
-      danger: true,
-    },
+    ...(isSelectedCampaignNew || isSelectedCampaignStopped
+      ? [
+          {
+            label: 'حذف',
+            icon: <DeleteOutline fontSize='small' />,
+            onClick: () => dispatch(controlSuccessDialog(selectedCampaignId)),
+            danger: true,
+          },
+        ]
+      : []),
   ];
 
   const deletedItemID = useSelector(
@@ -144,6 +153,16 @@ const Campaigns = ({ isTrash = false }) => {
   );
 
   const deletedItemUrl = `/${config.campaigns.delete}/${deletedItemID}`;
+
+  const {
+    mutate: restore,
+    isPending: isRestoring,
+    error: restoreError,
+  } = useRestore(['campaigns']);
+
+  const handleRestore = (id) => {
+    restore(`/${config.campaigns.restore}/${id}`);
+  };
 
   useEffect(() => {
     if (searchedKey != '') {
@@ -174,38 +193,42 @@ const Campaigns = ({ isTrash = false }) => {
         )}
       </Title>
       {/* filter & table */}
-      <div className='table-content campaigns'>
-        {/* filter holder */}
-        <div className='filters-holder'>
-          <div className='input-holder'>
-            <CustomInput
-              inputType='textField'
-              placeholder='ابحث حسب الاسم'
-              styles={{
-                width: '400px',
-                height: 'auto',
-                '& .MuiInputLabel-root.Mui-focused': {
-                  color: 'var(--main-color)', // لون اللابل عند focus
-                },
-              }}
-              value={searchedKey}
-              setValue={setSearchedKey}
-            />
+      {!isTrash && (
+        <div className='table-content campaigns'>
+          {/* filter holder */}
+          <div className='filters-holder'>
+            <div className='input-holder'>
+              <CustomInput
+                inputType='textField'
+                placeholder='ابحث حسب الاسم'
+                styles={{
+                  width: '400px',
+                  height: 'auto',
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    color: 'var(--main-color)', // لون اللابل عند focus
+                  },
+                }}
+                value={searchedKey}
+                setValue={setSearchedKey}
+              />
 
-            <p style={{ fontSize: '14px' }}>عدد الحملات: {rows?.length}</p>
+              <p style={{ fontSize: '14px' }}>عدد الحملات: {rows?.length}</p>
+            </div>
+            {/* filter Model btn */}
+            <IconButton
+              className='filter-btn'
+              onClick={() =>
+                dispatch(
+                  controlControlLocationModal({ type: 'add', id: 'null' }),
+                )
+              }
+              disabled={isFiltered && isFiltering && searchedKey !== ''}
+            >
+              <FilterAltOutlined className='icon' />
+            </IconButton>
           </div>
-          {/* filter Model btn */}
-          <IconButton
-            className='filter-btn'
-            onClick={() =>
-              dispatch(controlControlLocationModal({ type: 'add', id: 'null' }))
-            }
-            disabled={isFiltered && isFiltering && searchedKey !== ''}
-          >
-            <FilterAltOutlined className='icon' />
-          </IconButton>
         </div>
-      </div>
+      )}
 
       <PageTable
         rows={rows}
@@ -216,23 +239,27 @@ const Campaigns = ({ isTrash = false }) => {
           isLoading ||
           isStopping ||
           isResumming ||
-          (isFiltered && isFiltering)
+          (isFiltered && isFiltering) ||
+          (isTrash && isRestoring)
         }
         setAnchorEl={setAnchorEl}
         hasNoResult={isFiltered && rows?.length === 0}
         error={fetchingError?.message}
+        handleRestore={isTrash && handleRestore}
       />
 
       {/* MoreInfoMenu */}
-      <MoreMenu
-        menuId={selectedCampaignId}
-        handleCloseMenu={() => {
-          dispatch(closeMoreInfoMenu());
-          setAnchorEl(null);
-        }}
-        actions={actions}
-        anchorEl={anchorEl}
-      />
+      {!isTrash && (
+        <MoreMenu
+          menuId={selectedCampaignId}
+          handleCloseMenu={() => {
+            dispatch(closeMoreInfoMenu());
+            setAnchorEl(null);
+          }}
+          actions={actions}
+          anchorEl={anchorEl}
+        />
+      )}
       {/* DeleteDialog */}
       <DeleteItemLogic
         deletedItemTitle='الحملة'

@@ -179,21 +179,25 @@ const CampaignsDetails = () => {
                 استئناف
               </button>
             )}
-            <Link
-              to={`/content/campaigns/edit/${params.id}`}
-              className='button'
-            >
-              <EditCalendarRounded className='icon' />
-              تعديل
-            </Link>
+            {campaign?.status === 'جديدة' && (
+              <Link
+                to={`/content/campaigns/edit/${params.id}`}
+                className='button'
+              >
+                <EditCalendarRounded className='icon' />
+                تعديل
+              </Link>
+            )}
 
-            <button
-              className='button delete'
-              onClick={() => dispatch(controlSuccessDialog(params.id))}
-            >
-              <Delete className='icon' />
-              حذف
-            </button>
+            {campaign?.status === 'جديدة' && (
+              <button
+                className='button delete'
+                onClick={() => dispatch(controlSuccessDialog(params.id))}
+              >
+                <Delete className='icon' />
+                حذف
+              </button>
+            )}
           </Box>
         </Box>
         {/* 🔥 HERO IMAGE */}

@@ -13,7 +13,7 @@ export default function useCampaigns() {
 }
 export function useCampaignsTrash() {
   return useQuery({
-    queryKey: ['campaigns-trash'],
+    queryKey: ['campaigns', 'trash'],
     queryFn: getCampaignsTrash,
   });
 }

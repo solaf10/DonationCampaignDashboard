@@ -23,7 +23,7 @@ import {
   controlControlLocationModal,
   openMoreInfoMenu,
 } from '../redux/slices/ModalContollerSlice';
-import { EditCalendarRounded } from '@mui/icons-material';
+import { EditCalendarRounded, RecyclingRounded } from '@mui/icons-material';
 import CustomTablePagination from './CustomTablePagination';
 import { getStatusColor } from '../utils/methods';
 import TableMessage from './TableMessage';
@@ -36,6 +36,7 @@ const PageTable = ({
   setAnchorEl,
   hasNoResult,
   error,
+  handleRestore,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -78,7 +79,9 @@ const PageTable = ({
                       fontWeight: 600,
                     }}
                   >
-                    {column.label}
+                    {handleRestore && column.id === 'actions'
+                      ? 'الإجراءات'
+                      : column.label}
                   </TableCell>
                 ))}
               </TableRow>
@@ -95,13 +98,20 @@ const PageTable = ({
                       },
                     }}
                   >
-                    {columns.map((column) => (
-                      <TableCell key={column.id}>
+                    {columns.map((column, i) => (
+                      <TableCell key={column.id + i}>
                         {column.id === 'status' ? (
                           <Skeleton
                             variant='rounded'
                             width={80}
                             height={32}
+                            sx={{ mx: 'auto', borderRadius: '999px' }}
+                          />
+                        ) : column.id === 'actions' && handleRestore ? (
+                          <Skeleton
+                            variant='rounded'
+                            width={90}
+                            height={36}
                             sx={{ mx: 'auto', borderRadius: '999px' }}
                           />
                         ) : column.id === 'actions' ? (
@@ -160,9 +170,21 @@ const PageTable = ({
                       }}
                     >
                       {columns.map((column) => {
-                        if (column.id === 'actions') {
+                        if (column.id === 'actions' && handleRestore) {
                           return (
-                            <TableCell key={column.id}>
+                            <TableCell key={column.id + row.uuid}>
+                              <Button
+                                className='button restore'
+                                onClick={() => handleRestore(row.uuid)}
+                              >
+                                <RecyclingRounded className='icon' />
+                                <span>استعادة</span>
+                              </Button>
+                            </TableCell>
+                          );
+                        } else if (column.id === 'actions') {
+                          return (
+                            <TableCell key={column.id + row.uuid}>
                               <IconButton
                                 onClick={(e) => handleOpenMenu(e, row.uuid)}
                               >
@@ -172,7 +194,7 @@ const PageTable = ({
                           );
                         } else if (column.id === 'action') {
                           return (
-                            <TableCell key={column.id}>
+                            <TableCell key={column.id + row.uuid}>
                               <Button
                                 className='button'
                                 onClick={(e) => {
@@ -195,7 +217,7 @@ const PageTable = ({
 
                         if (column.id === 'status') {
                           return (
-                            <TableCell key={column.id}>
+                            <TableCell key={column.id + row.uuid}>
                               <Chip
                                 label={row[column.id]}
                                 className={
@@ -208,7 +230,7 @@ const PageTable = ({
                         }
 
                         return (
-                          <TableCell key={column.id}>
+                          <TableCell key={column.id + row.uuid}>
                             {row[column.id] === null ? (
                               <span style={{ color: '#8a8a8a' }}>&mdash;</span>
                             ) : (

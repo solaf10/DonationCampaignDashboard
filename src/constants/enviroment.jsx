@@ -35,6 +35,7 @@ const config = {
     resume: 'campaign/appeal',
     status: 'campaign/status',
     trash: 'campaign/deleted',
+    restore: 'campaign/restore',
   },
   projects: {
     all: 'project/index',
