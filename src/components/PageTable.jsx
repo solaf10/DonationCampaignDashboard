@@ -10,8 +10,11 @@ import {
   Button,
   Chip,
   Skeleton,
+  Box,
+  Typography,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import { useState } from 'react';
 import './PageTable.css';
 import { useNavigate } from 'react-router-dom';
@@ -23,8 +26,17 @@ import {
 import { EditCalendarRounded } from '@mui/icons-material';
 import CustomTablePagination from './CustomTablePagination';
 import { getStatusColor } from '../utils/methods';
+import TableMessage from './TableMessage';
 
-const PageTable = ({ columns, rows, pageLink, isLoading, setAnchorEl }) => {
+const PageTable = ({
+  columns,
+  rows,
+  pageLink,
+  isLoading,
+  setAnchorEl,
+  hasNoResult,
+  error,
+}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -51,7 +63,11 @@ const PageTable = ({ columns, rows, pageLink, isLoading, setAnchorEl }) => {
     <div className='table-holder'>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ height: 425 }}>
-          <Table stickyHeader aria-label='sticky table'>
+          <Table
+            stickyHeader
+            aria-label='sticky table'
+            sx={{ height: (isLoading || error) && '100%' }}
+          >
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
@@ -69,121 +85,141 @@ const PageTable = ({ columns, rows, pageLink, isLoading, setAnchorEl }) => {
             </TableHead>
 
             <TableBody>
-              {isLoading
-                ? Array.from(new Array(rowsPerPage)).map((_, index) => (
-                    <TableRow key={index}>
-                      {columns.map((column) => (
-                        <TableCell key={column.id}>
-                          {column.id === 'status' ? (
-                            <Skeleton
-                              variant='rounded'
-                              width={80}
-                              height={32}
-                              sx={{ mx: 'auto', borderRadius: '999px' }}
-                            />
-                          ) : column.id === 'actions' ? (
-                            <Skeleton
-                              variant='circular'
-                              width={32}
-                              height={32}
-                              sx={{ mx: 'auto' }}
-                            />
-                          ) : column.id === 'action' ? (
-                            <Skeleton
-                              variant='rounded'
-                              width={90}
-                              height={36}
-                              sx={{ mx: 'auto', borderRadius: '999px' }}
-                            />
-                          ) : (
-                            <Skeleton
-                              variant='text'
-                              width='80%'
-                              height={28}
-                              sx={{ mx: 'auto' }}
-                            />
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                : rows &&
-                  rows
-                    ?.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage,
-                    )
-                    ?.map((row) => (
-                      <TableRow
-                        hover
-                        key={row.uuid}
-                        onClick={() =>
-                          pageLink ? navigate(pageLink + `/${row.uuid}`) : null
-                        }
-                        style={{ cursor: pageLink ? 'pointer' : 'unset' }}
-                      >
-                        {columns.map((column) => {
-                          if (column.id === 'actions') {
-                            return (
-                              <TableCell key={column.id}>
-                                <IconButton
-                                  onClick={(e) => handleOpenMenu(e, row.uuid)}
-                                >
-                                  <MoreVertIcon />
-                                </IconButton>
-                              </TableCell>
-                            );
-                          } else if (column.id === 'action') {
-                            return (
-                              <TableCell key={column.id}>
-                                <Button
-                                  className='button'
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-
-                                    dispatch(
-                                      controlControlLocationModal({
-                                        type: 'edit',
-                                        id: row.uuid,
-                                      }),
-                                    );
-                                  }}
-                                >
-                                  <EditCalendarRounded className='icon' />
-                                  <span>تعديل</span>
-                                </Button>
-                              </TableCell>
-                            );
-                          }
-
-                          if (column.id === 'status') {
-                            return (
-                              <TableCell key={column.id}>
-                                <Chip
-                                  label={row[column.id]}
-                                  className={
-                                    'status-conditions ' +
-                                    getStatusColor(row[column.id])
-                                  }
-                                />
-                              </TableCell>
-                            );
-                          }
-
+              {isLoading ? (
+                Array.from(new Array(rowsPerPage)).map((_, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'transparent!important',
+                      },
+                    }}
+                  >
+                    {columns.map((column) => (
+                      <TableCell key={column.id}>
+                        {column.id === 'status' ? (
+                          <Skeleton
+                            variant='rounded'
+                            width={80}
+                            height={32}
+                            sx={{ mx: 'auto', borderRadius: '999px' }}
+                          />
+                        ) : column.id === 'actions' ? (
+                          <Skeleton
+                            variant='circular'
+                            width={32}
+                            height={32}
+                            sx={{ mx: 'auto' }}
+                          />
+                        ) : column.id === 'action' ? (
+                          <Skeleton
+                            variant='rounded'
+                            width={90}
+                            height={36}
+                            sx={{ mx: 'auto', borderRadius: '999px' }}
+                          />
+                        ) : (
+                          <Skeleton
+                            variant='text'
+                            width='80%'
+                            height={28}
+                            sx={{ mx: 'auto' }}
+                          />
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : hasNoResult ? (
+                <TableMessage
+                  message='لا توجد نتائج مطابقة'
+                  columnsLength={columns.length}
+                />
+              ) : error ? (
+                <TableMessage
+                  message={error}
+                  columnsLength={columns.length}
+                  isError={true}
+                />
+              ) : (
+                rows &&
+                rows
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ?.map((row) => (
+                    <TableRow
+                      hover
+                      key={row.uuid}
+                      onClick={() =>
+                        pageLink ? navigate(pageLink + `/${row.uuid}`) : null
+                      }
+                      style={{ cursor: pageLink ? 'pointer' : 'unset' }}
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: !pageLink && 'transparent!important',
+                        },
+                      }}
+                    >
+                      {columns.map((column) => {
+                        if (column.id === 'actions') {
                           return (
                             <TableCell key={column.id}>
-                              {row[column.id] === null ? (
-                                <span style={{ color: '#8a8a8a' }}>
-                                  &mdash;
-                                </span>
-                              ) : (
-                                row[column.id]
-                              )}
+                              <IconButton
+                                onClick={(e) => handleOpenMenu(e, row.uuid)}
+                              >
+                                <MoreVertIcon />
+                              </IconButton>
                             </TableCell>
                           );
-                        })}
-                      </TableRow>
-                    ))}
+                        } else if (column.id === 'action') {
+                          return (
+                            <TableCell key={column.id}>
+                              <Button
+                                className='button'
+                                onClick={(e) => {
+                                  e.stopPropagation();
+
+                                  dispatch(
+                                    controlControlLocationModal({
+                                      type: 'edit',
+                                      id: row.uuid,
+                                    }),
+                                  );
+                                }}
+                              >
+                                <EditCalendarRounded className='icon' />
+                                <span>تعديل</span>
+                              </Button>
+                            </TableCell>
+                          );
+                        }
+
+                        if (column.id === 'status') {
+                          return (
+                            <TableCell key={column.id}>
+                              <Chip
+                                label={row[column.id]}
+                                className={
+                                  'status-conditions ' +
+                                  getStatusColor(row[column.id])
+                                }
+                              />
+                            </TableCell>
+                          );
+                        }
+
+                        return (
+                          <TableCell key={column.id}>
+                            {row[column.id] === null ? (
+                              <span style={{ color: '#8a8a8a' }}>&mdash;</span>
+                            ) : (
+                              row[column.id]
+                            )}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>

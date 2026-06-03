@@ -6,6 +6,11 @@ export const getProjects = async () => {
 
   return res.data;
 };
+export const getUnAttachedProjects = async () => {
+  const res = await api.get(`/${config.projects.unattached}`);
+
+  return res.data;
+};
 export const getFundingSources = async () => {
   const res = await api.get(`/${config.projects.fundingSources}`);
 
@@ -38,126 +43,18 @@ export const filterProjects = async (body) => {
   return res.data;
 };
 export const addProject = async (body) => {
-  try {
-    const res = await api.post(`/${config.projects.add}`, body);
-    return res.data;
-  } catch (error) {
-    // السيرفر رد
-    if (error.response) {
-      const status = error.response.status;
-
-      // أخطاء إدخال/فاليديشن
-      if (status >= 400 && status < 500) {
-        throw new Error(
-          error.response.data?.error || 'البيانات المدخلة غير صحيحة',
-        );
-      }
-
-      // أخطاء السيرفر
-      if (status >= 500) {
-        throw new Error('حدث خطأ في الخادم. يرجى المحاولة لاحقًا');
-      }
-    }
-
-    // مشكلة نت
-    if (error.request) {
-      throw new Error('تعذر الاتصال بالخادم. تحقق من الإنترنت');
-    }
-
-    // أي خطأ ثاني
-    throw new Error('حدث خطأ غير متوقع');
-  }
+  const res = await api.post(`/${config.projects.add}`, body);
+  return res.data;
 };
 export const editProject = async (id, body) => {
-  try {
-    const res = await api.post(`/${config.projects.edit}/${id}`, body);
-    return res.data;
-  } catch (error) {
-    // السيرفر رد
-    if (error.response) {
-      const status = error.response.status;
-
-      // أخطاء إدخال/فاليديشن
-      if (status >= 400 && status < 500) {
-        throw new Error(
-          error.response.data?.error || 'البيانات المدخلة غير صحيحة',
-        );
-      }
-
-      // أخطاء السيرفر
-      if (status >= 500) {
-        throw new Error('حدث خطأ في الخادم. يرجى المحاولة لاحقًا');
-      }
-    }
-
-    // مشكلة نت
-    if (error.request) {
-      throw new Error('تعذر الاتصال بالخادم. تحقق من الإنترنت');
-    }
-
-    // أي خطأ ثاني
-    throw new Error('حدث خطأ غير متوقع');
-  }
+  const res = await api.post(`/${config.projects.edit}/${id}`, body);
+  return res.data;
 };
 export const addProjectDetail = async (id, body) => {
-  try {
-    const res = await api.post(`/${config.projects.details.add}/${id}`, body);
-    return res.data;
-  } catch (error) {
-    // السيرفر رد
-    if (error.response) {
-      const status = error.response.status;
-
-      // أخطاء إدخال/فاليديشن
-      if (status >= 400 && status < 500) {
-        throw new Error(
-          error.response.data?.error || 'البيانات المدخلة غير صحيحة',
-        );
-      }
-
-      // أخطاء السيرفر
-      if (status >= 500) {
-        throw new Error('حدث خطأ في الخادم. يرجى المحاولة لاحقًا');
-      }
-    }
-
-    // مشكلة نت
-    if (error.request) {
-      throw new Error('تعذر الاتصال بالخادم. تحقق من الإنترنت');
-    }
-
-    // أي خطأ ثاني
-    throw new Error('حدث خطأ غير متوقع');
-  }
+  const res = await api.post(`/${config.projects.details.add}/${id}`, body);
+  return res.data;
 };
 export const uploadProjectMedia = async (id, body) => {
-  try {
-    const res = await api.post(`/${config.projects.uploadMedia}/${id}`, body);
-    return res.data;
-  } catch (error) {
-    // السيرفر رد
-    if (error.response) {
-      const status = error.response.status;
-
-      // أخطاء إدخال/فاليديشن
-      if (status >= 400 && status < 500) {
-        throw new Error(
-          error.response.data?.error || 'البيانات المدخلة غير صحيحة',
-        );
-      }
-
-      // أخطاء السيرفر
-      if (status >= 500) {
-        throw new Error('حدث خطأ في الخادم. يرجى المحاولة لاحقًا');
-      }
-    }
-
-    // مشكلة نت
-    if (error.request) {
-      throw new Error('تعذر الاتصال بالخادم. تحقق من الإنترنت');
-    }
-
-    // أي خطأ ثاني
-    throw new Error('حدث خطأ غير متوقع');
-  }
+  const res = await api.post(`/${config.projects.uploadMedia}/${id}`, body);
+  return res.data;
 };

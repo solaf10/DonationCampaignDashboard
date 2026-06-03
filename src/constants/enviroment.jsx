@@ -49,6 +49,7 @@ const config = {
     status: 'project/status',
     details: { add: 'projects/details/add', delete: 'detail/delete' },
     uploadMedia: 'project/upload',
+    unattached: 'get/projects',
   },
   activities: 'api/activities',
   contact: 'api/contactForms/contact-us/',

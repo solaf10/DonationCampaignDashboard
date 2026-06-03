@@ -5,8 +5,8 @@ import {
   getCampaignsTrash,
   getSingleCampaign,
   getStatus,
-  searchCampaigns,
 } from '../../services/campaigns';
+import { useFilteredCampaigns } from '../../contexts/FilterCampaignsContext';
 
 export default function useCampaigns() {
   return useQuery({ queryKey: ['campaigns'], queryFn: getCampaigns });
@@ -32,26 +32,42 @@ export function useGetStatus() {
   });
 }
 
-export const useSearchCampaigns = (search) => {
-  return useQuery({
-    queryKey: ['campaigns', search],
-    queryFn: () =>
-      searchCampaigns({
-        name: search,
-      }),
-    enabled: !!search.trim(), // don't run if search is empty
+// convert data to FormData for the filterCampaigns
+const buildFilterFormData = (filters) => {
+  const data = new FormData();
+
+  if (filters.project_uuid) {
+    data.append('project_uuid', filters.project_uuid);
+  }
+
+  if (filters.government) {
+    data.append('governorate_uuid', filters.government);
+  }
+  if (filters.name) {
+    data.append('name', filters.name);
+  }
+
+  if (filters.city) {
+    data.append('city_uuid', filters.city);
+  }
+
+  if (filters.district_uuid) {
+    data.append('district_uuid', filters.district_uuid);
+  }
+
+  filters.status.forEach((status) => {
+    data.append('status[]', status);
   });
+
+  return data;
 };
-export const useFilterCampaigns = (governmentId, cityId) => {
+
+export const useFilterCampaigns = (body, enabled) => {
+  const data = buildFilterFormData(body);
+  const { isFiltered } = useFilteredCampaigns();
   return useQuery({
-    queryKey: ['campaigns', 'filter', [governmentId, cityId]],
-    queryFn: () =>
-      filterCampaigns({
-        ...(governmentId ? { governorate_uuid: governmentId } : {}),
-        ...(cityId ? { city_uuid: cityId } : {}),
-      }),
-    enabled: Boolean(
-      (governmentId && governmentId !== 'all') || (cityId && cityId !== 'all'),
-    ),
+    queryKey: ['campaigns', 'filter', body],
+    queryFn: () => filterCampaigns(data),
+    enabled: enabled || isFiltered,
   });
 };

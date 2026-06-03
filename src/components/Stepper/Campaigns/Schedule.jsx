@@ -1,7 +1,11 @@
 import { Grid } from '@mui/material';
 import CustomInput from '../../locations/CustomInput';
+import dayjs from 'dayjs';
+import { useLocation } from 'react-router-dom';
 
 const Schedule = ({ formData, setFormData, errors }) => {
+  const location = useLocation();
+  const isEdit = location.pathname.includes('edit');
   return (
     <Grid container spacing={3}>
       <Grid size={6}>
@@ -18,6 +22,12 @@ const Schedule = ({ formData, setFormData, errors }) => {
           isNestedState={true}
           errorMsg={errors?.start_date || null}
           isRequired={true}
+          minDate={
+            isEdit && formData.start_date
+              ? formData.start_date
+              : dayjs().add(1, 'day')
+          }
+          helperText='يجب أن يكون تاريخ البدء بعد اليوم بيوم واحد على الأقل'
         />
       </Grid>
       <Grid size={6}>
@@ -35,6 +45,12 @@ const Schedule = ({ formData, setFormData, errors }) => {
           isNestedState={true}
           errorMsg={errors?.end_date || null}
           isRequired={true}
+          minDate={
+            formData.start_date
+              ? dayjs(formData.start_date).add(1, 'day')
+              : dayjs().add(2, 'day')
+          }
+          helperText='يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء'
         />
       </Grid>
       <Grid size={6}>

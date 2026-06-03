@@ -307,10 +307,10 @@ const CampaignsDetails = () => {
 
         {/* 🔥 infos */}
         <Grid container spacing={2} mt={3} className='infos-holder'>
-          {infos.map((info) => (
+          {infos.slice(0, 3).map((info) => (
             <DonorsInfoCard
               key={info.id}
-              size={3}
+              size={4}
               icon={info.icon}
               label={info.label}
               value={info.value}

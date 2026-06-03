@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomInput from '../../locations/CustomInput';
 import { Typography } from '@mui/material';
+import config from '../../../constants/enviroment';
 
 const FundingMedia = ({ formData, setFormData, errors, styles }) => {
   const [selectedImage, setSelectedImage] = useState('');
+  useEffect(() => {
+    if (formData?.fetchedImage) {
+      setSelectedImage(config.baseUrl + formData.fetchedImage);
+    }
+  }, [formData?.fetchedImage]);
   return (
     <div className='form-holder'>
       <div className='input-holder' style={styles}>
@@ -13,9 +19,16 @@ const FundingMedia = ({ formData, setFormData, errors, styles }) => {
           placeholder='مثال: 50,000,000'
           helperText='سيتم عرض المبلغ المجموع تلقائيًا بعد بدء الحملة'
           value={formData.target_amount}
-          setValue={(e) =>
-            setFormData((prev) => ({ ...prev, target_amount: e.target.value }))
-          }
+          setValue={(e) => {
+            const value = e.target.value;
+
+            if (!isNaN(value)) {
+              setFormData((prev) => ({
+                ...prev,
+                target_amount: value,
+              }));
+            }
+          }}
           isNestedState={true}
           errorMsg={errors?.target_amount || null}
           isRequired={true}

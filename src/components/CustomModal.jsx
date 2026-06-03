@@ -11,6 +11,7 @@ export default function CustomModal({
   onSubmit,
   isLoading,
   isDisabled,
+  extraActions,
 }) {
   const style = {
     position: 'absolute',
@@ -72,22 +73,30 @@ export default function CustomModal({
             gap: 1,
             p: 2,
             borderTop: '1px solid #e1eaea',
+            justifyContent: extraActions ? 'space-between' : 'flex-start',
           }}
         >
-          <Button
-            variant='contained'
-            sx={{
-              minWidth: '85px',
-              backgroundColor: '#014a5b',
-              borderRadius: '999px',
-              padding: '8px 24px',
-            }}
-            className='btn'
-            type='submit'
-            disabled={isLoading || isDisabled}
-          >
-            {isLoading ? <span className='btn-loader'></span> : submitBtnTitle}
-          </Button>
+          <Box>
+            <Button
+              variant='contained'
+              sx={{
+                minWidth: '85px',
+                backgroundColor: '#014a5b',
+                borderRadius: '999px',
+                padding: '8px 24px',
+              }}
+              className='btn'
+              type='submit'
+              disabled={isLoading || isDisabled}
+            >
+              {isLoading ? (
+                <span className='btn-loader'></span>
+              ) : (
+                submitBtnTitle
+              )}
+            </Button>
+            {extraActions}
+          </Box>
           <Button
             variant='outlined'
             onClick={closeHandler}

@@ -151,6 +151,7 @@ export default function CustomInput({
   errorMsg,
   isNestedState,
   isRequired = false,
+  minDate,
 }) {
   const handleChange = (e) => {
     if (isNestedState) setValue(e);
@@ -220,8 +221,10 @@ export default function CustomInput({
           <Autocomplete
             options={children || []}
             getOptionLabel={(option) => option?.name || ''}
-            value={value || null}
-            onChange={handleChange}
+            value={value || ''}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
             disabled={isDisabled}
             isRequired={isRequired}
             sx={{
@@ -325,6 +328,7 @@ export default function CustomInput({
               },
             }}
             format='YYYY/MM/DD'
+            minDate={minDate}
           />
         ) : inputType === 'time' ? (
           <TimePicker
@@ -352,7 +356,7 @@ export default function CustomInput({
       </FormControl>
 
       {/* 🔹 Helper text */}
-      {((helperText && isDisabled) || errorMsg) && (
+      {(helperText || errorMsg) && (
         <FormHelperText error={!!errorMsg} sx={{ color: '#9AA0A6' }}>
           {errorMsg || helperText}
         </FormHelperText>

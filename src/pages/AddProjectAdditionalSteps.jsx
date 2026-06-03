@@ -25,7 +25,7 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useActiveStep } from '../contexts/ActiveStepContext';
 import useUploadProjectMedia from '../customHooks/mutations/useUploadProjectMedia';
 import { toast } from 'react-toastify';
-import LinkToCampaigns from '../components/Stepper/Projects/LinkToCampaigns';
+import SelectableCardsList from '../components/Stepper/Projects/SelectableCardsList';
 
 const steps = ['الوسائط', 'ربط المشروع بالحملة'];
 
@@ -116,7 +116,13 @@ const AddProjectAdditionalSteps = () => {
         {activeStep === 0 ? (
           <Media formData={formData} setFormData={setFormData} />
         ) : (
-          <LinkToCampaigns />
+          <SelectableCardsList
+            items={[]}
+            type='الحملات'
+            addLink='/content/campaigns/add'
+            searchPlaceholder='اكتب اسم الحملة...'
+            allowMultiple={false}
+          />
         )}
       </StepperForm>
     </PageContainer>

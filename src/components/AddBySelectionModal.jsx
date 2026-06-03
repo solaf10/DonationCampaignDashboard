@@ -1,18 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CustomModal from './CustomModal';
 import CustomInput from './locations/CustomInput';
 import { useDispatch, useSelector } from 'react-redux';
 import './AddBySelectionModal.css';
 import { Link } from 'react-router-dom';
 import { controlAddBySelectionModal } from '../redux/slices/ModalContollerSlice';
-import useProjects, {
-  useSearchProjects,
-} from '../customHooks/queries/useProjects';
-import useCampaigns, {
-  useSearchCampaigns,
-} from '../customHooks/queries/useCampaigns';
+import { useGetUnAttachedProjects } from '../customHooks/queries/useProjects';
+import useCampaigns from '../customHooks/queries/useCampaigns';
 import useAddProjectToCampaign from '../customHooks/mutations/useAddProjects';
 import { toast } from 'react-toastify';
+import { Box, Typography } from '@mui/material';
 
 const AddBySelectionModal = ({ entriesType, modalTitle }) => {
   const [searchedKey, setSearchedKey] = useState('');
@@ -26,40 +23,34 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
     data: projectsData,
     isPending: isFetchingProjects,
     error: projectsError,
-  } = useProjects();
-  const {
-    data: filteredProjectsData,
-    isPending: isFilteringProjects,
-    error: filterProjectsError,
-  } = useSearchProjects(searchedKey);
+  } = useGetUnAttachedProjects();
 
   const projects = searchedKey
-    ? (filteredProjectsData?.data ?? [])
-    : (projectsData?.data ?? []);
+    ? projectsData?.data.filter((p) =>
+        p.name.toLowerCase().includes(searchedKey.toLowerCase()),
+      ) || []
+    : projectsData?.data || [];
 
   const {
     data: campaignsData,
     isPending: isGettingCampaigns,
     error: campaignsError,
   } = useCampaigns();
-  const {
+  /* const {
     data: filteredCampaignsData,
     isPending: isFilteringCampaigns,
     error: filterCampaignsError,
-  } = useSearchCampaigns(searchedKey);
+  } = useSearchCampaigns(searchedKey); */
 
-  const campaigns = searchedKey
+  /*  const campaigns = searchedKey
     ? (filteredCampaignsData?.data ?? [])
-    : (campaignsData?.data ?? []);
+    : (campaignsData?.data ?? []); */
+  const campaigns = campaignsData?.data || [];
 
   const entries = entriesType === 'projects' ? projects : campaigns;
 
   const isOpen = useSelector(
     (state) => state.modalController.isAddBySelectionModalOpen,
-  );
-
-  const filteredProjects = entries.filter((project) =>
-    project.name.toLowerCase().includes(searchedKey.toLowerCase()),
   );
 
   const dispatch = useDispatch();
@@ -76,12 +67,39 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
     });
   };
 
-  const cards =
-    entries.length === 0 ? (
-      <div className='empty-projects'>
-        <p className='empty-text'>
+  const emptyState =
+    !searchedKey || entries.length === 0 ? (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          py: 3,
+          textAlign: 'center',
+          color: '#8c9ea0',
+        }}
+      >
+        {/* icon placeholder */}
+        <Box
+          sx={{
+            width: 60,
+            height: 60,
+            borderRadius: '50%',
+            bgcolor: '#eef3f3',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mb: 2,
+            fontSize: 22,
+          }}
+        >
+          📦
+        </Box>
+
+        <Typography fontWeight={600} mb={1}>
           لا توجد {entriesType === 'projects' ? 'مشاريع' : 'حملات'} حالياً
-        </p>
+        </Typography>
 
         <Link
           to={
@@ -90,29 +108,37 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
               : '/content/campaigns/add'
           }
           className='empty-projects-action'
+          style={{
+            color: 'var(--secondary-color)',
+            fontSize: '13px',
+            opacity: '0.8',
+            textDecoration: 'underline',
+          }}
         >
           إضافة {entriesType === 'projects' ? 'مشروع' : 'حملة'}
         </Link>
-      </div>
-    ) : filteredProjects.length > 0 ? (
-      filteredProjects.map((project) => (
-        <div
-          key={project.uuid}
-          className={`project-card ${
-            selectedProjects.find((p) => p.uuid === project.uuid)
-              ? 'selected'
-              : ''
-          }`}
-          onClick={() => handleSelectProject(project)}
-        >
-          <h4 className='name'>{project.name}</h4>
-          <p className='location'>{project.location}</p>
-        </div>
-      ))
+      </Box>
     ) : (
       <div className='empty-text'>لا توجد نتائج بهذا الاسم</div>
     );
 
+  const cards =
+    entries.length === 0
+      ? emptyState
+      : entries.map((entry) => (
+          <div
+            key={entry.uuid}
+            className={`project-card ${
+              selectedProjects.find((p) => p.uuid === entry.uuid)
+                ? 'selected'
+                : ''
+            }`}
+            onClick={() => handleSelectProject(entry)}
+          >
+            <h4 className='name'>{entry.name}</h4>
+            <p className='location'>{entry.location}</p>
+          </div>
+        ));
   const {
     mutate: addProjectToCampaign,
     isPending: isAdding,
@@ -132,11 +158,35 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
       },
     });
   };
+  if (isFetchingProjects || isGettingCampaigns)
+    return (
+      <Box
+        sx={{
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <div
+          className='btn-loader'
+          style={{
+            width: '40px',
+            height: '40px',
+            borderWidth: '4px',
+            borderColor: 'var(--secondary-color)',
+            borderTopColor: 'white',
+          }}
+        ></div>
+      </Box>
+    );
 
   return (
     <CustomModal
       isOpen={isOpen}
-      closeHandler={() => dispatch(controlAddBySelectionModal())}
+      closeHandler={() => {
+        dispatch(controlAddBySelectionModal());
+      }}
       modalTitle={modalTitle}
       submitBtnTitle='إضافة'
       styles={{ width: '600px' }}

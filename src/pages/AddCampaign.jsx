@@ -20,8 +20,24 @@ import {
 } from '../redux/slices/ModalContollerSlice';
 import useAddCampaign from '../customHooks/mutations/useAddCampaign';
 import FundingMedia from '../components/Stepper/Campaigns/FundingMedia';
+import {
+  containsOnlyArabicLetters,
+  isArabicOnly,
+  isWithinLength,
+} from '../utils/validation/common.validation';
+import dayjs from 'dayjs';
 
 const steps = ['معلومات الحملة', 'جدولة للحملة', 'التمويل والوسائط'];
+
+const icons = {
+  1: <InfoOutline fontSize='small' />,
+  2: <EventOutlined fontSize='small' />,
+  3: <PaymentsOutlined fontSize='small' />,
+};
+
+const styles = {
+  marginBottom: '24px',
+};
 
 const AddCampaign = () => {
   const { activeStep, setActiveStep } = useActiveStep();
@@ -46,7 +62,7 @@ const AddCampaign = () => {
     end_date: null,
     image: null,
   });
-  const hasErrors = false;
+  const hasErrors = Object.values(errors).some((err) => err !== null);
 
   const isDisabled =
     activeStep === 0
@@ -59,16 +75,6 @@ const AddCampaign = () => {
         : activeStep === 2
           ? !formData.target_amount || !formData.image
           : false;
-
-  const icons = {
-    1: <InfoOutline fontSize='small' />,
-    2: <EventOutlined fontSize='small' />,
-    3: <PaymentsOutlined fontSize='small' />,
-  };
-  // custom input custom styles
-  const styles = {
-    marginBottom: '24px',
-  };
 
   const {
     mutate: submitForm,
@@ -99,10 +105,7 @@ const AddCampaign = () => {
       onSuccess: (data) => {
         dispatch(controlSuccessDialog(null));
         setCampaignId(data?.data?.uuid);
-      },
-      onError: (err) => {
-        const message = err?.message || 'حدث خطأ أثناء حفظ البيانات';
-        /* setFormError(message); */
+        setActiveStep(0);
       },
     };
     submitForm(payload, mutationOptions);
@@ -110,7 +113,7 @@ const AddCampaign = () => {
   const handleNext = (e) => {
     e.preventDefault();
     let isValid = true;
-    /* if (activeStep === 0) {
+    if (activeStep === 0) {
       if (!formData.name) {
         setErrors((prev) => ({ ...prev, name: 'يرجى إدخال الاسم' }));
         isValid = false;
@@ -129,23 +132,60 @@ const AddCampaign = () => {
         }));
         isValid = false;
       }
-      if (!formData.requirements) {
+      if (!formData.purposes) {
         setErrors((prev) => ({
           ...prev,
-          requirements: 'يرجى إدخال المتطلبات',
+          purposes: 'يرجى إدخال الأهداف',
         }));
         isValid = false;
       }
-      if (!containsOnlyArabicLetters(formData.requirements)) {
+      if (!containsOnlyArabicLetters(formData.purposes)) {
         setErrors((prev) => ({
           ...prev,
-          requirements:
-            'المتطلبات يجب أن تكون باللغة العربية فقط، ويمكن استخدام الأرقام والرموز',
+          purposes:
+            'الأهداف يجب أن تكون باللغة العربية فقط، ويمكن استخدام الأرقام والرموز',
         }));
         isValid = false;
       }
     }
-    if (!isValid) return; */
+    if (activeStep === 1) {
+      const start = dayjs(formData.start_date);
+      const end = dayjs(formData.end_date);
+
+      if (!start.isValid()) {
+        setErrors((prev) => ({
+          ...prev,
+          start_date: 'تاريخ البدء غير صالح',
+        }));
+        isValid = false;
+      }
+
+      if (!end.isValid()) {
+        setErrors((prev) => ({
+          ...prev,
+          end_date: 'تاريخ الانتهاء غير صالح',
+        }));
+        isValid = false;
+      }
+
+      if (end.isBefore(start)) {
+        setErrors((prev) => ({
+          ...prev,
+          end_date: 'تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء',
+        }));
+        isValid = false;
+      }
+
+      if (!formData.start_time || !formData.end_time) {
+        setErrors((prev) => ({
+          ...prev,
+          start_time: 'يرجى إدخال الوقت',
+          end_time: 'يرجى إدخال الوقت',
+        }));
+        isValid = false;
+      }
+    }
+    if (!isValid) return;
     setActiveStep((prev) => prev + 1);
   };
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomInput from '../components/locations/CustomInput';
 import PageContainer from '../components/PageContainer';
@@ -30,6 +30,7 @@ import DeleteItemLogic from '../components/DeleteItemLogic';
 import config from '../constants/enviroment';
 import useControlState from '../customHooks/mutations/useControlState';
 import { toast } from 'react-toastify';
+import { useFilteredCampaigns } from '../contexts/FilterCampaignsContext';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
@@ -51,15 +52,19 @@ const Campaigns = ({ isTrash = false }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { isFiltered, setIsFiltered, setFormData, formData } =
+    useFilteredCampaigns();
+
   const {
     rows,
     isSearching,
-    searchError,
-    /* isFiltering,
-    filterError, */
+    isFiltering,
+    filterCampaignsError,
+    isFilterSuccess,
     isLoading,
-    campaignsError,
-  } = useGetCampaignsLogic(isTrash, searchedKey);
+    fetchingError,
+    refilterCampaigns,
+  } = useGetCampaignsLogic(isTrash);
 
   const isSelectedCampaignNew =
     rows?.find((row) => row.uuid === selectedCampaignId)?.status === 'جديدة';
@@ -140,6 +145,21 @@ const Campaigns = ({ isTrash = false }) => {
 
   const deletedItemUrl = `/${config.campaigns.delete}/${deletedItemID}`;
 
+  useEffect(() => {
+    if (searchedKey != '') {
+      setFormData((prev) => ({ ...prev, name: searchedKey }));
+      refilterCampaigns();
+      setIsFiltered(true);
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        name: '',
+      }));
+
+      setIsFiltered(false);
+    }
+  }, [searchedKey, setIsFiltered, refilterCampaigns, setFormData]);
+
   return (
     <PageContainer>
       <Title
@@ -180,6 +200,7 @@ const Campaigns = ({ isTrash = false }) => {
             onClick={() =>
               dispatch(controlControlLocationModal({ type: 'add', id: 'null' }))
             }
+            disabled={isFiltered && isFiltering && searchedKey !== ''}
           >
             <FilterAltOutlined className='icon' />
           </IconButton>
@@ -190,8 +211,16 @@ const Campaigns = ({ isTrash = false }) => {
         rows={rows}
         columns={columns}
         pageLink={!isTrash ? '/content/campaigns' : null}
-        isLoading={isSearching || isLoading || isStopping || isResumming}
+        isLoading={
+          isSearching ||
+          isLoading ||
+          isStopping ||
+          isResumming ||
+          (isFiltered && isFiltering)
+        }
         setAnchorEl={setAnchorEl}
+        hasNoResult={isFiltered && rows?.length === 0}
+        error={fetchingError?.message}
       />
 
       {/* MoreInfoMenu */}
@@ -216,7 +245,12 @@ const Campaigns = ({ isTrash = false }) => {
           });
         }} */
       />
-      <FilterCampaignsModal />
+      <FilterCampaignsModal
+        refilterCampaigns={refilterCampaigns}
+        isFiltering={isFiltering}
+        filterCampaignsError={filterCampaignsError}
+        isFilterSuccess={isFilterSuccess}
+      />
     </PageContainer>
   );
 };
