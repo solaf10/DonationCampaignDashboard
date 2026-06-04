@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './PageTable.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -59,6 +59,18 @@ const PageTable = ({
     setAnchorEl(e.currentTarget);
     dispatch(openMoreInfoMenu(id));
   };
+
+  useEffect(() => {
+    const totalPages = Math.ceil((rows?.length || 0) / rowsPerPage);
+
+    if (page >= totalPages && totalPages > 0) {
+      setPage(totalPages - 1);
+    }
+
+    if (totalPages === 0) {
+      setPage(0);
+    }
+  }, [rows?.length, rowsPerPage, page]);
 
   return (
     <div className='table-holder'>

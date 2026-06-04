@@ -269,12 +269,6 @@ const Campaigns = ({ isTrash = false }) => {
         deletedItemTitle='الحملة'
         baseQuery={['campaigns']}
         url={deletedItemUrl}
-        /* onSuccess={() => {
-          setPage((prev) => {
-            const newTotal = Math.ceil((projects.length - 1) / itemsPerPage);
-            return prev > newTotal - 1 ? Math.max(newTotal - 1, 0) : prev;
-          });
-        }} */
       />
       <FilterCampaignsDrawer
         refilterCampaigns={refilterCampaigns}
