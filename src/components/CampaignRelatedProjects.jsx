@@ -55,7 +55,6 @@ const CampaignRelatedProjects = ({ projects, campaignId }) => {
             مشاريع الحملة
           </Typography>
           <button
-            style={{ backgroundColor: 'var(--secondary-color)' }}
             onClick={() => dispatch(controlAddBySelectionModal(campaignId))}
             style={{
               backgroundColor: 'transparent',

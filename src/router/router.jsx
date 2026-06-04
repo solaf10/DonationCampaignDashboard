@@ -20,7 +20,7 @@ import Donars from '../pages/Donars';
 import ProtectedRoute from '../utils/ProtectedRoute';
 import AddProjectAdditionalSteps from '../pages/AddProjectAdditionalSteps';
 import InKindDonations from '../pages/InKindDonation';
-import FilterCampaignsProvider from '../contexts/FilterCampaignsContext';
+import { FiltersProvider } from '../contexts/FilterContext';
 
 export const router = createBrowserRouter([
   {
@@ -31,9 +31,11 @@ export const router = createBrowserRouter([
   // Protected Routes
   {
     element: (
-      <ActiveStepProvider>
-        <ProtectedRoute />
-      </ActiveStepProvider>
+      <FiltersProvider>
+        <ActiveStepProvider>
+          <ProtectedRoute />
+        </ActiveStepProvider>
+      </FiltersProvider>
     ),
     children: [
       {
@@ -55,11 +57,7 @@ export const router = createBrowserRouter([
           { path: 'areas', element: <Areas /> },
           {
             path: 'campaigns',
-            element: (
-              <FilterCampaignsProvider>
-                <Campaigns />
-              </FilterCampaignsProvider>
-            ),
+            element: <Campaigns />,
           },
           { path: 'campaigns/:id', element: <CampaignsDetails /> },
 
@@ -95,11 +93,7 @@ export const router = createBrowserRouter([
 
           {
             path: 'campaigns-trash',
-            element: (
-              <FilterCampaignsProvider>
-                <Campaigns isTrash={true} />
-              </FilterCampaignsProvider>
-            ),
+            element: <Campaigns isTrash={true} />,
           },
 
           /* Donars */

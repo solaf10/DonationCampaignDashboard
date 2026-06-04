@@ -6,7 +6,6 @@ import {
   getSingleCampaign,
   getStatus,
 } from '../../services/campaigns';
-import { useFilteredCampaigns } from '../../contexts/FilterCampaignsContext';
 
 export default function useCampaigns() {
   return useQuery({ queryKey: ['campaigns'], queryFn: getCampaigns });
@@ -62,12 +61,15 @@ const buildFilterFormData = (filters) => {
   return data;
 };
 
-export const useFilterCampaigns = (body, enabled) => {
+export const useFilterCampaigns = (body) => {
   const data = buildFilterFormData(body);
-  const { isFiltered } = useFilteredCampaigns();
+
   return useQuery({
-    queryKey: ['campaigns', 'filter', body],
-    queryFn: () => filterCampaigns(data),
-    enabled: enabled || isFiltered,
+    queryKey: ['campaigns', 'filter', JSON.stringify(body)],
+    queryFn: () => {
+      console.log('FILTER REQUEST');
+      return filterCampaigns(data);
+    },
+    enabled: false,
   });
 };

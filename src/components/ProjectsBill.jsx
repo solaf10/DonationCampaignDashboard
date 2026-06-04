@@ -43,7 +43,6 @@ const ProjectsBill = ({ details, projectID }) => {
               التفاصيل
             </Typography>
             <button
-              style={{ backgroundColor: 'var(--secondary-color)' }}
               onClick={() => dispatch(controlAddProjectDetailModalOpen())}
               style={{
                 backgroundColor: 'transparent',

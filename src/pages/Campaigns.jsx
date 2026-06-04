@@ -25,13 +25,13 @@ import { Button, IconButton } from '@mui/material';
 import useGetCampaignsLogic from '../customHooks/useGetCampaignsLogic';
 import PageTable from '../components/PageTable';
 import '../components/ContentWithTable.css';
-import FilterCampaignsModal from '../components/FilterCampaignsModal';
 import DeleteItemLogic from '../components/DeleteItemLogic';
 import config from '../constants/enviroment';
 import useControlState from '../customHooks/mutations/useControlState';
 import { toast } from 'react-toastify';
-import { useFilteredCampaigns } from '../contexts/FilterCampaignsContext';
+import { useFilters } from '../contexts/FilterContext';
 import useRestore from '../customHooks/mutations/useRestore';
+import FilterCampaignsDrawer from '../components/FilterCampaignDrawer';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
@@ -44,7 +44,6 @@ const columns = [
 ];
 
 const Campaigns = ({ isTrash = false }) => {
-  const [searchedKey, setSearchedKey] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const selectedCampaignId = useSelector(
     (state) => state.modalController.selectedMoreInfoModal,
@@ -53,14 +52,21 @@ const Campaigns = ({ isTrash = false }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isFiltered, setIsFiltered, setFormData } = useFilteredCampaigns();
+  const { campaignFilters, setCampaignFilters } = useFilters();
+
+  const isSearching = !!campaignFilters.name?.trim();
+
+  const isFiltered =
+    !!campaignFilters?.government ||
+    !!campaignFilters?.city ||
+    !!campaignFilters?.district_uuid ||
+    !!campaignFilters?.project_uuid ||
+    campaignFilters?.status?.length > 0;
 
   const {
     rows,
-    isSearching,
     isFiltering,
     filterCampaignsError,
-    isFilterSuccess,
     isLoading,
     fetchingError,
     refilterCampaigns,
@@ -165,19 +171,8 @@ const Campaigns = ({ isTrash = false }) => {
   };
 
   useEffect(() => {
-    if (searchedKey != '') {
-      setFormData((prev) => ({ ...prev, name: searchedKey }));
-      refilterCampaigns();
-      setIsFiltered(true);
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        name: '',
-      }));
-
-      setIsFiltered(false);
-    }
-  }, [searchedKey, setIsFiltered, refilterCampaigns, setFormData]);
+    refilterCampaigns();
+  }, [campaignFilters, refilterCampaigns]);
 
   return (
     <PageContainer>
@@ -208,8 +203,13 @@ const Campaigns = ({ isTrash = false }) => {
                     color: 'var(--main-color)', // لون اللابل عند focus
                   },
                 }}
-                value={searchedKey}
-                setValue={setSearchedKey}
+                value={campaignFilters.name}
+                setValue={(value) =>
+                  setCampaignFilters((prev) => ({
+                    ...prev,
+                    name: value,
+                  }))
+                }
               />
 
               <p style={{ fontSize: '14px' }}>عدد الحملات: {rows?.length}</p>
@@ -222,7 +222,6 @@ const Campaigns = ({ isTrash = false }) => {
                   controlControlLocationModal({ type: 'add', id: 'null' }),
                 )
               }
-              disabled={isFiltered && isFiltering && searchedKey !== ''}
             >
               <FilterAltOutlined className='icon' />
             </IconButton>
@@ -235,11 +234,10 @@ const Campaigns = ({ isTrash = false }) => {
         columns={columns}
         pageLink={!isTrash ? '/content/campaigns' : null}
         isLoading={
-          isSearching ||
           isLoading ||
           isStopping ||
           isResumming ||
-          (isFiltered && isFiltering) ||
+          isFiltering ||
           (isTrash && isRestoring)
         }
         setAnchorEl={setAnchorEl}
@@ -272,11 +270,10 @@ const Campaigns = ({ isTrash = false }) => {
           });
         }} */
       />
-      <FilterCampaignsModal
+      <FilterCampaignsDrawer
         refilterCampaigns={refilterCampaigns}
         isFiltering={isFiltering}
-        filterCampaignsError={filterCampaignsError}
-        isFilterSuccess={isFilterSuccess}
+        filterCampaignsError={fetchingError}
       />
     </PageContainer>
   );

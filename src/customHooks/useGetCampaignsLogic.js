@@ -1,4 +1,4 @@
-import { useFilteredCampaigns } from '../contexts/FilterCampaignsContext';
+import { useFilters } from '../contexts/FilterContext';
 import useCampaigns, {
   useCampaignsTrash,
   useFilterCampaigns,
@@ -15,7 +15,7 @@ export const formatDate = (date) => {
 };
 
 const useGetCampaignsLogic = (isTrash) => {
-  const { formData, isFiltered } = useFilteredCampaigns();
+  const { campaignFilters } = useFilters();
   const {
     data: campaignsData,
     isFetching: isFetchingCampaigns,
@@ -33,15 +33,24 @@ const useGetCampaignsLogic = (isTrash) => {
     isPending: isFiltering,
     refetch,
     error: filterCampaignsError,
-    isSuccess: isFilterSuccess,
-  } = useFilterCampaigns(formData);
+  } = useFilterCampaigns(campaignFilters, false);
 
   const allCampaigns = isTrash
     ? campaignsTrashData?.data
     : campaignsData?.data || [];
+
   const filteredCampaigns = filteredCampaignsData?.data || [];
 
-  const rawData = isFiltered ? filteredCampaigns : allCampaigns;
+  const hasFilters =
+    campaignFilters.name ||
+    campaignFilters.government ||
+    campaignFilters.city ||
+    campaignFilters.district_uuid ||
+    campaignFilters.project_uuid ||
+    campaignFilters.status.length > 0;
+
+  const rawData = hasFilters ? filteredCampaigns : allCampaigns;
+
   const rows = rawData?.map((c) => ({
     ...c,
     projectsNum: c.projects?.length || null,
@@ -51,7 +60,6 @@ const useGetCampaignsLogic = (isTrash) => {
   return {
     rows,
     refilterCampaigns: refetch,
-    isFilterSuccess,
     isFiltering,
     isLoading: isFetchingCampaigns || isFetchingCampaignsTrash,
     fetchingError: isTrash ? campaignsTrashError : campaignsError,

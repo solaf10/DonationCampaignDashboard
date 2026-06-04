@@ -16,6 +16,9 @@ const useAddProjectToCampaign = (id) => {
       queryClient.invalidateQueries({
         queryKey: ['campaigns', id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['campaigns', id],
+      });
       dispatch(controlAddBySelectionModal());
     },
   });
