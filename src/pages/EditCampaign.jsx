@@ -25,7 +25,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSingleCampaign } from '../customHooks/queries/useCampaigns';
 import dayjs from 'dayjs';
 import useEditCampaign from '../customHooks/mutations/useEditCampaign';
-import SelectableCardsList from '../components/Stepper/Projects/SelectableCardsList';
+import SelectableCardsList from '../components/Stepper/SelectableCardsList';
 import { Box } from '@mui/material';
 import { useGetUnAttachedProjects } from '../customHooks/queries/useProjects';
 import { toast } from 'react-toastify';
@@ -264,7 +264,7 @@ const EditCampaign = () => {
       start_time: dayjs(start_time, 'HH:mm'),
       end_time: dayjs(end_time, 'HH:mm'),
       fetchedImage: image,
-      projects: [],
+      projects: projects || [], // 👈 مهم
     }));
   }, [campaignDetailsData]);
 
@@ -373,6 +373,7 @@ const EditCampaign = () => {
             setFormData={setFormData}
             styles={styles}
             errors={errors}
+            originalStartDate={start_date}
           />
         ) : activeStep === 2 ? (
           <FundingMedia
@@ -389,6 +390,7 @@ const EditCampaign = () => {
             addLink='/content/projects/add'
             searchPlaceholder='اكتب اسم المشروع...'
             setFormData={setFormData}
+            initialSelected={projects}
           />
         )}
       </StepperForm>

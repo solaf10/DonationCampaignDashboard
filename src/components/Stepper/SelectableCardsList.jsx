@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import CustomInput from '../../locations/CustomInput';
+import CustomInput from '../locations/CustomInput';
 
 const SelectableCardsList = ({
   items = [],
-  type = 'items', // campaigns | projects | anything
+  type = 'items',
   title = 'العناصر',
   searchPlaceholder = 'ابحث...',
   addLink = '#',
   getName = (item) => item.name,
   allowMultiple = true,
   setFormData,
+  initialSelected = [], // 👈 جديد
 }) => {
   const [searchedKey, setSearchedKey] = useState('');
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState(initialSelected);
 
   const handleSelect = (item) => {
     setSelectedItems((prev) => {
@@ -32,6 +33,12 @@ const SelectableCardsList = ({
       return exists ? [] : [item];
     });
   };
+
+  useEffect(() => {
+    if (initialSelected.length) {
+      setSelectedItems(initialSelected);
+    }
+  }, [initialSelected]);
 
   useEffect(() => {
     if (setFormData) {
