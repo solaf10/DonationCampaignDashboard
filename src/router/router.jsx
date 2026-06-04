@@ -19,8 +19,9 @@ import BusinessDonars from '../pages/businessDonars';
 import Donars from '../pages/Donars';
 import ProtectedRoute from '../utils/ProtectedRoute';
 import AddProjectAdditionalSteps from '../pages/AddProjectAdditionalSteps';
-import InKindDonations from '../pages/InKindDonation';
 import { FiltersProvider } from '../contexts/FilterContext';
+import InKindDonations from '../pages/InKindDonations';
+import InKindDonationDetails from '../pages/InKindDonationDetails';
 
 export const router = createBrowserRouter([
   {
@@ -83,7 +84,14 @@ export const router = createBrowserRouter([
               </ActiveStepProvider>
             ),
           },
-          { path: 'inKindDonation', element: <InKindDonations /> },
+          {
+            path: 'inKindDonation',
+            element: <InKindDonations />,
+          },
+          {
+            path: 'inKindDonation/:id',
+            element: <InKindDonationDetails />,
+          },
 
           /* Trash */
           {
