@@ -147,7 +147,13 @@ const Campaigns = ({ isTrash = false }) => {
           {
             label: 'حذف',
             icon: <DeleteOutline fontSize='small' />,
-            onClick: () => dispatch(controlSuccessDialog(selectedCampaignId)),
+            onClick: () =>
+              dispatch(
+                controlSuccessDialog({
+                  type: 'delete',
+                  id: selectedCampaignId,
+                }),
+              ),
             danger: true,
           },
         ]

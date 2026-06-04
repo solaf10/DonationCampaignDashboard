@@ -292,6 +292,7 @@ const AddProject = () => {
         onConfirm={() =>
           navigate(`/content/projects/add/additional/${projectId}`)
         }
+        dialogType='add'
       />
 
       {/* ================= ADD TO CAMPAIGN ================= */}

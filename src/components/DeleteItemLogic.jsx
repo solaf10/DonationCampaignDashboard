@@ -16,7 +16,7 @@ const DeleteItemLogic = ({ deletedItemTitle, baseQuery, url, onSuccess }) => {
 
     deleteItem(url, {
       onSuccess: () => {
-        dispatch(controlSuccessDialog(null));
+        dispatch(controlSuccessDialog({ type: 'delete', id: null }));
         toast.success(`تم حذف ${deletedItemTitle} بنجاح!`);
         onSuccess();
       },

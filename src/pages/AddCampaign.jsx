@@ -103,7 +103,7 @@ const AddCampaign = () => {
     payload.append('image', formData.image);
     const mutationOptions = {
       onSuccess: (data) => {
-        dispatch(controlSuccessDialog(null));
+        dispatch(controlSuccessDialog({ type: 'add', id: null }));
         setCampaignId(data?.data?.uuid);
         setActiveStep(0);
       },
@@ -260,6 +260,7 @@ const AddCampaign = () => {
         desc='تم إنشاء حملتك بنجاح. يمكنك الآن إضافة مشاريع مرتبطة أو القيام بذلك لاحقًا.'
         btnTitle='إضافة مشاريع الآن'
         onConfirm={() => dispatch(controlAddBySelectionModal(campaignId))}
+        dialogType='add'
       />
       <AddBySelectionModal
         entriesType='projects'

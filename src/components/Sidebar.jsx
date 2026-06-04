@@ -8,6 +8,11 @@ import {
 import './Sidebar.css';
 import { NavLink, useLocation } from 'react-router-dom';
 import { RecyclingRounded } from '@mui/icons-material';
+import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
+import { useDispatch } from 'react-redux';
+import SuccessMessageDialog from './SuccessMessageDialog';
+import { useState } from 'react';
+import useLogOut from '../customHooks/mutations/useLogOut';
 
 const links = [
   {
@@ -205,41 +210,27 @@ const links = [
 
 const Sidebar = () => {
   const location = useLocation();
-  /* useEffect(() => {
-    const sidebar = sidebarRef.current;
-    if (!sidebar) return;
+  const dispatch = useDispatch();
 
-    const handleMouseEnter = () => {
-      activeLinksRef.current = Array.from(sidebar.querySelectorAll('a.active'));
+  const [logoutError, setLogoutError] = useState(null);
 
-      openAccordionsRef.current = Array.from(
-        sidebar.querySelectorAll('.sidebar-accordion.open')
-      );
+  const { mutate: logout, isPending: isLoggingOut } = useLogOut();
 
-      activeLinksRef.current.forEach((el) => el.classList.remove('active'));
+  const handleLogOut = () => {
+    setLogoutError(null);
 
-      openAccordionsRef.current.forEach((el) => el.classList.remove('open'));
-    };
-
-    const handleMouseLeave = () => {
-      activeLinksRef.current.forEach((el) => el.classList.add('active'));
-
-      openAccordionsRef.current.forEach((el) => el.classList.add('open'));
-    };
-
-    sidebar.addEventListener('mouseenter', handleMouseEnter);
-    sidebar.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      sidebar.removeEventListener('mouseenter', handleMouseEnter);
-      sidebar.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, []); */
+    logout(undefined, {
+      onError: (err) => {
+        setLogoutError(err?.message || `حدث خطأ أثناء تسجيل الخروج`);
+      },
+    });
+  };
+  const onClearError = () => setLogoutError(null);
   return (
     <div className='sidebar'>
       <div className='holder'>
         <div className='logo'>
-          <img src='/Logo.svg' alt='لوغو' />
+          <img src='/Logo.svg' alt='logo' />
         </div>
 
         <ul>
@@ -301,7 +292,12 @@ const Sidebar = () => {
           })}
         </ul>
       </div>
-      <button className='log-out'>
+      <button
+        className='log-out'
+        onClick={() =>
+          dispatch(controlSuccessDialog({ type: 'logout', id: null }))
+        }
+      >
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='24'
@@ -318,6 +314,17 @@ const Sidebar = () => {
         </svg>
         <span>تسجيل الخروج</span>
       </button>
+      <SuccessMessageDialog
+        type='warning'
+        title='تأكيد تسجيل الخروج'
+        desc='سيتم إنهاء الجلسة الحالية وإعادة توجيهك إلى صفحة تسجيل الدخول.'
+        btnTitle='حذف'
+        onConfirm={handleLogOut}
+        isLoading={isLoggingOut}
+        error={logoutError}
+        onClearError={onClearError}
+        dialogType='logout'
+      />
     </div>
   );
 };

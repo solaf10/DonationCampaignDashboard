@@ -25,9 +25,13 @@ export default function SuccessMessageDialog({
   isLoading = false,
   error,
   onClearError,
+  dialogType = 'delete',
 }) {
   const isOpen = useSelector(
     (state) => state.modalController.isSuccessDialogOpen,
+  );
+  const selectedDialogType = useSelector(
+    (state) => state.modalController.successDialogType,
   );
 
   const dispatch = useDispatch();
@@ -43,7 +47,7 @@ export default function SuccessMessageDialog({
   }, [isOpen]);
 
   const handleClose = () => {
-    dispatch(controlSuccessDialog());
+    dispatch(controlSuccessDialog({ type: dialogType, id: null }));
 
     if (!isWarning) {
       navigate(-1);
@@ -51,7 +55,11 @@ export default function SuccessMessageDialog({
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} className='success-dialog'>
+    <Dialog
+      open={isOpen && selectedDialogType === dialogType}
+      onClose={handleClose}
+      className='success-dialog'
+    >
       <DialogTitle style={{ textAlign: 'center' }}>
         {isWarning ? (
           <WarningAmber sx={{ fontSize: 50, color: '#b3261e', opacity: 0.9 }} />

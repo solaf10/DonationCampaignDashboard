@@ -9,7 +9,6 @@ import {
 } from '../redux/slices/ModalContollerSlice';
 import config from '../constants/enviroment';
 import { AddRounded } from '@mui/icons-material';
-import useAddProjectDetail from '../customHooks/mutations/useAddProjectDetail';
 import AddProjectDetailModal from './AddProjectDetailModal';
 
 const ProjectsBill = ({ details, projectID }) => {
@@ -89,7 +88,10 @@ const ProjectsBill = ({ details, projectID }) => {
                     }}
                     onClick={() =>
                       dispatch(
-                        controlSuccessDialog(`${projectID}/${item.uuid}`),
+                        controlSuccessDialog({
+                          type: 'delete',
+                          id: `${projectID}/${item.uuid}`,
+                        }),
                       )
                     }
                   >

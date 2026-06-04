@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 const useLogin = () => {
   const navigate = useNavigate();
   return useMutation({
+    mutationKey: ['user'],
     mutationFn: login,
     onSuccess: (data) => {
       localStorage.setItem('token', data.data.token);

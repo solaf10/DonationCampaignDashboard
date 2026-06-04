@@ -25,7 +25,7 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useActiveStep } from '../contexts/ActiveStepContext';
 import useUploadProjectMedia from '../customHooks/mutations/useUploadProjectMedia';
 import { toast } from 'react-toastify';
-import SelectableCardsList from '../components/Stepper/Projects/SelectableCardsList';
+import SelectableCardsList from '../components/Stepper/SelectableCardsList';
 
 const steps = ['الوسائط', 'ربط المشروع بالحملة'];
 

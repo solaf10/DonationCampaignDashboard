@@ -192,7 +192,11 @@ const CampaignsDetails = () => {
             {campaign?.status === 'جديدة' && (
               <button
                 className='button delete'
-                onClick={() => dispatch(controlSuccessDialog(params.id))}
+                onClick={() =>
+                  dispatch(
+                    controlSuccessDialog({ type: 'delete', id: params.id }),
+                  )
+                }
               >
                 <Delete className='icon' />
                 حذف

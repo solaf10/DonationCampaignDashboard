@@ -1,6 +1,7 @@
 const config = {
   baseUrl: 'http://127.0.0.1:8000',
   login: 'login',
+  logout: 'logout',
   governments: {
     all: 'governorates/all',
     search: 'governorate/search',

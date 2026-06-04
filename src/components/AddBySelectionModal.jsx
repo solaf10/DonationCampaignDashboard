@@ -3,13 +3,17 @@ import CustomModal from './CustomModal';
 import CustomInput from './locations/CustomInput';
 import { useDispatch, useSelector } from 'react-redux';
 import './AddBySelectionModal.css';
-import { Link } from 'react-router-dom';
-import { controlAddBySelectionModal } from '../redux/slices/ModalContollerSlice';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  controlAddBySelectionModal,
+  controlSuccessDialog,
+} from '../redux/slices/ModalContollerSlice';
 import { useGetUnAttachedProjects } from '../customHooks/queries/useProjects';
 import useCampaigns from '../customHooks/queries/useCampaigns';
 import useAddProjectToCampaign from '../customHooks/mutations/useAddProjects';
 import { toast } from 'react-toastify';
 import { Box, Typography } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 
 const AddBySelectionModal = ({ entriesType, modalTitle }) => {
   const [searchedKey, setSearchedKey] = useState('');
@@ -144,16 +148,33 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
     isPending: isAdding,
     error: addProjectError,
   } = useAddProjectToCampaign(selectedAddSrcId);
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isAddPage = location.pathname.includes('/campaigns/add');
+  const queryClient = useQueryClient();
   const handleSubmit = (e) => {
     e.preventDefault();
     const body = new FormData();
-
+    if (entries.length === 0) return;
     selectedProjects.forEach((p) => {
       body.append('project_uuid[]', p.uuid);
     });
     addProjectToCampaign(body, {
       onSuccess: () => {
+        dispatch(controlAddBySelectionModal(null));
+
+        if (isAddPage) {
+          navigate('/content/campaigns');
+          dispatch(controlSuccessDialog({ type: 'add', id: null }));
+          queryClient.invalidateQueries({
+            queryKey: ['campaigns'],
+          });
+        } else {
+          queryClient.invalidateQueries({
+            queryKey: ['campaigns', selectedAddSrcId],
+          });
+        }
+
         toast.success('تمت إضافة المشاريع بنجاح!');
       },
     });
@@ -192,7 +213,9 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
       styles={{ width: '600px' }}
       onSubmit={handleSubmit}
       isLoading={isAdding}
-      isDisabled={isAdding}
+      isDisabled={
+        isAdding || entries.length === 0 || selectedProjects?.length === 0
+      }
     >
       {addProjectError && (
         <div

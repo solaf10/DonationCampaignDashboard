@@ -193,7 +193,9 @@ export default function ProjectCard({
                 border: '1px solid #ffcccc',
                 backgroundColor: '#fff5f5',
               }}
-              onClick={() => dispatch(controlSuccessDialog(uuid))}
+              onClick={() =>
+                dispatch(controlSuccessDialog({ type: 'delete', id: uuid }))
+              }
             >
               <DeleteOutlinedIcon fontSize='small' />
             </IconButton>
