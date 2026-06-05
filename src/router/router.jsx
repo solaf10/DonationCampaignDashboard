@@ -13,14 +13,15 @@ import ActiveStepProvider from "../contexts/ActiveStepContext";
 import AddProject from "../pages/AddProject";
 import Projects from "../pages/Projects";
 import ProjectsDetails from "../pages/ProjectsDetails";
-import IndividualDonars from "../pages/IndividualDonars";
+// import IndividualDonars from "../pages/InKindDonations";
 import Organizations from "../pages/Organizations";
 import BusinessDonars from "../pages/businessDonars";
 import Donars from "../pages/Donars";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import AddProjectAdditionalSteps from "../pages/AddProjectAdditionalSteps";
-import InKindDonations from "../pages/InKindDonation";
+// import InKindDonations from "../pages/InKindDonation";
 import FinancialOperations from "../pages/FinancialOperations";
+import { FiltersProvider } from "../contexts/FilterContext";
 
 export const router = createBrowserRouter([
   {
@@ -81,14 +82,14 @@ export const router = createBrowserRouter([
             ),
           },
 
-          {
-            path: "inKindDonation",
-            element: <InKindDonations />,
-          },
-          {
-            path: "inKindDonation/:id",
-            element: <InKindDonationDetails />,
-          },
+          // {
+          //   path: "inKindDonation",
+          //   element: <InKindDonations />,
+          // },
+          // {
+          //   path: "inKindDonation/:id",
+          //   element: <InKindDonationDetails />,
+          // },
 
           /* Trash */
           {
@@ -110,10 +111,10 @@ export const router = createBrowserRouter([
             element: <Donars />,
           },
 
-          {
-            path: "individuals",
-            element: <IndividualDonars />,
-          },
+          // {
+          //   path: "individuals",
+          //   element: <IndividualDonars />,
+          // },
 
           {
             path: "organizations",

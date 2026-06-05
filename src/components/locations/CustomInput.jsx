@@ -220,9 +220,8 @@ export default function CustomInput({
         ) : inputType === "autocomplete" ? (
           <Autocomplete
             options={children || []}
-
-            getOptionLabel={(option) => option?.name || ''}
-            value={value || ''}
+            getOptionLabel={(option) => option?.name || ""}
+            value={value || ""}
             onChange={(event, newValue) => {
               setValue(newValue);
             }}
@@ -328,12 +327,8 @@ export default function CustomInput({
                 sx: styles ? { ...pickerStyles, ...styles } : pickerStyles,
               },
             }}
-<<<<<<< HEAD
             format="YYYY/MM/DD"
-=======
-            format='YYYY/MM/DD'
             minDate={minDate}
->>>>>>> 7d19358618c742354439779e0672f856d1f03eb4
           />
         ) : inputType === "time" ? (
           <TimePicker
@@ -361,13 +356,9 @@ export default function CustomInput({
       </FormControl>
 
       {/* 🔹 Helper text */}
-<<<<<<< HEAD
-      {((helperText && isDisabled) || errorMsg) && (
-        <FormHelperText error={!!errorMsg} sx={{ color: "#9AA0A6" }}>
-=======
+
       {(helperText || errorMsg) && (
-        <FormHelperText error={!!errorMsg} sx={{ color: '#9AA0A6' }}>
->>>>>>> 7d19358618c742354439779e0672f856d1f03eb4
+        <FormHelperText error={!!errorMsg} sx={{ color: "#9AA0A6" }}>
           {errorMsg || helperText}
         </FormHelperText>
       )}
