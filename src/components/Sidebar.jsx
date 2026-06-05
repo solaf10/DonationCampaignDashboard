@@ -176,7 +176,7 @@ const links = [
 
   {
     id: 6,
-    href: "/content/financial-perations",
+    href: "/content/financial-operations",
     label: "العمليات المالية",
     isAccordion: false,
     icon: (

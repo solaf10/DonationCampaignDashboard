@@ -98,11 +98,15 @@ export const router = createBrowserRouter([
             element: <Projects isTrash={true} />,
           },
           {
-            path: 'financial-perations',
+            path: "financial-operations",
             element: <FinancialOperations />,
           },
           {
-            path: 'campaigns-trash',
+            path: "financial-operations/add",
+            element: <AddFinancialOperations />,
+          },
+          {
+            path: "campaigns-trash",
             element: <Campaigns isTrash={true} />,
           },
 
