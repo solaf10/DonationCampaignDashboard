@@ -58,3 +58,7 @@ export const uploadProjectMedia = async (id, body) => {
   const res = await api.post(`/${config.projects.uploadMedia}/${id}`, body);
   return res.data;
 };
+export const addCampaignToProject = async (id, body) => {
+  const res = await api.post(`/${config.projects.addCampaign}/${id}`, body);
+  return res.data;
+};

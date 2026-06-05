@@ -1,7 +1,6 @@
 import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
-import CampaignsForm from '../components/CampaignsForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useActiveStep } from '../contexts/ActiveStepContext';
 import StepperForm from '../components/Stepper/StepperForm';
 import Basic from '../components/Stepper/Campaigns/Basic';
@@ -26,6 +25,7 @@ import {
   isWithinLength,
 } from '../utils/validation/common.validation';
 import dayjs from 'dayjs';
+import '../components/CampaignsForm.css';
 
 const steps = ['معلومات الحملة', 'جدولة للحملة', 'التمويل والوسائط'];
 
@@ -188,6 +188,10 @@ const AddCampaign = () => {
     if (!isValid) return;
     setActiveStep((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    setActiveStep(0);
+  }, []);
 
   return (
     <PageContainer>

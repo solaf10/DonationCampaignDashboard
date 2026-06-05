@@ -25,6 +25,7 @@ import DeleteItemLogic from '../components/DeleteItemLogic';
 import CustomPagination from '../components/CustomPagination';
 import config from '../constants/enviroment';
 import { useSelector } from 'react-redux';
+import ProjectCardSkeleton from '../components/Skeletons/ProjectCardSkeleton';
 
 export default function Projects({ isTrash = false }) {
   const [openFilter, setOpenFilter] = useState(false);
@@ -64,6 +65,42 @@ export default function Projects({ isTrash = false }) {
       setPage(0);
     }
   }, [projects.length, page]);
+
+  const cards = isFetchingProjects
+    ? Array.from({ length: 8 }).map((_, index) => (
+        <Grid item size={3} key={index}>
+          <ProjectCardSkeleton />
+        </Grid>
+      ))
+    : paginatedProjects.map((project) => (
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          size={3}
+          key={project.uuid}
+          sx={{ display: 'flex' }}
+        >
+          <ProjectCard
+            name={project.name}
+            governorate_name={
+              project.district.city.governorate.governorate_name
+            }
+            cover_image={config.baseUrl + project.cover_image}
+            progress_percentage={project?.progress_percentage}
+            estimated_cost={project.estimated_cost}
+            sector={
+              project.on_the_other_hand
+                ? project.on_the_other_hand
+                : project.sector
+            }
+            uuid={project.uuid}
+            isTrash={isTrash}
+            onDetailsClick={() => navigate(`/projects/${project.uuid}`)}
+          />
+        </Grid>
+      ));
 
   return (
     <Container className='projects' maxWidth='lg' sx={{ px: 2 }}>
@@ -119,36 +156,8 @@ export default function Projects({ isTrash = false }) {
           justifyContent: 'center',
         }}
       >
-        <Grid container spacing={4} alignItems='stretch' sx={{ width: '100%' }}>
-          {paginatedProjects.map((project) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              size={3}
-              key={project.uuid}
-              sx={{ display: 'flex' }}
-            >
-              <ProjectCard
-                name={project.name}
-                governorate_name={
-                  project.district.city.governorate.governorate_name
-                }
-                cover_image={config.baseUrl + project.cover_image}
-                progress_precentage={project.progress_percentage}
-                estimated_cost={project.estimated_cost}
-                sector={
-                  project.on_the_other_hand
-                    ? project.on_the_other_hand
-                    : project.sector
-                }
-                uuid={project.uuid}
-                isTrash={isTrash}
-                onDetailsClick={() => navigate(`/projects/${project.uuid}`)}
-              />
-            </Grid>
-          ))}
+        <Grid container spacing={3} alignItems='stretch' sx={{ width: '100%' }}>
+          {cards}
         </Grid>
       </Box>
 

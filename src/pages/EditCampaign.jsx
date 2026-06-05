@@ -1,6 +1,5 @@
 import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
-import CampaignsForm from '../components/CampaignsForm';
 import { useEffect, useState } from 'react';
 import { useActiveStep } from '../contexts/ActiveStepContext';
 import StepperForm from '../components/Stepper/StepperForm';
@@ -267,6 +266,10 @@ const EditCampaign = () => {
       projects: projects || [], // 👈 مهم
     }));
   }, [campaignDetailsData]);
+
+  useEffect(() => {
+    setActiveStep(0);
+  }, []);
 
   const {
     data: unAttachedprojectsData,

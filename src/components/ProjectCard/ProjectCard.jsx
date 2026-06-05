@@ -135,7 +135,6 @@ export default function ProjectCard({
             <Typography fontWeight='bold' fontSize={15}>
               {estimated_cost}
             </Typography>
-            <AttachMoneyIcon fontSize='small' />
           </Box>
         </Box>
 
@@ -157,10 +156,10 @@ export default function ProjectCard({
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant='caption'>
-              % متبقي {remainingPrecentage}
+              %متبقي {remainingPrecentage}
             </Typography>
             <Typography variant='caption'>
-              {progressValue} % نسبة إنجاز المشروع
+              %{progressValue} نسبة إنجاز المشروع
             </Typography>
           </Box>
         </Box>

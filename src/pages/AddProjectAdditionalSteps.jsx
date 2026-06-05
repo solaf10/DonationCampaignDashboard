@@ -26,6 +26,9 @@ import { useActiveStep } from '../contexts/ActiveStepContext';
 import useUploadProjectMedia from '../customHooks/mutations/useUploadProjectMedia';
 import { toast } from 'react-toastify';
 import SelectableCardsList from '../components/Stepper/SelectableCardsList';
+import useCampaigns from '../customHooks/queries/useCampaigns';
+import { Box } from '@mui/material';
+import useAddCampaignToProject from '../customHooks/mutations/useAddCampaignToProject.js';
 
 const steps = ['الوسائط', 'ربط المشروع بالحملة'];
 
@@ -40,6 +43,7 @@ const AddProjectAdditionalSteps = () => {
   const [formData, setFormData] = useState({
     images: [],
     videos: '',
+    campaign_uuid: '',
   });
 
   /* ================= VALIDATION ================= */
@@ -51,6 +55,12 @@ const AddProjectAdditionalSteps = () => {
     isPending: isUploading,
     error: uploadingError,
   } = useUploadProjectMedia(params.id);
+
+  const {
+    mutate: linkToCampaign,
+    isPending: isLinking,
+    error: linkToCampignError,
+  } = useAddCampaignToProject(params.id);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -69,8 +79,22 @@ const AddProjectAdditionalSteps = () => {
           setActiveStep(1);
         },
       });
+    } else {
+      const data = { campaign_uuid: formData?.campaign_uuid };
+      linkToCampaign(data, {
+        onSuccess: () => {
+          toast.success('تم ربط المشروع بالحملة بنجاح!');
+          navigate('/content/projects');
+        },
+      });
     }
   };
+
+  const {
+    data: campaignsData,
+    isFetching: isFetchingCamaigns,
+    error: campignsError,
+  } = useCampaigns();
 
   return (
     <PageContainer>
@@ -98,7 +122,14 @@ const AddProjectAdditionalSteps = () => {
       <StepperForm
         icons={icons}
         steps={steps}
-        isDisabled={isUploading}
+        isDisabled={
+          isUploading ||
+          isLinking ||
+          (!formData?.images.length &&
+            !formData?.videos.length &&
+            activeStep === 0) ||
+          (activeStep === 1 && formData?.campaign_uuid === '')
+        }
         isSubmit={true}
         onForwardAction={handleSubmit}
         actionBtnTitle={
@@ -115,13 +146,35 @@ const AddProjectAdditionalSteps = () => {
       >
         {activeStep === 0 ? (
           <Media formData={formData} setFormData={setFormData} />
+        ) : isFetchingCamaigns ? (
+          <Box
+            sx={{
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <div
+              className='btn-loader'
+              style={{
+                width: '40px',
+                height: '40px',
+                borderWidth: '4px',
+                borderColor: 'var(--secondary-color)',
+                borderTopColor: 'white',
+              }}
+            ></div>
+          </Box>
         ) : (
           <SelectableCardsList
-            items={[]}
-            type='الحملات'
+            items={campaignsData?.data || []}
+            type='campaign_uuid'
+            title='الحملة'
             addLink='/content/campaigns/add'
             searchPlaceholder='اكتب اسم الحملة...'
             allowMultiple={false}
+            setFormData={setFormData}
           />
         )}
       </StepperForm>

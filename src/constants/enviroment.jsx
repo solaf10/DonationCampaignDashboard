@@ -52,6 +52,7 @@ const config = {
     details: { add: 'projects/details/add', delete: 'detail/delete' },
     uploadMedia: 'project/upload',
     unattached: 'get/projects',
+    addCampaign: 'project/campaign',
   },
   activities: 'api/activities',
   contact: 'api/contactForms/contact-us/',

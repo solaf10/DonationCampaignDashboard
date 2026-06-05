@@ -14,6 +14,7 @@ const useLogin = () => {
     onSuccess: () => {
       dispatch(controlSuccessDialog({ type: 'logout', id: null }));
       queryClient.invalidateQueries({ queryKey: ['user'] });
+      localStorage.removeItem('token');
       navigate('/');
     },
   });

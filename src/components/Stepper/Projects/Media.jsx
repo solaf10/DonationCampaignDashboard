@@ -6,7 +6,7 @@ const styles = {
   marginBottom: '24px',
 };
 
-const Media = ({ formData, setFormData }) => {
+const Media = ({ formData, setFormData, errors }) => {
   const extraInputRef = useRef(null);
 
   return (
@@ -28,11 +28,7 @@ const Media = ({ formData, setFormData }) => {
         {/* ================= الصور الإضافية ================= */}
         <div
           style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: '24px',
-            direction: 'rtl',
-            marginBottom: '28px',
+            marginBottom: '24px',
           }}
         >
           <Typography
@@ -41,7 +37,7 @@ const Media = ({ formData, setFormData }) => {
               fontSize: '16px',
               color: '#374151',
               whiteSpace: 'nowrap',
-              mt: 1,
+              mb: 2,
             }}
           >
             صور إضافية للمشروع
@@ -172,14 +168,7 @@ const Media = ({ formData, setFormData }) => {
         )}
 
         {/* ================= الفيديو ================= */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '24px',
-            direction: 'rtl',
-          }}
-        >
+        <div>
           <Typography
             sx={{
               fontFamily: 'Cairo',
@@ -191,24 +180,22 @@ const Media = ({ formData, setFormData }) => {
             فيديو توضيحي
           </Typography>
 
-          <div style={{ width: '100%' }}>
-            <CustomInput
-              label=''
-              inputType='input'
-              placeholder='https://youtube.com/...'
-              value={formData.videos || ''}
-              setValue={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  videos: e.target.value,
-                }))
-              }
-              isNestedState={true}
-              styles={styles}
-              errorMsg={errors?.videos || null}
-              isRequired={false}
-            />
-          </div>
+          <CustomInput
+            label=''
+            inputType='input'
+            placeholder='https://youtube.com/...'
+            value={formData.videos || ''}
+            setValue={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                videos: e.target.value,
+              }))
+            }
+            isNestedState={true}
+            styles={styles}
+            errorMsg={errors?.videos || null}
+            isRequired={false}
+          />
         </div>
       </div>
     </div>

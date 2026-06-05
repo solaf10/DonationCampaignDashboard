@@ -1,9 +1,13 @@
 import { Box, Grid, Skeleton } from '@mui/material';
 import PageContainer from '../PageContainer';
+import { useLocation } from 'react-router-dom';
+import MediaGallerySkeleton from './MediaGallerySkeleton';
 
-const CampaignDetailsSkeleton = () => {
+const CampaignDetailsSkeleton = ({ infos = [1, 2, 3] }) => {
   const cardBg = '#e9eeee';
   const skeletonBg = '#d6dddd';
+  const location = useLocation();
+  const isProject = location.pathname.includes('projects');
 
   return (
     <PageContainer>
@@ -44,7 +48,7 @@ const CampaignDetailsSkeleton = () => {
 
       {/* INFOS */}
       <Grid container spacing={2} mt={3}>
-        {[1, 2, 3].map((i) => (
+        {infos.map((i) => (
           <Grid size={4} key={i}>
             <Box
               sx={{
@@ -132,6 +136,13 @@ const CampaignDetailsSkeleton = () => {
           </Box>
         </Grid>
       </Grid>
+
+      {isProject && (
+        <>
+          <MediaGallerySkeleton />
+          <MediaGallerySkeleton />
+        </>
+      )}
     </PageContainer>
   );
 };

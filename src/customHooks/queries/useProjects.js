@@ -36,7 +36,7 @@ export function useGetSectors() {
 }
 export function useGetStatus() {
   return useQuery({
-    queryKey: ['status'],
+    queryKey: ['projects-status'],
     queryFn: getStatus,
   });
 }

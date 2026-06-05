@@ -16,7 +16,7 @@ import StepperForm from '../components/Stepper/StepperForm';
 import SuccessMessageDialog from '../components/SuccessMessageDialog';
 import AddBySelectionModal from '../components/AddBySelectionModal';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAddProject from '../customHooks/mutations/useAddProject';
 import { useDispatch } from 'react-redux';
 import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
@@ -146,7 +146,7 @@ const AddProject = () => {
 
     const mutationOptions = {
       onSuccess: (data) => {
-        dispatch(controlSuccessDialog(null));
+        dispatch(controlSuccessDialog({ type: 'add', id: data?.data?.uuid }));
         setProjectId(data.data.uuid);
       },
     };
@@ -202,6 +202,10 @@ const AddProject = () => {
     if (!isValid) return;
     setActiveStep((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    setActiveStep(0);
+  }, []);
 
   return (
     <PageContainer>
@@ -289,18 +293,12 @@ const AddProject = () => {
         title='تم إنشاء المشروع بنجاح!'
         desc='تم إنشاء مشروعك بنجاح. يمكنك متابعة إعداد المشروع بإكمال الخطوات الإضافية (إضافة الوسائط وربط المشروع بحملة).'
         btnTitle='المتابعة الآن'
-        onConfirm={() =>
-          navigate(`/content/projects/add/additional/${projectId}`)
-        }
+        onConfirm={() => {
+          navigate(`/content/projects/add/additional/${projectId}`);
+          dispatch(controlSuccessDialog({ type: 'add' }));
+        }}
         dialogType='add'
       />
-
-      {/* ================= ADD TO CAMPAIGN ================= */}
-      {/* <AddBySelectionModal
-        entriesType='campaigns'
-        entries={[]}
-        modalTitle='إضافة المشروع إلى حملة'
-      /> */}
     </PageContainer>
   );
 };

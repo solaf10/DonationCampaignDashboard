@@ -59,54 +59,96 @@ const ProjectsBill = ({ details, projectID }) => {
               flexDirection: 'column',
             }}
           >
-            {details?.map((item) => (
-              <Box
-                key={item.uuid}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  bgcolor: '#f8fafb',
-                  py: 1.5,
-                  gap: 1.5,
-                  borderRadius: 4,
-                  borderBottom: '1px solid #edf0f4',
-                }}
-              >
+            {details?.length ? (
+              details?.map((item) => (
                 <Box
+                  key={item.uuid}
                   sx={{
                     display: 'flex',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
-                    width: 200,
+                    bgcolor: '#f8fafb',
+                    py: 1.5,
+                    gap: 1.5,
+                    borderRadius: 4,
+                    borderBottom: '1px solid #edf0f4',
                   }}
                 >
-                  {/* DELETE BUTTON */}
-                  <IconButton
-                    size='small'
+                  <Box
                     sx={{
-                      color: '#d32f2f',
+                      display: 'flex',
+                      alignItems: 'center',
+                      width: 200,
                     }}
-                    onClick={() =>
-                      dispatch(
-                        controlSuccessDialog({
-                          type: 'delete',
-                          id: `${projectID}/${item.uuid}`,
-                        }),
-                      )
-                    }
                   >
-                    <CloseIcon fontSize='small' />
-                  </IconButton>
+                    {/* DELETE BUTTON */}
+                    <IconButton
+                      size='small'
+                      sx={{
+                        color: '#d32f2f',
+                      }}
+                      onClick={() =>
+                        dispatch(
+                          controlSuccessDialog({
+                            type: 'delete',
+                            id: `${projectID}/${item.uuid}`,
+                          }),
+                        )
+                      }
+                    >
+                      <CloseIcon fontSize='small' />
+                    </IconButton>
 
-                  <Typography fontSize={15}>{item.detail}</Typography>
+                    <Typography fontSize={15}>{item.detail}</Typography>
+                  </Box>
+
+                  {/* PRICE */}
+                  <Typography fontWeight={700} color='#2e7d32'>
+                    ${item.cost}
+                  </Typography>
+                </Box>
+              ))
+            ) : (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  pt: 3,
+                  pb: 6,
+                  textAlign: 'center',
+                  color: '#8c9ea0',
+                  height: '272px',
+                }}
+              >
+                {/* icon placeholder */}
+                <Box
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: '50%',
+                    bgcolor: '#eef3f3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 2,
+                    fontSize: 22,
+                  }}
+                >
+                  📦
                 </Box>
 
-                {/* PRICE */}
-                <Typography fontWeight={700} color='#2e7d32'>
-                  ${item.cost}
+                <Typography fontWeight={600} mb={1}>
+                  لا توجد تفاصيل للمشروع حالياً
+                </Typography>
+
+                <Typography fontSize={13} sx={{ px: 4, opacity: 0.8 }}>
+                  يمكنك إضافة تفاصيل توضح احتياجات المشروع وتكاليفها، مثل شراء
+                  المعدات أو تنفيذ أعمال التأهيل والصيانة.
                 </Typography>
               </Box>
-            ))}
+            )}
           </Box>
 
           {/* TOTAL */}

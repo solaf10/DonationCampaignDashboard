@@ -26,7 +26,7 @@ export function useSingleCampaign(id) {
 
 export function useGetStatus() {
   return useQuery({
-    queryKey: ['status'],
+    queryKey: ['campaigns-status'],
     queryFn: getStatus,
   });
 }
