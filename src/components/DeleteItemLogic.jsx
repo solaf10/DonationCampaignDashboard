@@ -3,20 +3,30 @@ import SuccessMessageDialog from './SuccessMessageDialog';
 import useDelete from '../customHooks/mutations/useDelete';
 import { toast } from 'react-toastify';
 import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-const DeleteItemLogic = ({ deletedItemTitle, baseQuery, url, onSuccess }) => {
+const DeleteItemLogic = ({
+  deletedItemTitle,
+  baseQuery,
+  url,
+  onSuccess,
+  modalType = 'delete',
+}) => {
   const dispatch = useDispatch();
   const [deleteError, setDeleteError] = useState(null);
 
   const { mutate: deleteItem, isPending: isDeleting } = useDelete(baseQuery);
+
+  const dialogTypeState = useSelector(
+    (state) => state.modalController.successDialogType,
+  );
 
   const handleDelete = () => {
     setDeleteError(null);
 
     deleteItem(url, {
       onSuccess: () => {
-        dispatch(controlSuccessDialog({ type: 'delete', id: null }));
+        dispatch(controlSuccessDialog({ type: modalType, id: null }));
         toast.success(`تم حذف ${deletedItemTitle} بنجاح!`);
         onSuccess();
       },
@@ -37,6 +47,7 @@ const DeleteItemLogic = ({ deletedItemTitle, baseQuery, url, onSuccess }) => {
       isLoading={isDeleting}
       error={deleteError}
       onClearError={onClearError}
+      dialogType={modalType}
     />
   );
 };

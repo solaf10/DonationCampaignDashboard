@@ -16,7 +16,7 @@ import StepperForm from '../components/Stepper/StepperForm';
 import SuccessMessageDialog from '../components/SuccessMessageDialog';
 import AddBySelectionModal from '../components/AddBySelectionModal';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAddProject from '../customHooks/mutations/useAddProject';
 import { useDispatch } from 'react-redux';
 import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
@@ -31,6 +31,7 @@ import {
   isWithinLength,
 } from '../utils/validation/common.validation';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessage from '../components/Messages/ErrorMessage';
 
 const steps = [
   'المعلومات الأساسية',
@@ -146,7 +147,7 @@ const AddProject = () => {
 
     const mutationOptions = {
       onSuccess: (data) => {
-        dispatch(controlSuccessDialog(null));
+        dispatch(controlSuccessDialog({ type: 'add', id: data?.data?.uuid }));
         setProjectId(data.data.uuid);
       },
     };
@@ -203,29 +204,17 @@ const AddProject = () => {
     setActiveStep((prev) => prev + 1);
   };
 
+  useEffect(() => {
+    setActiveStep(0);
+  }, []);
+
   return (
     <PageContainer>
       <Title
         pageTitle='إضافة مشروع جديد'
         subtitle='أكمل الخطوات التالية لإضافة مشروع جديد'
       />
-      {addError && (
-        <div
-          style={{
-            backgroundColor: '#ffebee',
-            color: '#b71c1c',
-            borderRadius: '12px',
-            padding: '12px 16px',
-            fontSize: '14px',
-            lineHeight: 1.6,
-            fontFamily: 'Cairo',
-            boxShadow: '0 2px 8px rgba(244, 67, 54, 0.12)',
-            marginBottom: '16px',
-          }}
-        >
-          {addError.message}
-        </div>
-      )}
+      {addError && <ErrorMessage>{addError.message}</ErrorMessage>}
       <StepperForm
         icons={icons}
         steps={steps}
@@ -289,18 +278,12 @@ const AddProject = () => {
         title='تم إنشاء المشروع بنجاح!'
         desc='تم إنشاء مشروعك بنجاح. يمكنك متابعة إعداد المشروع بإكمال الخطوات الإضافية (إضافة الوسائط وربط المشروع بحملة).'
         btnTitle='المتابعة الآن'
-        onConfirm={() =>
-          navigate(`/content/projects/add/additional/${projectId}`)
-        }
+        onConfirm={() => {
+          navigate(`/content/projects/add/additional/${projectId}`);
+          dispatch(controlSuccessDialog({ type: 'add' }));
+        }}
         dialogType='add'
       />
-
-      {/* ================= ADD TO CAMPAIGN ================= */}
-      {/* <AddBySelectionModal
-        entriesType='campaigns'
-        entries={[]}
-        modalTitle='إضافة المشروع إلى حملة'
-      /> */}
     </PageContainer>
   );
 };

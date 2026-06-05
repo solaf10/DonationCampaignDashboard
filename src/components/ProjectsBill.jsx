@@ -1,23 +1,70 @@
 import { Box, Card, Grid, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SuccessMessageDialog from './SuccessMessageDialog';
 import DeleteItemLogic from './DeleteItemLogic';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  closeMoreInfoMenu,
   controlAddProjectDetailModalOpen,
   controlSuccessDialog,
+  openMoreInfoMenu,
 } from '../redux/slices/ModalContollerSlice';
 import config from '../constants/enviroment';
-import { AddRounded } from '@mui/icons-material';
+import { AddRounded, DeleteOutline, EditOutlined } from '@mui/icons-material';
 import AddProjectDetailModal from './AddProjectDetailModal';
+import { useState } from 'react';
+import MoreMenu from './MoreMenu';
 
 const ProjectsBill = ({ details, projectID }) => {
-  const dispatch = useDispatch();
-  const deletedItemID = useSelector(
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const clickedDialogID = useSelector(
     (state) => state.modalController.clickedDialogID,
   );
 
-  const deletedItemUrl = `/${config.projects.details.delete}/${deletedItemID}`;
+  const clickedDetailID = useSelector(
+    (state) => state.modalController.selectedMoreInfoModal,
+  );
+
+  const dispatch = useDispatch();
+
+  const deletedItemUrl = `/${config.projects.details.delete}/${clickedDialogID}`;
+
+  const handleOpenMenu = (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setAnchorEl(e.currentTarget);
+    dispatch(openMoreInfoMenu(id));
+  };
+
+  const actions = [
+    {
+      label: 'تعديل',
+      icon: <EditOutlined fontSize='small' />,
+      onClick: () =>
+        dispatch(
+          controlAddProjectDetailModalOpen({
+            type: 'edit',
+            id: clickedDetailID,
+          }),
+        ),
+    },
+
+    {
+      label: 'حذف',
+      icon: <DeleteOutline fontSize='small' />,
+      onClick: () =>
+        dispatch(
+          controlSuccessDialog({
+            type: 'delete',
+            id: `${projectID}/${clickedDetailID}`,
+          }),
+        ),
+
+      danger: true,
+    },
+  ];
 
   return (
     <>
@@ -42,7 +89,9 @@ const ProjectsBill = ({ details, projectID }) => {
               التفاصيل
             </Typography>
             <button
-              onClick={() => dispatch(controlAddProjectDetailModalOpen())}
+              onClick={() =>
+                dispatch(controlAddProjectDetailModalOpen({ type: 'add' }))
+              }
               style={{
                 backgroundColor: 'transparent',
                 cursor: 'pointer',
@@ -59,54 +108,83 @@ const ProjectsBill = ({ details, projectID }) => {
               flexDirection: 'column',
             }}
           >
-            {details?.map((item) => (
-              <Box
-                key={item.uuid}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  bgcolor: '#f8fafb',
-                  py: 1.5,
-                  gap: 1.5,
-                  borderRadius: 4,
-                  borderBottom: '1px solid #edf0f4',
-                }}
-              >
+            {details?.length ? (
+              details?.map((item) => (
                 <Box
+                  key={item.uuid}
                   sx={{
                     display: 'flex',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
-                    width: 200,
+                    bgcolor: '#f8fafb',
+                    py: 1.5,
+                    gap: 1.5,
+                    borderRadius: 4,
+                    borderBottom: '1px solid #edf0f4',
                   }}
                 >
-                  {/* DELETE BUTTON */}
-                  <IconButton
-                    size='small'
+                  <Box
                     sx={{
-                      color: '#d32f2f',
+                      display: 'flex',
+                      alignItems: 'center',
+                      width: 200,
                     }}
-                    onClick={() =>
-                      dispatch(
-                        controlSuccessDialog({
-                          type: 'delete',
-                          id: `${projectID}/${item.uuid}`,
-                        }),
-                      )
-                    }
                   >
-                    <CloseIcon fontSize='small' />
-                  </IconButton>
+                    {/* More BUTTON */}
+                    <IconButton onClick={(e) => handleOpenMenu(e, item.uuid)}>
+                      <MoreVertIcon />
+                    </IconButton>
 
-                  <Typography fontSize={15}>{item.detail}</Typography>
+                    <Typography fontSize={15}>{item.detail}</Typography>
+                  </Box>
+
+                  {/* PRICE */}
+                  <Typography fontWeight={700} color='#2e7d32'>
+                    {item.detail_cost}
+                  </Typography>
+                </Box>
+              ))
+            ) : (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  pt: 3,
+                  pb: 6,
+                  textAlign: 'center',
+                  color: '#8c9ea0',
+                  height: '272px',
+                }}
+              >
+                {/* icon placeholder */}
+                <Box
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: '50%',
+                    bgcolor: '#eef3f3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 2,
+                    fontSize: 22,
+                  }}
+                >
+                  📦
                 </Box>
 
-                {/* PRICE */}
-                <Typography fontWeight={700} color='#2e7d32'>
-                  ${item.cost}
+                <Typography fontWeight={600} mb={1}>
+                  لا توجد تفاصيل للمشروع حالياً
+                </Typography>
+
+                <Typography fontSize={13} sx={{ px: 4, opacity: 0.8 }}>
+                  يمكنك إضافة تفاصيل توضح احتياجات المشروع وتكاليفها، مثل شراء
+                  المعدات أو تنفيذ أعمال التأهيل والصيانة.
                 </Typography>
               </Box>
-            ))}
+            )}
           </Box>
 
           {/* TOTAL */}
@@ -126,7 +204,7 @@ const ProjectsBill = ({ details, projectID }) => {
               <Typography fontWeight={900} color='#2e7d32'>
                 $
                 {details
-                  ?.reduce((sum, item) => sum + parseInt(item.cost), 0)
+                  ?.reduce((sum, item) => sum + parseInt(item.detail_cost), 0)
                   .toFixed(2)}
               </Typography>
             </Box>
@@ -139,6 +217,15 @@ const ProjectsBill = ({ details, projectID }) => {
         url={deletedItemUrl}
       />
       <AddProjectDetailModal projectID={projectID} />
+      <MoreMenu
+        menuId={clickedDetailID}
+        handleCloseMenu={() => {
+          dispatch(closeMoreInfoMenu());
+          setAnchorEl(null);
+        }}
+        actions={actions}
+        anchorEl={anchorEl}
+      />
     </>
   );
 };

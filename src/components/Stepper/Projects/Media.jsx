@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Typography, Box } from '@mui/material';
 import CustomInput from '../../locations/CustomInput';
 
@@ -6,192 +6,172 @@ const styles = {
   marginBottom: '24px',
 };
 
-const Media = ({ formData, setFormData }) => {
+const Media = ({ formData, setFormData, errors, mediaType = 'both' }) => {
   const extraInputRef = useRef(null);
 
   return (
     <div className='form-holder'>
       <div className='image-upload' style={{ marginTop: '24px' }}>
-        {/* {errors?.cover_image && (
-          <Typography
-            sx={{
-              color: 'var(--error-color)',
-              fontSize: '13px',
-              fontFamily: 'Cairo',
-              mb: 2,
-            }}
-          >
-            {errors.cover_image}
-          </Typography>
-        )} */}
-
         {/* ================= الصور الإضافية ================= */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: '24px',
-            direction: 'rtl',
-            marginBottom: '28px',
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: 'Cairo',
-              fontSize: '16px',
-              color: '#374151',
-              whiteSpace: 'nowrap',
-              mt: 1,
-            }}
-          >
-            صور إضافية للمشروع
-          </Typography>
-
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 1.5,
-              flexWrap: 'wrap',
-            }}
-          >
-            {/* الصور المختارة */}
-            {formData.images?.map((img, index) => (
-              <Box
-                key={index}
-                sx={{
-                  width: '72px',
-                  height: '72px',
-                  borderRadius: '10px',
-                  overflow: 'hidden',
-                  position: 'relative',
-                  border: '1px solid #e5e7eb',
-                }}
-              >
-                <img
-                  src={URL.createObjectURL(img)}
-                  alt={`extra-${index}`}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-
-                <Box
-                  onClick={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      images: prev.images.filter((_, i) => i !== index),
-                    }))
-                  }
-                  sx={{
-                    position: 'absolute',
-                    top: 4,
-                    left: 4,
-                    width: '18px',
-                    height: '18px',
-                    borderRadius: '50%',
-                    backgroundColor: 'rgba(0,0,0,0.6)',
-                    color: '#fff',
-                    fontSize: '12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                  }}
-                >
-                  ×
-                </Box>
-              </Box>
-            ))}
-
-            {/* زر إضافة صورة */}
-            <Box
-              onClick={() => extraInputRef.current?.click()}
-              sx={{
-                width: '72px',
-                height: '72px',
-                border: '2px dashed #d1d5db',
-                borderRadius: '10px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: '0.3s',
-                color: '#9AA0A6',
-                '&:hover': {
-                  borderColor: 'var(--main-color)',
-                  color: 'var(--main-color)',
-                },
+        {(mediaType == 'both' || mediaType == 'image') && (
+          <>
+            <div
+              style={{
+                marginBottom: '24px',
               }}
             >
-              <span style={{ fontSize: '22px', lineHeight: 1 }}>+</span>
-
               <Typography
                 sx={{
                   fontFamily: 'Cairo',
-                  fontSize: '11px',
+                  fontSize: '16px',
+                  color: '#374151',
+                  whiteSpace: 'nowrap',
+                  mb: 2,
                 }}
               >
-                إضافة
+                صور إضافية للمشروع
               </Typography>
-            </Box>
 
-            <input
-              ref={extraInputRef}
-              type='file'
-              accept='image/*'
-              multiple
-              style={{ display: 'none' }}
-              onChange={(e) => {
-                const files = Array.from(e.target.files || []);
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 1.5,
+                  flexWrap: 'wrap',
+                }}
+              >
+                {/* الصور المختارة */}
+                {formData.images?.map((img, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      width: '72px',
+                      height: '72px',
+                      borderRadius: '10px',
+                      overflow: 'hidden',
+                      position: 'relative',
+                      border: '1px solid #e5e7eb',
+                    }}
+                  >
+                    <img
+                      src={URL.createObjectURL(img)}
+                      alt={`extra-${index}`}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
 
-                if (files.length > 0) {
-                  setFormData((prev) => ({
-                    ...prev,
-                    images: [...(prev.images || []), ...files],
-                  }));
-                }
-              }}
-            />
-          </Box>
-        </div>
+                    <Box
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          images: prev.images.filter((_, i) => i !== index),
+                        }))
+                      }
+                      sx={{
+                        position: 'absolute',
+                        top: 4,
+                        left: 4,
+                        width: '18px',
+                        height: '18px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(0,0,0,0.6)',
+                        color: '#fff',
+                        fontSize: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      ×
+                    </Box>
+                  </Box>
+                ))}
 
-        {errors?.images && (
-          <Typography
-            sx={{
-              color: 'var(--error-color)',
-              fontSize: '13px',
-              fontFamily: 'Cairo',
-              mb: 2,
-            }}
-          >
-            {errors.images}
-          </Typography>
+                {/* زر إضافة صورة */}
+                <Box
+                  onClick={() => extraInputRef.current?.click()}
+                  sx={{
+                    width: '72px',
+                    height: '72px',
+                    border: '2px dashed #d1d5db',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: '0.3s',
+                    color: '#9AA0A6',
+                    '&:hover': {
+                      borderColor: 'var(--main-color)',
+                      color: 'var(--main-color)',
+                    },
+                  }}
+                >
+                  <span style={{ fontSize: '22px', lineHeight: 1 }}>+</span>
+
+                  <Typography
+                    sx={{
+                      fontFamily: 'Cairo',
+                      fontSize: '11px',
+                    }}
+                  >
+                    إضافة
+                  </Typography>
+                </Box>
+
+                <input
+                  ref={extraInputRef}
+                  type='file'
+                  accept='image/*'
+                  multiple
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+
+                    if (files.length > 0) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        images: [...(prev.images || []), ...files],
+                      }));
+                    }
+                  }}
+                />
+              </Box>
+            </div>
+
+            {errors?.images && (
+              <Typography
+                sx={{
+                  color: 'var(--error-color)',
+                  fontSize: '13px',
+                  fontFamily: 'Cairo',
+                  mb: 2,
+                }}
+              >
+                {errors.images}
+              </Typography>
+            )}
+          </>
         )}
 
         {/* ================= الفيديو ================= */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '24px',
-            direction: 'rtl',
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: 'Cairo',
-              fontSize: '16px',
-              color: '#374151',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            فيديو توضيحي
-          </Typography>
+        {(mediaType == 'both' || mediaType == 'video') && (
+          <div>
+            <Typography
+              sx={{
+                fontFamily: 'Cairo',
+                fontSize: '16px',
+                color: '#374151',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              فيديو توضيحي
+            </Typography>
 
-          <div style={{ width: '100%' }}>
             <CustomInput
               label=''
               inputType='input'
@@ -209,7 +189,7 @@ const Media = ({ formData, setFormData }) => {
               isRequired={false}
             />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

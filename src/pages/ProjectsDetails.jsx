@@ -25,13 +25,62 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSingleProject } from '../customHooks/queries/useProjects';
 import MediaSection from '../components/MediaSection';
-import { ChevronLeft } from '@mui/icons-material';
+import { AddRounded, ChevronLeft } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
+import {
+  controlControlMediaModal,
+  controlSuccessDialog,
+} from '../redux/slices/ModalContollerSlice';
 import config from '../constants/enviroment';
 import ProjectsBill from '../components/ProjectsBill';
 import DeleteItemLogic from '../components/DeleteItemLogic';
 import Requirements from '../components/Requirements';
+import CampaignDetailsSkeleton from '../components/Skeletons/CampaignDetailsSkeleton';
+import ControlMediaModal from '../components/ControlMediaModal';
+import ProjectMediaCard from '../components/ProjectMediaCard';
+import InfoCard from '../components/InfoCard';
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case 'مخطط له':
+      return 'draft-status';
+
+    case 'قيد التنفيذ':
+      return 'warning-status';
+
+    case 'مكتمل':
+      return 'success-status';
+
+    case 'متوقف':
+      return 'error-status';
+
+    default:
+      return 'draft-status';
+  }
+};
+
+const buttonStyles = {
+  height: '40px',
+  padding: ' 0px 16px',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+
+  backgroundColor: 'transparent',
+  border: '1px solid var(--border-color)',
+  color: '#333',
+
+  borderRadius: '99px',
+  fontSize: '14px',
+  fontWeight: '500',
+  transition: 'all 0.2s ease',
+  boxShadow: 'none',
+  '&:hover': {
+    boxShadow: 'none',
+    background: 'rgba(255, 255, 255, 0.15)',
+    transform: 'translateY(-1px)',
+  },
+};
 
 export default function ProjectDetails() {
   const { id } = useParams();
@@ -70,6 +119,8 @@ export default function ProjectDetails() {
       </Box>
     );
   }
+  if (isFetchingProjectDetails)
+    return <CampaignDetailsSkeleton infos={[...Array(6)]} />;
 
   return (
     <Box
@@ -126,12 +177,7 @@ export default function ProjectDetails() {
               variant='contained'
               startIcon={<EditIcon />}
               // onClick={handleEdit}
-              sx={{
-                bgcolor: 'var(--main-color)',
-                '&:hover': {
-                  bgcolor: 'var(--main-color)',
-                },
-              }}
+              sx={buttonStyles}
             >
               تعديل
             </Button>
@@ -140,6 +186,7 @@ export default function ProjectDetails() {
               variant='outlined'
               startIcon={<DeleteIcon />}
               sx={{
+                ...buttonStyles,
                 color: '#d32f2f',
                 borderColor: '#d32f2f',
                 '&:hover': {
@@ -149,7 +196,10 @@ export default function ProjectDetails() {
               }}
               onClick={() =>
                 dispatch(
-                  controlSuccessDialog({ type: 'delete', id: project.uuid }),
+                  controlSuccessDialog({
+                    type: 'delete-project',
+                    id: project.uuid,
+                  }),
                 )
               }
             >
@@ -193,16 +243,16 @@ export default function ProjectDetails() {
             }}
           >
             <Chip
-              label={project.status}
+              label={project?.status}
               size='small'
               sx={{
                 width: 'fit-content',
                 mb: 1,
-                py: 1,
+                py: 2,
+                px: 1,
                 fontWeight: 700,
-                bgcolor: '#457461',
-                color: 'white',
               }}
+              className={`status-conditions ${getStatusColor(project?.status)}`}
             />
 
             <Typography
@@ -265,7 +315,7 @@ export default function ProjectDetails() {
 
         {/* INFO CARDS */}
         <Grid container spacing={2} mb={4}>
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid size={4}>
             <InfoCard
               icon={<LocationOnIcon />}
               title='الموقع'
@@ -275,7 +325,7 @@ export default function ProjectDetails() {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid size={4}>
             <InfoCard
               icon={<CategoryIcon />}
               title='القطاع'
@@ -289,7 +339,7 @@ export default function ProjectDetails() {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid size={4}>
             <InfoCard
               icon={<BusinessIcon />}
               title='الجهة المنفذة'
@@ -299,7 +349,7 @@ export default function ProjectDetails() {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid size={4}>
             <InfoCard
               icon={<AccountBalanceIcon />}
               title='الجهة الممولة'
@@ -309,7 +359,7 @@ export default function ProjectDetails() {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid size={4}>
             <InfoCard
               icon={<AttachMoneyIcon />}
               title='الكلفة'
@@ -320,7 +370,7 @@ export default function ProjectDetails() {
           </Grid>
 
           {/* Progress */}
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid size={4}>
             <Card
               sx={{
                 p: 2.5,
@@ -330,7 +380,7 @@ export default function ProjectDetails() {
                 boxShadow: '0 4px 18px rgba(0,0,0,0.07)',
               }}
             >
-              <Box sx={{ display: 'flex', gap: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Avatar
                   sx={{
                     bgcolor: '#e3f2fd',
@@ -352,6 +402,9 @@ export default function ProjectDetails() {
                       mt: 1,
                       height: 8,
                       borderRadius: 5,
+                      '& .MuiLinearProgress-bar': {
+                        backgroundColor: '#1565c0',
+                      },
                     }}
                   />
                 </Box>
@@ -373,91 +426,30 @@ export default function ProjectDetails() {
         </Grid>
 
         {/* Image GALLERY */}
-        <Card
-          sx={{
-            mt: 4,
-            p: 4,
-            borderRadius: 5,
-            boxShadow: '0 4px 18px rgba(0,0,0,0.07)',
-          }}
-        >
-          <Typography variant='h5' fontWeight={800} mb={4}>
-            صور المشروع
-          </Typography>
-
-          <MediaSection
-            mediaType='image'
-            mediaItems={project.images}
-            altBase={project.name}
-          />
-        </Card>
-        {/* Videos GALLERY */}
-        <Card
-          sx={{
-            mt: 4,
-            p: 4,
-            borderRadius: 5,
-            boxShadow: '0 4px 18px rgba(0,0,0,0.07)',
-          }}
-        >
-          <Typography variant='h5' fontWeight={800} mb={4}>
-            فيديوهات المشروع
-          </Typography>
-
-          <MediaSection
-            mediaType='video'
-            mediaItems={project.videos}
-            altBase={project.name}
-          />
-        </Card>
-      </Box>
-
-      {!deletedItemID?.includes('/') && (
-        <DeleteItemLogic
-          deletedItemTitle='المشروع'
-          baseQuery={['projects']}
-          url={deletedItemUrl}
-          onSuccess={() => navigate('/content/projects')}
+        <ProjectMediaCard
+          title='صور المشروع'
+          mediaType='image'
+          mediaItems={project.images}
+          altBase={project.name}
         />
-      )}
-    </Box>
-  );
-}
 
-/* INFO CARD */
-function InfoCard({ icon, title, value, bg, color }) {
-  return (
-    <Card
-      sx={{
-        p: 2.5,
-        borderRadius: 4,
-        bgcolor: '#f8fafb',
-        height: '100%',
-        boxShadow: '0 4px 18px rgba(0,0,0,0.07)',
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2,
-        }}
-      >
-        <Avatar
-          sx={{
-            bgcolor: bg,
-            color: color,
-          }}
-        >
-          {icon}
-        </Avatar>
-
-        <Box>
-          <Typography variant='caption'>{title}</Typography>
-
-          <Typography fontWeight={700}>{value}</Typography>
-        </Box>
+        {/* Videos GALLERY */}
+        <ProjectMediaCard
+          title='فيديوهات المشروع'
+          mediaType='video'
+          mediaItems={project.videos}
+          altBase={project.name}
+        />
       </Box>
-    </Card>
+
+      {/* {typeof deletedItemID === 'string' && !deletedItemID.includes('/') && */}
+      <DeleteItemLogic
+        deletedItemTitle='المشروع'
+        baseQuery={['projects']}
+        url={deletedItemUrl}
+        onSuccess={() => navigate('/content/projects')}
+        modalType='delete-project'
+      />
+    </Box>
   );
 }

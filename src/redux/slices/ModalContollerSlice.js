@@ -4,6 +4,7 @@ const initialState = {
   isAddProjectDetailModalOpen: false,
   isAddBySelectionModalOpen: false,
   isControlLocationModalOpen: false,
+  isControlMediaModalOpen: false,
 
   // More Menu
   isMoreInfoMenuShown: false,
@@ -14,10 +15,14 @@ const initialState = {
   successDialogType: 'delete',
 
   controlLocationModalType: 'add',
+  controlProjectDetailModalType: 'add',
+  mediaType: 'image',
 
   clickedDialogID: null,
   selectedLocationID: null,
   selectedAddSrcID: null,
+  selectedProjectDetailID: null,
+  selectedMediaItemID: null,
 };
 
 const modalControllerSlice = createSlice({
@@ -27,8 +32,10 @@ const modalControllerSlice = createSlice({
 
   reducers: {
     /* ================= Add Project Detail Modal ================= */
-    controlAddProjectDetailModalOpen: (state) => {
+    controlAddProjectDetailModalOpen: (state, action) => {
       state.isAddProjectDetailModalOpen = !state.isAddProjectDetailModalOpen;
+      state.controlProjectDetailModalType = action.payload.type;
+      state.selectedProjectDetailID = action.payload.id || null;
     },
 
     /* ================= Add By Selection Modal ================= */
@@ -36,6 +43,13 @@ const modalControllerSlice = createSlice({
       state.isAddBySelectionModalOpen = !state.isAddBySelectionModalOpen;
 
       state.selectedAddSrcID = action.payload;
+    },
+    /* ================= ControlMedia Modal ================= */
+    controlControlMediaModal: (state, action) => {
+      state.isControlMediaModalOpen = !state.isControlMediaModalOpen;
+
+      state.selectedMediaItemID = action.payload.id;
+      state.mediaType = action.payload.type;
     },
 
     /* ================= Location Modal ================= */
@@ -80,6 +94,7 @@ export const {
   closeMoreInfoMenu,
 
   controlSuccessDialog,
+  controlControlMediaModal,
 } = modalControllerSlice.actions;
 
 export default modalControllerSlice.reducer;

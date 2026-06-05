@@ -1,7 +1,6 @@
 import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
-import CampaignsForm from '../components/CampaignsForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useActiveStep } from '../contexts/ActiveStepContext';
 import StepperForm from '../components/Stepper/StepperForm';
 import Basic from '../components/Stepper/Campaigns/Basic';
@@ -26,6 +25,8 @@ import {
   isWithinLength,
 } from '../utils/validation/common.validation';
 import dayjs from 'dayjs';
+import '../components/CampaignsForm.css';
+import ErrorMessage from '../components/Messages/ErrorMessage';
 
 const steps = ['معلومات الحملة', 'جدولة للحملة', 'التمويل والوسائط'];
 
@@ -189,29 +190,17 @@ const AddCampaign = () => {
     setActiveStep((prev) => prev + 1);
   };
 
+  useEffect(() => {
+    setActiveStep(0);
+  }, []);
+
   return (
     <PageContainer>
       <Title
         pageTitle='إضافة حملة جديدة'
         subtitle='أكمل الخطوات التالية لإضافة حملة جديدة'
       />
-      {addError && (
-        <div
-          style={{
-            backgroundColor: '#ffebee',
-            color: '#b71c1c',
-            borderRadius: '12px',
-            padding: '12px 16px',
-            fontSize: '14px',
-            lineHeight: 1.6,
-            fontFamily: 'Cairo',
-            boxShadow: '0 2px 8px rgba(244, 67, 54, 0.12)',
-            marginBottom: '16px',
-          }}
-        >
-          {addError.message}
-        </div>
-      )}
+      {addError && <ErrorMessage>{addError.message}</ErrorMessage>}
       <StepperForm
         icons={icons}
         steps={steps}

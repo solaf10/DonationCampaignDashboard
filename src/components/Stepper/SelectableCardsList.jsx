@@ -42,7 +42,10 @@ const SelectableCardsList = ({
 
   useEffect(() => {
     if (setFormData) {
-      setFormData((prev) => ({ ...prev, [type]: selectedItems }));
+      setFormData((prev) => ({
+        ...prev,
+        [type]: allowMultiple ? selectedItems : selectedItems[0]?.uuid,
+      }));
     }
   }, [selectedItems, setFormData, type]);
 
@@ -53,7 +56,7 @@ const SelectableCardsList = ({
   const cards = filteredItems.map((item) => (
     <Grid
       item
-      xs={12}
+      size={12}
       key={item.uuid}
       className={`project-card ${
         selectedItems.find((p) => p.uuid === item.uuid) ? 'selected' : ''

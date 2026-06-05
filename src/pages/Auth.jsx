@@ -4,6 +4,7 @@ import AuthAnimation from '../components/AuthAnimation';
 import CustomInput from '../components/locations/CustomInput';
 import { useState } from 'react';
 import useLogin from '../customHooks/mutations/useLogin';
+import ErrorMessage from '../components/Messages/ErrorMessage';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -43,23 +44,7 @@ const Auth = () => {
           </p> */}
         </div>
 
-        {error && (
-          <div
-            style={{
-              backgroundColor: '#ffebee',
-              color: '#b71c1c',
-              borderRadius: '12px',
-              padding: '12px 16px',
-              fontSize: '14px',
-              lineHeight: 1.6,
-              fontFamily: 'Cairo',
-              boxShadow: '0 2px 8px rgba(244, 67, 54, 0.12)',
-              marginBottom: '16px',
-            }}
-          >
-            {error}
-          </div>
-        )}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
 
         <form onSubmit={handleSubmit}>
           <div className='email'>

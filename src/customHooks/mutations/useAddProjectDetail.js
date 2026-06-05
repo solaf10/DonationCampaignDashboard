@@ -16,7 +16,7 @@ const useAddProjectDetail = (id) => {
       queryClient.invalidateQueries({
         queryKey: ['projects', id],
       });
-      dispatch(controlAddProjectDetailModalOpen());
+      dispatch(controlAddProjectDetailModalOpen({ type: 'add' }));
     },
   });
 };

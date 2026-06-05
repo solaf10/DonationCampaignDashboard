@@ -1,9 +1,13 @@
 import { Box, Grid, Skeleton } from '@mui/material';
 import PageContainer from '../PageContainer';
+import { useLocation } from 'react-router-dom';
+import MediaGallerySkeleton from './MediaGallerySkeleton';
 
-const CampaignDetailsSkeleton = () => {
+const CampaignDetailsSkeleton = ({ infos = [1, 2, 3] }) => {
   const cardBg = '#e9eeee';
   const skeletonBg = '#d6dddd';
+  const location = useLocation();
+  const isProject = location.pathname.includes('projects');
 
   return (
     <PageContainer>
@@ -15,20 +19,22 @@ const CampaignDetailsSkeleton = () => {
           <Skeleton variant='text' width={180} height={30} />
         </Box>
 
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <Skeleton
-            variant='rounded'
-            sx={{ borderRadius: '99px' }}
-            width={90}
-            height={40}
-          />
-          <Skeleton
-            variant='rounded'
-            sx={{ borderRadius: '99px' }}
-            width={90}
-            height={40}
-          />
-        </Box>
+        {isProject && (
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Skeleton
+              variant='rounded'
+              sx={{ borderRadius: '99px' }}
+              width={90}
+              height={40}
+            />
+            <Skeleton
+              variant='rounded'
+              sx={{ borderRadius: '99px' }}
+              width={90}
+              height={40}
+            />
+          </Box>
+        )}
       </Box>
 
       {/* HERO */}
@@ -44,7 +50,7 @@ const CampaignDetailsSkeleton = () => {
 
       {/* INFOS */}
       <Grid container spacing={2} mt={3}>
-        {[1, 2, 3].map((i) => (
+        {infos.map((i) => (
           <Grid size={4} key={i}>
             <Box
               sx={{
@@ -132,6 +138,13 @@ const CampaignDetailsSkeleton = () => {
           </Box>
         </Grid>
       </Grid>
+
+      {isProject && (
+        <>
+          <MediaGallerySkeleton />
+          <MediaGallerySkeleton />
+        </>
+      )}
     </PageContainer>
   );
 };
