@@ -9,7 +9,6 @@ import {
 } from '../redux/slices/ModalContollerSlice';
 import config from '../constants/enviroment';
 import { AddRounded } from '@mui/icons-material';
-import useAddProjectDetail from '../customHooks/mutations/useAddProjectDetail';
 import AddProjectDetailModal from './AddProjectDetailModal';
 
 const ProjectsBill = ({ details, projectID }) => {
@@ -43,7 +42,6 @@ const ProjectsBill = ({ details, projectID }) => {
               التفاصيل
             </Typography>
             <button
-              style={{ backgroundColor: 'var(--secondary-color)' }}
               onClick={() => dispatch(controlAddProjectDetailModalOpen())}
               style={{
                 backgroundColor: 'transparent',
@@ -90,7 +88,10 @@ const ProjectsBill = ({ details, projectID }) => {
                     }}
                     onClick={() =>
                       dispatch(
-                        controlSuccessDialog(`${projectID}/${item.uuid}`),
+                        controlSuccessDialog({
+                          type: 'delete',
+                          id: `${projectID}/${item.uuid}`,
+                        }),
                       )
                     }
                   >

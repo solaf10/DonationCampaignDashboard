@@ -147,7 +147,11 @@ export default function ProjectDetails() {
                   bgcolor: '#fff5f5',
                 },
               }}
-              onClick={() => dispatch(controlSuccessDialog(project.uuid))}
+              onClick={() =>
+                dispatch(
+                  controlSuccessDialog({ type: 'delete', id: project.uuid }),
+                )
+              }
             >
               حذف
             </Button>

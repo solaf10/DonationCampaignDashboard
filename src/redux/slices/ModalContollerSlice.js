@@ -11,6 +11,7 @@ const initialState = {
 
   // Success Dialog
   isSuccessDialogOpen: false,
+  successDialogType: 'delete',
 
   controlLocationModalType: 'add',
 
@@ -63,7 +64,8 @@ const modalControllerSlice = createSlice({
     controlSuccessDialog: (state, action) => {
       state.isSuccessDialogOpen = !state.isSuccessDialogOpen;
 
-      state.clickedDialogID = action.payload;
+      state.successDialogType = action.payload.type;
+      state.clickedDialogID = action.payload.id;
     },
   },
 });

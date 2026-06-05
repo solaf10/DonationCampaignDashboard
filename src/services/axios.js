@@ -21,17 +21,48 @@ api.interceptors.response.use(
   (response) => response,
 
   (error) => {
-    // إذا التوكين منتهي أو غير صالح
+    // Unauthorized
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
 
-      // تحويل للوغ إن
       if (window.location.pathname !== '/') {
         window.location.href = '/';
       }
+
+      return Promise.reject(
+        new Error('انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجدداً'),
+      );
     }
 
-    return Promise.reject(error);
+    // السيرفر رد
+    if (error.response) {
+      const status = error.response.status;
+
+      if (status >= 400 && status < 500) {
+        return Promise.reject(
+          new Error(
+            error.response.data?.error ||
+              error.response.data?.message ||
+              'البيانات المدخلة غير صحيحة',
+          ),
+        );
+      }
+
+      if (status >= 500) {
+        return Promise.reject(
+          new Error('حدث خطأ في الخادم. يرجى المحاولة لاحقاً'),
+        );
+      }
+    }
+
+    // لا يوجد رد من السيرفر
+    if (error.request) {
+      return Promise.reject(
+        new Error('تعذر الاتصال بالخادم. تحقق من الإنترنت'),
+      );
+    }
+
+    return Promise.reject(new Error('حدث خطأ غير متوقع'));
   },
 );
 

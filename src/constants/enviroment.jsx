@@ -1,6 +1,7 @@
 const config = {
   baseUrl: 'http://127.0.0.1:8000',
   login: 'login',
+  logout: 'logout',
   governments: {
     all: 'governorates/all',
     search: 'governorate/search',
@@ -35,6 +36,7 @@ const config = {
     resume: 'campaign/appeal',
     status: 'campaign/status',
     trash: 'campaign/deleted',
+    restore: 'campaign/restore',
   },
   projects: {
     all: 'project/index',
@@ -49,6 +51,7 @@ const config = {
     status: 'project/status',
     details: { add: 'projects/details/add', delete: 'detail/delete' },
     uploadMedia: 'project/upload',
+    unattached: 'get/projects',
   },
   activities: 'api/activities',
   contact: 'api/contactForms/contact-us/',

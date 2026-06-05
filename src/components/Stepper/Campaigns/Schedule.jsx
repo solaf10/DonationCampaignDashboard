@@ -1,7 +1,17 @@
 import { Grid } from '@mui/material';
 import CustomInput from '../../locations/CustomInput';
+import dayjs from 'dayjs';
+import { useLocation } from 'react-router-dom';
 
-const Schedule = ({ formData, setFormData, errors }) => {
+const Schedule = ({ formData, setFormData, errors, originalStartDate }) => {
+  const location = useLocation();
+  const isEdit = location.pathname.includes('edit');
+
+  const startChanged =
+    originalStartDate &&
+    formData?.start_date &&
+    !dayjs(formData.start_date).isSame(originalStartDate, 'day');
+
   return (
     <Grid container spacing={3}>
       <Grid size={6}>
@@ -18,12 +28,14 @@ const Schedule = ({ formData, setFormData, errors }) => {
           isNestedState={true}
           errorMsg={errors?.start_date || null}
           isRequired={true}
+          minDate={isEdit && !startChanged ? null : dayjs().add(1, 'day')}
+          helperText='يجب أن يكون تاريخ البدء بعد اليوم بيوم واحد على الأقل'
         />
       </Grid>
+
       <Grid size={6}>
         <CustomInput
           label='تاريخ الانتهاء'
-          placeholder='يوم/شهر/سنة'
           inputType='date'
           value={formData.end_date || null}
           setValue={(newValue) =>
@@ -35,13 +47,19 @@ const Schedule = ({ formData, setFormData, errors }) => {
           isNestedState={true}
           errorMsg={errors?.end_date || null}
           isRequired={true}
+          minDate={
+            formData.start_date
+              ? dayjs(formData.start_date).add(1, 'day')
+              : dayjs().add(2, 'day')
+          }
+          helperText='يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء'
         />
       </Grid>
+
       <Grid size={6}>
         <CustomInput
           label='وقت البدء'
           inputType='time'
-          placeholder='مثال: 00:00'
           value={formData.start_time || null}
           setValue={(newValue) =>
             setFormData((prev) => ({
@@ -54,11 +72,11 @@ const Schedule = ({ formData, setFormData, errors }) => {
           isRequired={true}
         />
       </Grid>
+
       <Grid size={6}>
         <CustomInput
           label='وقت الإنتهاء'
           inputType='time'
-          placeholder='مثال: 00:00'
           value={formData.end_time || null}
           setValue={(newValue) =>
             setFormData((prev) => ({

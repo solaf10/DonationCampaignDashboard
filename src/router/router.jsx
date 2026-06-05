@@ -31,9 +31,11 @@ export const router = createBrowserRouter([
   // Protected Routes
   {
     element: (
-      <ActiveStepProvider>
-        <ProtectedRoute />
-      </ActiveStepProvider>
+      <FiltersProvider>
+        <ActiveStepProvider>
+          <ProtectedRoute />
+        </ActiveStepProvider>
+      </FiltersProvider>
     ),
     children: [
       {
@@ -78,7 +80,15 @@ export const router = createBrowserRouter([
               </ActiveStepProvider>
             ),
           },
-          { path: "inKindDonation", element: <InKindDonations /> },
+
+          {
+            path: "inKindDonation",
+            element: <InKindDonations />,
+          },
+          {
+            path: "inKindDonation/:id",
+            element: <InKindDonationDetails />,
+          },
 
           /* Trash */
           {

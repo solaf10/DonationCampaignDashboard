@@ -6,12 +6,22 @@ import {
   getSectors,
   getSingleProject,
   getStatus,
+  getUnAttachedProjects,
   searchProjects,
 } from '../../services/projects';
 
 export default function useProjects() {
   return useQuery({ queryKey: ['projects'], queryFn: getProjects });
 }
+
+export function useGetUnAttachedProjects() {
+  return useQuery({
+    queryKey: ['campaigns', 'unattached-projects'],
+    queryFn: getUnAttachedProjects,
+    staleTime: 0,
+  });
+}
+
 export function useGetFundingSources() {
   return useQuery({
     queryKey: ['funding-sources'],

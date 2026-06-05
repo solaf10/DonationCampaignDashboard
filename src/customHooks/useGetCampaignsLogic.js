@@ -1,6 +1,7 @@
+import { useFilters } from '../contexts/FilterContext';
 import useCampaigns, {
   useCampaignsTrash,
-  useSearchCampaigns,
+  useFilterCampaigns,
 } from './queries/useCampaigns';
 
 export const formatDate = (date) => {
@@ -13,12 +14,14 @@ export const formatDate = (date) => {
   });
 };
 
-const useGetCampaignsLogic = (isTrash, campaign, area, city, government) => {
+const useGetCampaignsLogic = (isTrash) => {
+  const { campaignFilters } = useFilters();
   const {
     data: campaignsData,
     isFetching: isFetchingCampaigns,
     error: campaignsError,
   } = useCampaigns();
+
   const {
     data: campaignsTrashData,
     isFetching: isFetchingCampaignsTrash,
@@ -26,41 +29,28 @@ const useGetCampaignsLogic = (isTrash, campaign, area, city, government) => {
   } = useCampaignsTrash();
 
   const {
-    data: searchedCampaigns,
-    isFetching: isSearching,
-    error: searchError,
-  } = useSearchCampaigns(campaign);
-
-  /* const {
-    data: filteredCampaigns,
-    isFetching: isFiltering,
-    error: filterError,
-  } = useFilterCampaigns(
-    government !== 'all' ? government : null,
-    city !== 'all' ? city : null,
-  ); */
+    data: filteredCampaignsData,
+    isPending: isFiltering,
+    refetch,
+    error: filterCampaignsError,
+  } = useFilterCampaigns(campaignFilters, false);
 
   const allCampaigns = isTrash
     ? campaignsTrashData?.data
     : campaignsData?.data || [];
-  const searchCampaigns = searchedCampaigns?.data || [];
-  /* const filteredCampaignsData = filteredCampaigns?.data || []; */
 
-  /*  const isSearchEnabled = area.trim() !== '';
-  const isFilterEnabled = government !== 'all' || city !== 'all';
+  const filteredCampaigns = filteredCampaignsData?.data || [];
 
-  let rawData = allCampaigns;
+  const hasFilters =
+    campaignFilters.name ||
+    campaignFilters.government ||
+    campaignFilters.city ||
+    campaignFilters.district_uuid ||
+    campaignFilters.project_uuid ||
+    campaignFilters.status.length > 0;
 
-  if (isFilterEnabled && isSearchEnabled) {
-    rawData = filteredCampaignsData.filter(
-      (c) => c.district_name?.toLowerCase() === area.trim().toLowerCase(),
-    );
-  } else if (isSearchEnabled) {
-    rawData = searchCampaigns;
-  } else if (isFilterEnabled) {
-    rawData = filteredCampaignsData;
-  } */
-  const rawData = searchCampaigns.length > 0 ? searchCampaigns : allCampaigns;
+  const rawData = hasFilters ? filteredCampaigns : allCampaigns;
+
   const rows = rawData?.map((c) => ({
     ...c,
     projectsNum: c.projects?.length || null,
@@ -69,12 +59,11 @@ const useGetCampaignsLogic = (isTrash, campaign, area, city, government) => {
 
   return {
     rows,
-    isSearching,
-    searchError,
-    /* isFiltering,
-    filterError, */
+    refilterCampaigns: refetch,
+    isFiltering,
     isLoading: isFetchingCampaigns || isFetchingCampaignsTrash,
-    campaignsError,
+    fetchingError: isTrash ? campaignsTrashError : campaignsError,
+    filterCampaignsError,
   };
 };
 

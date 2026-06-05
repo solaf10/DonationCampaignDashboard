@@ -32,7 +32,7 @@ const Basic = ({ formData, setFormData, errors, setErrors, styles }) => {
       <div className='input-holder' style={styles}>
         <Textarea
           label='متطلبات المشروع'
-          placeholder='اكتب متطلبات المشروع باختصار (افصل بينها بفاصلة)، مثال: ترميم الصفوف، تركيب نوافذ، تأهيل دورات المياه'
+          placeholder='اكتب متطلبات المشروع مفصولة بفواصل، مثال: ترميم الصفوف، تركيب نوافذ، تأهيل دورات المياه'
           value={formData.requirements || ''}
           setValue={(e) => {
             setErrors((prev) => ({

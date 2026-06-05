@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Grid,
   Box,
@@ -52,6 +52,18 @@ export default function Projects({ isTrash = false }) {
     (state) => state.modalController.clickedDialogID,
   );
   const deletedItemUrl = `/${config.projects.delete}/${deletedItemID}`;
+
+  useEffect(() => {
+    const totalPages = Math.ceil(projects.length / itemsPerPage);
+
+    if (page >= totalPages && totalPages > 0) {
+      setPage(totalPages - 1);
+    }
+
+    if (totalPages === 0) {
+      setPage(0);
+    }
+  }, [projects.length, page]);
 
   return (
     <Container className='projects' maxWidth='lg' sx={{ px: 2 }}>
@@ -153,12 +165,6 @@ export default function Projects({ isTrash = false }) {
         deletedItemTitle='المشروع'
         baseQuery={['projects']}
         url={deletedItemUrl}
-        onSuccess={() => {
-          setPage((prev) => {
-            const newTotal = Math.ceil((projects.length - 1) / itemsPerPage);
-            return prev > newTotal - 1 ? Math.max(newTotal - 1, 0) : prev;
-          });
-        }}
       />
     </Container>
   );

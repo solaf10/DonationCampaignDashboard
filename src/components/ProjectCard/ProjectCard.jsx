@@ -81,14 +81,16 @@ export default function ProjectCard({
           variant='subtitle1'
           fontWeight='bold'
           sx={{
-            mb: 0.5,
-            minHeight: 32,
             textAlign: 'center',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
+            textOverflow: 'ellipsis',
+
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 2,
+
             lineHeight: 1.6,
+            height: '3.2em', // سطرين
           }}
         >
           {name}
@@ -193,7 +195,9 @@ export default function ProjectCard({
                 border: '1px solid #ffcccc',
                 backgroundColor: '#fff5f5',
               }}
-              onClick={() => dispatch(controlSuccessDialog(uuid))}
+              onClick={() =>
+                dispatch(controlSuccessDialog({ type: 'delete', id: uuid }))
+              }
             >
               <DeleteOutlinedIcon fontSize='small' />
             </IconButton>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomInput from '../components/locations/CustomInput';
 import PageContainer from '../components/PageContainer';
@@ -21,15 +21,17 @@ import {
   controlControlLocationModal,
   controlSuccessDialog,
 } from '../redux/slices/ModalContollerSlice';
-import { IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import useGetCampaignsLogic from '../customHooks/useGetCampaignsLogic';
 import PageTable from '../components/PageTable';
 import '../components/ContentWithTable.css';
-import FilterCampaignsModal from '../components/FilterCampaignsModal';
 import DeleteItemLogic from '../components/DeleteItemLogic';
 import config from '../constants/enviroment';
 import useControlState from '../customHooks/mutations/useControlState';
 import { toast } from 'react-toastify';
+import { useFilters } from '../contexts/FilterContext';
+import useRestore from '../customHooks/mutations/useRestore';
+import FilterCampaignsDrawer from '../components/FilterCampaignDrawer';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
@@ -42,7 +44,6 @@ const columns = [
 ];
 
 const Campaigns = ({ isTrash = false }) => {
-  const [searchedKey, setSearchedKey] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const selectedCampaignId = useSelector(
     (state) => state.modalController.selectedMoreInfoModal,
@@ -51,15 +52,25 @@ const Campaigns = ({ isTrash = false }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { campaignFilters, setCampaignFilters } = useFilters();
+
+  const isSearching = !!campaignFilters.name?.trim();
+
+  const isFiltered =
+    !!campaignFilters?.government ||
+    !!campaignFilters?.city ||
+    !!campaignFilters?.district_uuid ||
+    !!campaignFilters?.project_uuid ||
+    campaignFilters?.status?.length > 0;
+
   const {
     rows,
-    isSearching,
-    searchError,
-    /* isFiltering,
-    filterError, */
+    isFiltering,
+    filterCampaignsError,
     isLoading,
-    campaignsError,
-  } = useGetCampaignsLogic(isTrash, searchedKey);
+    fetchingError,
+    refilterCampaigns,
+  } = useGetCampaignsLogic(isTrash);
 
   const isSelectedCampaignNew =
     rows?.find((row) => row.uuid === selectedCampaignId)?.status === 'جديدة';
@@ -120,18 +131,33 @@ const Campaigns = ({ isTrash = false }) => {
       onClick: () => navigate(`/content/campaigns/${selectedCampaignId}`),
     },
 
-    {
-      label: 'تعديل',
-      icon: <EditOutlined fontSize='small' />,
-      onClick: () => navigate(`/content/campaigns/edit/${selectedCampaignId}`),
-    },
+    ...(isSelectedCampaignNew
+      ? [
+          {
+            label: 'تعديل',
+            icon: <EditOutlined fontSize='small' />,
+            onClick: () =>
+              navigate(`/content/campaigns/edit/${selectedCampaignId}`),
+          },
+        ]
+      : []),
 
-    {
-      label: 'حذف',
-      icon: <DeleteOutline fontSize='small' />,
-      onClick: () => dispatch(controlSuccessDialog(selectedCampaignId)),
-      danger: true,
-    },
+    ...(isSelectedCampaignNew || isSelectedCampaignStopped
+      ? [
+          {
+            label: 'حذف',
+            icon: <DeleteOutline fontSize='small' />,
+            onClick: () =>
+              dispatch(
+                controlSuccessDialog({
+                  type: 'delete',
+                  id: selectedCampaignId,
+                }),
+              ),
+            danger: true,
+          },
+        ]
+      : []),
   ];
 
   const deletedItemID = useSelector(
@@ -139,6 +165,20 @@ const Campaigns = ({ isTrash = false }) => {
   );
 
   const deletedItemUrl = `/${config.campaigns.delete}/${deletedItemID}`;
+
+  const {
+    mutate: restore,
+    isPending: isRestoring,
+    error: restoreError,
+  } = useRestore(['campaigns']);
+
+  const handleRestore = (id) => {
+    restore(`/${config.campaigns.restore}/${id}`);
+  };
+
+  useEffect(() => {
+    refilterCampaigns();
+  }, [campaignFilters, refilterCampaigns]);
 
   return (
     <PageContainer>
@@ -154,69 +194,87 @@ const Campaigns = ({ isTrash = false }) => {
         )}
       </Title>
       {/* filter & table */}
-      <div className='table-content campaigns'>
-        {/* filter holder */}
-        <div className='filters-holder'>
-          <div className='input-holder'>
-            <CustomInput
-              inputType='textField'
-              placeholder='ابحث حسب الاسم'
-              styles={{
-                width: '400px',
-                height: 'auto',
-                '& .MuiInputLabel-root.Mui-focused': {
-                  color: 'var(--main-color)', // لون اللابل عند focus
-                },
-              }}
-              value={searchedKey}
-              setValue={setSearchedKey}
-            />
+      {!isTrash && (
+        <div className='table-content campaigns'>
+          {/* filter holder */}
+          <div className='filters-holder'>
+            <div className='input-holder'>
+              <CustomInput
+                inputType='textField'
+                placeholder='ابحث حسب الاسم'
+                styles={{
+                  width: '400px',
+                  height: 'auto',
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    color: 'var(--main-color)', // لون اللابل عند focus
+                  },
+                }}
+                value={campaignFilters.name}
+                setValue={(value) =>
+                  setCampaignFilters((prev) => ({
+                    ...prev,
+                    name: value,
+                  }))
+                }
+              />
 
-            <p style={{ fontSize: '14px' }}>عدد الحملات: {rows?.length}</p>
+              <p style={{ fontSize: '14px' }}>عدد الحملات: {rows?.length}</p>
+            </div>
+            {/* filter Model btn */}
+            <IconButton
+              className='filter-btn'
+              onClick={() =>
+                dispatch(
+                  controlControlLocationModal({ type: 'add', id: 'null' }),
+                )
+              }
+            >
+              <FilterAltOutlined className='icon' />
+            </IconButton>
           </div>
-          {/* filter Model btn */}
-          <IconButton
-            className='filter-btn'
-            onClick={() =>
-              dispatch(controlControlLocationModal({ type: 'add', id: 'null' }))
-            }
-          >
-            <FilterAltOutlined className='icon' />
-          </IconButton>
         </div>
-      </div>
+      )}
 
       <PageTable
         rows={rows}
         columns={columns}
         pageLink={!isTrash ? '/content/campaigns' : null}
-        isLoading={isSearching || isLoading || isStopping || isResumming}
+        isLoading={
+          isLoading ||
+          isStopping ||
+          isResumming ||
+          isFiltering ||
+          (isTrash && isRestoring)
+        }
         setAnchorEl={setAnchorEl}
+        hasNoResult={isFiltered && rows?.length === 0}
+        error={fetchingError?.message}
+        handleRestore={isTrash && handleRestore}
       />
 
       {/* MoreInfoMenu */}
-      <MoreMenu
-        menuId={selectedCampaignId}
-        handleCloseMenu={() => {
-          dispatch(closeMoreInfoMenu());
-          setAnchorEl(null);
-        }}
-        actions={actions}
-        anchorEl={anchorEl}
-      />
+      {!isTrash && (
+        <MoreMenu
+          menuId={selectedCampaignId}
+          handleCloseMenu={() => {
+            dispatch(closeMoreInfoMenu());
+            setAnchorEl(null);
+          }}
+          actions={actions}
+          anchorEl={anchorEl}
+        />
+      )}
       {/* DeleteDialog */}
       <DeleteItemLogic
         deletedItemTitle='الحملة'
         baseQuery={['campaigns']}
         url={deletedItemUrl}
-        /* onSuccess={() => {
-          setPage((prev) => {
-            const newTotal = Math.ceil((projects.length - 1) / itemsPerPage);
-            return prev > newTotal - 1 ? Math.max(newTotal - 1, 0) : prev;
-          });
-        }} */
       />
-      <FilterCampaignsModal />
+      <FilterCampaignsDrawer
+        refilterCampaigns={refilterCampaigns}
+        isFiltering={isFiltering}
+        filterCampaignsError={fetchingError}
+      />
     </PageContainer>
   );
 };

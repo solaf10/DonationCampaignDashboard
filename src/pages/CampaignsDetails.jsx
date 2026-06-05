@@ -179,21 +179,29 @@ const CampaignsDetails = () => {
                 استئناف
               </button>
             )}
-            <Link
-              to={`/content/campaigns/edit/${params.id}`}
-              className='button'
-            >
-              <EditCalendarRounded className='icon' />
-              تعديل
-            </Link>
+            {campaign?.status === 'جديدة' && (
+              <Link
+                to={`/content/campaigns/edit/${params.id}`}
+                className='button'
+              >
+                <EditCalendarRounded className='icon' />
+                تعديل
+              </Link>
+            )}
 
-            <button
-              className='button delete'
-              onClick={() => dispatch(controlSuccessDialog(params.id))}
-            >
-              <Delete className='icon' />
-              حذف
-            </button>
+            {campaign?.status === 'جديدة' && (
+              <button
+                className='button delete'
+                onClick={() =>
+                  dispatch(
+                    controlSuccessDialog({ type: 'delete', id: params.id }),
+                  )
+                }
+              >
+                <Delete className='icon' />
+                حذف
+              </button>
+            )}
           </Box>
         </Box>
         {/* 🔥 HERO IMAGE */}
@@ -307,10 +315,10 @@ const CampaignsDetails = () => {
 
         {/* 🔥 infos */}
         <Grid container spacing={2} mt={3} className='infos-holder'>
-          {infos.map((info) => (
+          {infos.slice(0, 3).map((info) => (
             <DonorsInfoCard
               key={info.id}
-              size={3}
+              size={4}
               icon={info.icon}
               label={info.label}
               value={info.value}

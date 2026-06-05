@@ -8,7 +8,7 @@ const Basic = ({ formData, setFormData, errors, styles }) => {
         <CustomInput
           label='اسم الحملة'
           inputType='input'
-          placeholder='اسم الحملة'
+          placeholder='الرجاء إدخال اسم من 3 إلى 100 حرف عربي فقط دون استخدام أرقام أو رموز'
           value={formData.name}
           setValue={(e) =>
             setFormData((prev) => ({ ...prev, name: e.target.value }))
@@ -20,7 +20,7 @@ const Basic = ({ formData, setFormData, errors, styles }) => {
       </div>
       <Textarea
         label='أهداف الحملة'
-        placeholder='اكتب أهداف الحملة باختصار...'
+        placeholder='اكتب أهداف الحملة مفصولة بفواصل، مثال: دعم الأسر المحتاجة، توفير الرعاية الصحية، تحسين البنية التحتية'
         value={formData.purposes}
         setValue={(e) =>
           setFormData((prev) => ({ ...prev, purposes: e.target.value }))

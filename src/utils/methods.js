@@ -24,7 +24,7 @@ export const formatArabicTime = (timeStr) => {
     hour12: true,
   }).format(date);
 };
-// Campaigns only
+/* ----------------------------- Campaigns only ---------------------------- */
 export const getStatusColor = (status) => {
   switch (status) {
     case 'نشطة':
@@ -46,6 +46,26 @@ export const getStatusColor = (status) => {
       return 'draft-status';
   }
 };
+const formatRemainingTime = (days) => {
+  if (days <= 0) return 'اليوم';
+
+  if (days === 1) return 'غداً';
+
+  if (days === 2) return 'بعد غد';
+
+  if (days < 30) {
+    return `بعد ${days} أيام`;
+  }
+
+  const months = Math.floor(days / 30);
+
+  if (months === 1) return 'بعد شهر';
+
+  if (months === 2) return 'بعد شهرين';
+
+  return `بعد ${months} أشهر`;
+};
+
 export const getCampaignStatusText = (campaign) => {
   if (!campaign) return null;
 
@@ -58,34 +78,25 @@ export const getCampaignStatusText = (campaign) => {
   start.setHours(0, 0, 0, 0);
   end.setHours(0, 0, 0, 0);
 
-  const status = campaign.status;
-
   const msPerDay = 1000 * 60 * 60 * 24;
 
   const daysToStart = Math.floor((start - today) / msPerDay);
   const daysToEnd = Math.floor((end - today) / msPerDay);
 
-  switch (status) {
+  switch (campaign.status) {
     case 'جديدة':
       return {
         type: 'upcoming',
-        text:
-          daysToStart > 1
-            ? `تبدأ خلال ${daysToStart} أيام`
-            : daysToStart === 1
-              ? 'تبدأ غداً'
-              : 'تبدأ اليوم',
+        text: `تبدأ ${formatRemainingTime(daysToStart)}`,
       };
 
     case 'نشطة':
       return {
         type: 'ongoing',
         text:
-          daysToEnd > 1
-            ? `متبقي ${daysToEnd} أيام`
-            : daysToEnd === 1
-              ? 'متبقي يوم واحد'
-              : 'تنتهي اليوم',
+          daysToEnd <= 0
+            ? 'تنتهي اليوم'
+            : `تنتهي ${formatRemainingTime(daysToEnd)}`,
       };
 
     case 'متوقفة':
@@ -112,4 +123,15 @@ export const getCampaignStatusText = (campaign) => {
         text: '',
       };
   }
+};
+// filter campaigns
+
+export const hasFormData = (formData) => {
+  return Object.values(formData).some((value) => {
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+
+    return value !== '' && value !== null && value !== undefined;
+  });
 };
