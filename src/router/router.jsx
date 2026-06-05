@@ -22,6 +22,7 @@ import AddProjectAdditionalSteps from "../pages/AddProjectAdditionalSteps";
 // import InKindDonations from "../pages/InKindDonation";
 import FinancialOperations from "../pages/FinancialOperations";
 import { FiltersProvider } from "../contexts/FilterContext";
+import AddFinancialOperations from "../pages/AddFinancialOperations";
 
 export const router = createBrowserRouter([
   {
@@ -97,8 +98,12 @@ export const router = createBrowserRouter([
             element: <Projects isTrash={true} />,
           },
           {
-            path: "financial-perations",
+            path: "financial-operations",
             element: <FinancialOperations />,
+          },
+          {
+            path: "financial-operations/add",
+            element: <AddFinancialOperations />,
           },
           {
             path: "campaigns-trash",
