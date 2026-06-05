@@ -1,6 +1,6 @@
-import { MenuItem } from '@mui/material';
-import { useGetFundingSources } from '../../../customHooks/queries/useProjects';
-import CustomInput from '../../locations/CustomInput';
+import { MenuItem } from "@mui/material";
+import { useGetFundingSources } from "../../../customHooks/queries/useProjects";
+import CustomInput from "../../locations/CustomInput";
 
 const Funding = ({ styles, formData, setFormData, errors }) => {
   const {
@@ -12,13 +12,13 @@ const Funding = ({ styles, formData, setFormData, errors }) => {
   const fundingSources = fundingSourcesData?.data || [];
 
   return (
-    <div className='form-holder'>
+    <div className="form-holder">
       {/* الجهات الممولة */}
-      <div className='input-holder' style={styles}>
+      <div className="input-holder" style={styles}>
         <CustomInput
-          label='الجهات الممولة'
-          inputType='select'
-          value={formData.funding_source || ''}
+          label="الجهات الممولة"
+          inputType="select"
+          value={formData.funding_source || ""}
           setValue={(e) =>
             setFormData((prev) => ({
               ...prev,
@@ -29,12 +29,12 @@ const Funding = ({ styles, formData, setFormData, errors }) => {
           isDisabled={isFetchingFundingSources}
           helperText={
             isFetchingFundingSources
-              ? 'جارِ جلب الجهات الممولة...'
+              ? "جارِ جلب الجهات الممولة..."
               : fundingSourcesError
-                ? 'حدث خطأ أثناء جلب الجهات الممولة'
+                ? "حدث خطأ أثناء جلب الجهات الممولة"
                 : fundingSources.length === 0
-                  ? 'لا توجد جهات ممولة حالياً'
-                  : ''
+                  ? "لا توجد جهات ممولة حالياً"
+                  : ""
           }
           errorMsg={errors?.funding_source || null}
           isRequired={true}
@@ -48,12 +48,12 @@ const Funding = ({ styles, formData, setFormData, errors }) => {
       </div>
 
       {/* الجهة المنفذة */}
-      <div className='input-holder' style={styles}>
+      <div className="input-holder" style={styles}>
         <CustomInput
-          label='الجهة المنفذة'
-          inputType='input'
-          placeholder='أدخل اسم الجهة المنفذة'
-          value={formData.Implementing_party || ''}
+          label="الجهة المنفذة"
+          inputType="input"
+          placeholder="أدخل اسم الجهة المنفذة"
+          value={formData.Implementing_party || ""}
           setValue={(e) =>
             setFormData((prev) => ({
               ...prev,
@@ -67,12 +67,12 @@ const Funding = ({ styles, formData, setFormData, errors }) => {
       </div>
 
       {/* الكلفة المقدرة */}
-      <div className='input-holder' style={styles}>
+      <div className="input-holder" style={styles}>
         <CustomInput
-          label='الكلفة المقدرة'
-          inputType='input'
-          placeholder='أدخل الكلفة التقديرية للمشروع'
-          value={formData.estimated_cost || ''}
+          label="الكلفة المقدرة"
+          inputType="input"
+          placeholder="أدخل الكلفة التقديرية للمشروع"
+          value={formData.estimated_cost || ""}
           setValue={(e) => {
             const value = e.target.value;
 

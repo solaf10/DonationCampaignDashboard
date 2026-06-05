@@ -1,10 +1,10 @@
-import React from 'react';
-import CustomInput from '../../locations/CustomInput';
-import { MenuItem } from '@mui/material';
+import React from "react";
+import CustomInput from "../../locations/CustomInput";
+import { MenuItem } from "@mui/material";
 
-import useGovernments from '../../../customHooks/queries/useGovernments';
-import useCities from '../../../customHooks/queries/useCities';
-import useAreas from '../../../customHooks/queries/useAreas';
+import useGovernments from "../../../customHooks/queries/useGovernments";
+import useCities from "../../../customHooks/queries/useCities";
+import useAreas from "../../../customHooks/queries/useAreas";
 
 const Location = ({ formData, setFormData, errors, styles, isRequired }) => {
   /* ================= GOVERNMENTS ================= */
@@ -41,27 +41,27 @@ const Location = ({ formData, setFormData, errors, styles, isRequired }) => {
   return (
     <>
       {/* المحافظة */}
-      <div className='input-holder' style={styles}>
+      <div className="input-holder" style={styles}>
         <CustomInput
-          inputType='select'
+          inputType="select"
           isDisabled={isFetchingGovernments}
-          label='المحافظة'
+          label="المحافظة"
           value={formData.government}
           setValue={(e) =>
             setFormData((prev) => ({
               ...prev,
               government: e.target.value,
-              city: '',
-              district_uuid: '',
+              city: "",
+              district_uuid: "",
             }))
           }
           isNestedState={true}
           errorMsg={
             governmentsError
-              ? 'حدث خطأ أثناء جلب المحافظات'
+              ? "حدث خطأ أثناء جلب المحافظات"
               : errors?.government || null
           }
-          helperText={isFetchingGovernments ? 'جار جلب المحافظات...' : ''}
+          helperText={isFetchingGovernments ? "جار جلب المحافظات..." : ""}
           isRequired={isRequired}
         >
           {governments.map((government) => (
@@ -73,33 +73,33 @@ const Location = ({ formData, setFormData, errors, styles, isRequired }) => {
       </div>
 
       {/* المدينة */}
-      <div className='input-holder' style={styles}>
+      <div className="input-holder" style={styles}>
         <CustomInput
-          inputType='select'
+          inputType="select"
           isDisabled={
             !formData.government || isFetchingCities || cities.length === 0
           }
           helperText={
             !formData.government
-              ? 'يتم تفعيل هذا الحقل بعد اختيار المحافظة'
+              ? "يتم تفعيل هذا الحقل بعد اختيار المحافظة"
               : isFetchingCities
-                ? 'جار جلب الأحياء...'
+                ? "جار جلب الأحياء..."
                 : cities.length === 0
-                  ? 'لا توجد أحياء متاحة لهذه المحافظة'
-                  : ''
+                  ? "لا توجد أحياء متاحة لهذه المحافظة"
+                  : ""
           }
-          label='المدينة'
+          label="المدينة"
           value={formData.city}
           setValue={(e) =>
             setFormData((prev) => ({
               ...prev,
               city: e.target.value,
-              district_uuid: '',
+              district_uuid: "",
             }))
           }
           isNestedState={true}
           errorMsg={
-            citiesError ? 'حدث خطأ أثناء جلب الأحياء' : errors?.city || null
+            citiesError ? "حدث خطأ أثناء جلب الأحياء" : errors?.city || null
           }
           isRequired={isRequired}
         >
@@ -112,20 +112,20 @@ const Location = ({ formData, setFormData, errors, styles, isRequired }) => {
       </div>
 
       {/* المنطقة */}
-      <div className='input-holder' style={styles}>
+      <div className="input-holder" style={styles}>
         <CustomInput
-          inputType='select'
+          inputType="select"
           isDisabled={!formData.city || isFetchingAreas || areas.length === 0}
           helperText={
             !formData.city
-              ? 'يتم تفعيل هذا الحقل بعد اختيار الحي'
+              ? "يتم تفعيل هذا الحقل بعد اختيار الحي"
               : isFetchingAreas
-                ? 'جار جلب المناطق...'
+                ? "جار جلب المناطق..."
                 : areas.length === 0
-                  ? 'لا توجد مناطق متاحة لهذه الحي'
-                  : ''
+                  ? "لا توجد مناطق متاحة لهذه الحي"
+                  : ""
           }
-          label='المنطقة'
+          label="المنطقة"
           value={formData.district_uuid}
           setValue={(e) =>
             setFormData((prev) => ({
@@ -136,7 +136,7 @@ const Location = ({ formData, setFormData, errors, styles, isRequired }) => {
           isNestedState={true}
           errorMsg={
             areasError
-              ? 'حدث خطأ أثناء جلب المناطق'
+              ? "حدث خطأ أثناء جلب المناطق"
               : errors?.district_uuid || null
           }
           isRequired={isRequired}

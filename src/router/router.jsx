@@ -1,29 +1,30 @@
-import { createBrowserRouter } from 'react-router-dom';
-import Auth from '../pages/Auth';
-import Root from '../Root';
-import Dashboard from '../pages/Dashboard';
-import Governments from '../pages/Governments';
-import Cities from '../pages/Cities';
-import Areas from '../pages/Areas';
-import Campaigns from '../pages/Campaigns';
-import AddCampaign from '../pages/AddCampaign';
-import EditCampaign from '../pages/EditCampaign';
-import CampaignsDetails from '../pages/CampaignsDetails';
-import ActiveStepProvider from '../contexts/ActiveStepContext';
-import AddProject from '../pages/AddProject';
-import Projects from '../pages/Projects';
-import ProjectsDetails from '../pages/ProjectsDetails';
-import IndividualDonars from '../pages/IndividualDonars';
-import Organizations from '../pages/Organizations';
-import BusinessDonars from '../pages/businessDonars';
-import Donars from '../pages/Donars';
-import ProtectedRoute from '../utils/ProtectedRoute';
-import AddProjectAdditionalSteps from '../pages/AddProjectAdditionalSteps';
-import InKindDonations from '../pages/InKindDonation';
+import { createBrowserRouter } from "react-router-dom";
+import Auth from "../pages/Auth";
+import Root from "../Root";
+import Dashboard from "../pages/Dashboard";
+import Governments from "../pages/Governments";
+import Cities from "../pages/Cities";
+import Areas from "../pages/Areas";
+import Campaigns from "../pages/Campaigns";
+import AddCampaign from "../pages/AddCampaign";
+import EditCampaign from "../pages/EditCampaign";
+import CampaignsDetails from "../pages/CampaignsDetails";
+import ActiveStepProvider from "../contexts/ActiveStepContext";
+import AddProject from "../pages/AddProject";
+import Projects from "../pages/Projects";
+import ProjectsDetails from "../pages/ProjectsDetails";
+import IndividualDonars from "../pages/IndividualDonars";
+import Organizations from "../pages/Organizations";
+import BusinessDonars from "../pages/businessDonars";
+import Donars from "../pages/Donars";
+import ProtectedRoute from "../utils/ProtectedRoute";
+import AddProjectAdditionalSteps from "../pages/AddProjectAdditionalSteps";
+import InKindDonations from "../pages/InKindDonation";
+import FinancialOperations from "../pages/FinancialOperations";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Auth />,
   },
 
@@ -36,78 +37,81 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: '/content',
+        path: "/content",
         element: <Root />,
         children: [
           {
-            path: 'dashboard',
+            path: "dashboard",
             element: <Dashboard />,
           },
           {
-            path: 'governments',
+            path: "governments",
             element: <Governments />,
           },
 
-          { path: 'projects', element: <Projects /> },
-          { path: 'projects/:id', element: <ProjectsDetails /> },
-          { path: 'cities', element: <Cities /> },
-          { path: 'areas', element: <Areas /> },
-          { path: 'campaigns', element: <Campaigns /> },
-          { path: 'campaigns/:id', element: <CampaignsDetails /> },
+          { path: "projects", element: <Projects /> },
+          { path: "projects/:id", element: <ProjectsDetails /> },
+          { path: "cities", element: <Cities /> },
+          { path: "areas", element: <Areas /> },
+          { path: "campaigns", element: <Campaigns /> },
+          { path: "campaigns/:id", element: <CampaignsDetails /> },
 
           {
-            path: 'campaigns/add',
+            path: "campaigns/add",
             element: <AddCampaign />,
           },
 
           {
-            path: 'campaigns/edit/:id',
+            path: "campaigns/edit/:id",
             element: <EditCampaign />,
           },
 
           {
-            path: 'projects/add',
+            path: "projects/add",
             element: <AddProject />,
           },
           {
-            path: 'projects/add/additional/:id',
+            path: "projects/add/additional/:id",
             element: (
               <ActiveStepProvider>
                 <AddProjectAdditionalSteps />
               </ActiveStepProvider>
             ),
           },
-          { path: 'inKindDonation', element: <InKindDonations /> },
+          { path: "inKindDonation", element: <InKindDonations /> },
 
           /* Trash */
           {
-            path: 'projects-trash',
+            path: "projects-trash",
             element: <Projects isTrash={true} />,
           },
-
           {
-            path: 'campaigns-trash',
+            path: "financial-perations",
+            element: <FinancialOperations />,
+          },
+          {
+            path: "campaigns-trash",
             element: <Campaigns isTrash={true} />,
           },
 
           /* Donars */
           {
-            path: 'donars',
+            path: "donars",
             element: <Donars />,
           },
 
           {
-            path: 'individuals',
+            path: "individuals",
             element: <IndividualDonars />,
           },
 
           {
-            path: 'organizations',
+            path: "organizations",
             element: <Organizations />,
           },
 
           {
-            path: 'business',
+            path: "business",
             element: <BusinessDonars />,
           },
         ],
