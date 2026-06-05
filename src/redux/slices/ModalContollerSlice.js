@@ -14,10 +14,12 @@ const initialState = {
   successDialogType: 'delete',
 
   controlLocationModalType: 'add',
+  controlProjectDetailModalType: 'add',
 
   clickedDialogID: null,
   selectedLocationID: null,
   selectedAddSrcID: null,
+  selectedProjectDetailID: null,
 };
 
 const modalControllerSlice = createSlice({
@@ -27,8 +29,10 @@ const modalControllerSlice = createSlice({
 
   reducers: {
     /* ================= Add Project Detail Modal ================= */
-    controlAddProjectDetailModalOpen: (state) => {
+    controlAddProjectDetailModalOpen: (state, action) => {
       state.isAddProjectDetailModalOpen = !state.isAddProjectDetailModalOpen;
+      state.controlProjectDetailModalType = action.payload.type;
+      state.selectedProjectDetailID = action.payload.id || null;
     },
 
     /* ================= Add By Selection Modal ================= */

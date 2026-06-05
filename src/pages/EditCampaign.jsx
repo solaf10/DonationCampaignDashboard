@@ -28,6 +28,8 @@ import SelectableCardsList from '../components/Stepper/SelectableCardsList';
 import { Box } from '@mui/material';
 import { useGetUnAttachedProjects } from '../customHooks/queries/useProjects';
 import { toast } from 'react-toastify';
+import Loader from '../components/Skeletons/Loader';
+import ErrorMessage from '../components/Messages/ErrorMessage';
 
 const steps = [
   'معلومات الحملة',
@@ -285,40 +287,12 @@ const EditCampaign = () => {
         pageTitle='تعديل الحملة'
         subtitle='أكمل الخطوات التالية لتعديل الحملة'
       />
-      {editError && (
-        <div
-          style={{
-            backgroundColor: '#ffebee',
-            color: '#b71c1c',
-            borderRadius: '12px',
-            padding: '12px 16px',
-            fontSize: '14px',
-            lineHeight: 1.6,
-            fontFamily: 'Cairo',
-            boxShadow: '0 2px 8px rgba(244, 67, 54, 0.12)',
-            marginBottom: '16px',
-          }}
-        >
-          {editError.message}
-        </div>
-      )}
+      {editError && <ErrorMessage>{editError.message}</ErrorMessage>}
       {activeStep === 3 && isDataNotChanged && !isEditting && (
-        <Box
-          sx={{
-            mb: 2,
-            p: 2,
-            borderRadius: '12px',
-            backgroundColor: '#fff4e5',
-            color: '#7f4e1e',
-            border: '1px solid #f7d9b0',
-            fontFamily: 'Cairo',
-            fontSize: '14px',
-            lineHeight: 1.6,
-          }}
-        >
-          لم تتغير أي بيانات بعد. الرجاء تعديل حقل واحد على الأقل قبل حفظ
+        <ErrorMessage warning={true}>
+          لم تقم بتغيير البيانات بعد. الرجاء تعديل حقل واحد على الأقل قبل حفظ
           التعديل.
-        </Box>
+        </ErrorMessage>
       )}
       <StepperForm
         icons={icons}
@@ -344,25 +318,7 @@ const EditCampaign = () => {
       >
         {isFetchingCampaignDetails ||
         (activeStep === 3 && isFetchingUnAttacedProjects) ? (
-          <Box
-            sx={{
-              height: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <div
-              className='btn-loader'
-              style={{
-                width: '40px',
-                height: '40px',
-                borderWidth: '4px',
-                borderColor: 'var(--secondary-color)',
-                borderTopColor: 'white',
-              }}
-            ></div>
-          </Box>
+          <Loader />
         ) : activeStep === 0 ? (
           <Basic
             formData={formData}

@@ -29,6 +29,8 @@ import SelectableCardsList from '../components/Stepper/SelectableCardsList';
 import useCampaigns from '../customHooks/queries/useCampaigns';
 import { Box } from '@mui/material';
 import useAddCampaignToProject from '../customHooks/mutations/useAddCampaignToProject.js';
+import Loader from '../components/Skeletons/Loader.jsx';
+import ErrorMessage from '../components/Messages/ErrorMessage.jsx';
 
 const steps = ['الوسائط', 'ربط المشروع بالحملة'];
 
@@ -102,23 +104,7 @@ const AddProjectAdditionalSteps = () => {
         pageTitle='إضافة مشروع جديد'
         subtitle='أكمل الخطوات التالية لإضافة مشروع جديد'
       />
-      {uploadingError && (
-        <div
-          style={{
-            backgroundColor: '#ffebee',
-            color: '#b71c1c',
-            borderRadius: '12px',
-            padding: '12px 16px',
-            fontSize: '14px',
-            lineHeight: 1.6,
-            fontFamily: 'Cairo',
-            boxShadow: '0 2px 8px rgba(244, 67, 54, 0.12)',
-            marginBottom: '16px',
-          }}
-        >
-          {uploadingError.message}
-        </div>
-      )}
+      {uploadingError && <ErrorMessage>{uploadingError.message}</ErrorMessage>}
       <StepperForm
         icons={icons}
         steps={steps}
@@ -147,25 +133,7 @@ const AddProjectAdditionalSteps = () => {
         {activeStep === 0 ? (
           <Media formData={formData} setFormData={setFormData} />
         ) : isFetchingCamaigns ? (
-          <Box
-            sx={{
-              height: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <div
-              className='btn-loader'
-              style={{
-                width: '40px',
-                height: '40px',
-                borderWidth: '4px',
-                borderColor: 'var(--secondary-color)',
-                borderTopColor: 'white',
-              }}
-            ></div>
-          </Box>
+          <Loader />
         ) : (
           <SelectableCardsList
             items={campaignsData?.data || []}

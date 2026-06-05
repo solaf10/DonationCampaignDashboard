@@ -36,7 +36,7 @@ const MediaSection = ({ mediaType = 'image', mediaItems, altBase }) => {
     <>
       <Grid container spacing={4}>
         {mediaItems?.map((item, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+          <Grid size={4} key={index}>
             {isVideo ? (
               <Box
                 component='iframe'
@@ -57,7 +57,7 @@ const MediaSection = ({ mediaType = 'image', mediaItems, altBase }) => {
                 alt={`${altBase}-${index + 1}`}
                 onClick={() => setLightboxMedia(item.url)}
                 sx={{
-                  width: '300px',
+                  width: '100%',
                   height: 260,
                   borderRadius: 4,
                   objectFit: 'cover',

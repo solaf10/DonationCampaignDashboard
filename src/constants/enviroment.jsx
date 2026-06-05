@@ -49,7 +49,12 @@ const config = {
     fundingSources: 'project/fundingsource',
     sectors: 'project/sectors',
     status: 'project/status',
-    details: { add: 'projects/details/add', delete: 'detail/delete' },
+    details: {
+      all: 'details/all',
+      add: 'projects/details/add',
+      delete: 'detail/delete',
+      edit: 'project/details/update',
+    },
     uploadMedia: 'project/upload',
     unattached: 'get/projects',
     addCampaign: 'project/campaign',

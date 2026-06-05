@@ -31,6 +31,11 @@ export const getSingleProject = async (id) => {
 
   return res.data;
 };
+export const getProjectDetails = async (id) => {
+  const res = await api.get(`/${config.projects.details.all}/${id}`);
+
+  return res.data;
+};
 
 export const searchProjects = async (body) => {
   const res = await api.post(`/${config.projects.search}`, body);
@@ -52,6 +57,10 @@ export const editProject = async (id, body) => {
 };
 export const addProjectDetail = async (id, body) => {
   const res = await api.post(`/${config.projects.details.add}/${id}`, body);
+  return res.data;
+};
+export const editProjectDetail = async (id, body) => {
+  const res = await api.post(`/${config.projects.details.edit}/${id}`, body);
   return res.data;
 };
 export const uploadProjectMedia = async (id, body) => {

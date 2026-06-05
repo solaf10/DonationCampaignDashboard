@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
   filterProjects,
   getFundingSources,
+  getProjectDetails,
   getProjects,
   getSectors,
   getSingleProject,
@@ -44,6 +45,13 @@ export function useSingleProject(id) {
   return useQuery({
     queryKey: ['projects', id],
     queryFn: () => getSingleProject(id),
+  });
+}
+export function useGetProjectDetails(id, enabled) {
+  return useQuery({
+    queryKey: ['projects', id, 'details'],
+    queryFn: () => getProjectDetails(id),
+    enabled,
   });
 }
 

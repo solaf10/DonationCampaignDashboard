@@ -8,6 +8,7 @@ import CustomModal from '../CustomModal';
 import { controlControlLocationModal } from '../../redux/slices/ModalContollerSlice';
 
 import useSubmitAreaForm from '../../customHooks/useSubmitAreaForm';
+import ErrorMessage from '../Messages/ErrorMessage';
 
 const AreaModalForm = ({ governments, areas }) => {
   const [government, setGovernment] = useState('');
@@ -102,22 +103,7 @@ const AreaModalForm = ({ governments, areas }) => {
       isLoading={isSubmitting}
       isDisabled={hasValidationErrors}
     >
-      {formError && (
-        <div
-          style={{
-            backgroundColor: '#ffebee',
-            color: '#b71c1c',
-            borderRadius: '12px',
-            padding: '12px 16px',
-            fontSize: '14px',
-            lineHeight: 1.6,
-            fontFamily: 'Cairo',
-            boxShadow: '0 2px 8px rgba(244, 67, 54, 0.12)',
-          }}
-        >
-          {formError}
-        </div>
-      )}
+      {formError && <ErrorMessage>{formError}</ErrorMessage>}
 
       <CustomInput
         inputType='select'
