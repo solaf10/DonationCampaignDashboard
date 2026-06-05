@@ -64,7 +64,7 @@ export const editProjectDetail = async (id, body) => {
   return res.data;
 };
 export const uploadProjectMedia = async (id, body) => {
-  const res = await api.post(`/${config.projects.uploadMedia}/${id}`, body);
+  const res = await api.post(`/${config.projects.media.upload}/${id}`, body);
   return res.data;
 };
 export const addCampaignToProject = async (id, body) => {

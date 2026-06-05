@@ -19,20 +19,22 @@ const CampaignDetailsSkeleton = ({ infos = [1, 2, 3] }) => {
           <Skeleton variant='text' width={180} height={30} />
         </Box>
 
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <Skeleton
-            variant='rounded'
-            sx={{ borderRadius: '99px' }}
-            width={90}
-            height={40}
-          />
-          <Skeleton
-            variant='rounded'
-            sx={{ borderRadius: '99px' }}
-            width={90}
-            height={40}
-          />
-        </Box>
+        {isProject && (
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Skeleton
+              variant='rounded'
+              sx={{ borderRadius: '99px' }}
+              width={90}
+              height={40}
+            />
+            <Skeleton
+              variant='rounded'
+              sx={{ borderRadius: '99px' }}
+              width={90}
+              height={40}
+            />
+          </Box>
+        )}
       </Box>
 
       {/* HERO */}
