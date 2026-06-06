@@ -44,7 +44,7 @@ const AddProjectAdditionalSteps = () => {
 
   const [formData, setFormData] = useState({
     images: [],
-    videos: '',
+    videos: [],
     campaign_uuid: '',
   });
 
@@ -73,7 +73,9 @@ const AddProjectAdditionalSteps = () => {
         data.append('images[]', img);
       });
 
-      data.append('videos[]', formData.videos);
+      formData.videos?.forEach((video) => {
+        data.append('videos[]', video);
+      });
 
       upload(data, {
         onSuccess: () => {

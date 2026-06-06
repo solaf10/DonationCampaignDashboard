@@ -67,7 +67,6 @@ export const useFilterCampaigns = (body) => {
   return useQuery({
     queryKey: ['campaigns', 'filter', JSON.stringify(body)],
     queryFn: () => {
-      console.log('FILTER REQUEST');
       return filterCampaigns(data);
     },
     enabled: false,

@@ -290,7 +290,7 @@ const EditCampaign = () => {
       {editError && <ErrorMessage>{editError.message}</ErrorMessage>}
       {activeStep === 3 && isDataNotChanged && !isEditting && (
         <ErrorMessage warning={true}>
-          لم تقم بتغيير البيانات بعد. الرجاء تعديل حقل واحد على الأقل قبل حفظ
+          لم تتغير أي بيانات بعد. الرجاء تعديل حقل واحد على الأقل قبل حفظ
           التعديل.
         </ErrorMessage>
       )}

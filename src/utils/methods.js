@@ -28,19 +28,22 @@ export const formatArabicTime = (timeStr) => {
 export const getStatusColor = (status) => {
   switch (status) {
     case 'نشطة':
+    case 'مكتمل':
       return 'success-status';
 
-    case 'مكتملة':
-      return 'completed-status'; // نفس الأخضر بس ممكن أقوى بالCSS لاحقاً
+    case 'جديدة':
+    case 'قيد التنفيذ':
+      return 'draft-status';
+
+    case 'متوقفة':
+    case 'متوقف':
+      return 'warning-status';
+
+    case 'مخطط له':
+      return 'completed-status';
 
     case 'منتهية':
       return 'error-status';
-
-    case 'متوقفة':
-      return 'warning-status';
-
-    case 'جديدة':
-      return 'draft-status';
 
     default:
       return 'draft-status';

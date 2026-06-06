@@ -18,11 +18,13 @@ import BusinessDonars from '../pages/businessDonars';
 import Donars from '../pages/Donars';
 import ProtectedRoute from '../utils/ProtectedRoute';
 import AddProjectAdditionalSteps from '../pages/AddProjectAdditionalSteps';
-import FinancialOperations from '../pages/FinancialOperations';
 import { FiltersProvider } from '../contexts/FilterContext';
 import InKindDonations from '../pages/InKindDonations';
 import InKindDonationDetails from '../pages/InKindDonationDetails';
 import IndividualDonars from '../pages/IndividualDonars';
+import FinancialOperations from '../pages/FinancialOperations';
+import AddFinancialOperations from '../pages/AddFinancialOperations';
+import EditProject from '../pages/EditProject';
 
 export const router = createBrowserRouter([
   {
@@ -84,6 +86,11 @@ export const router = createBrowserRouter([
           },
 
           {
+            path: 'projects/edit/:id',
+            element: <EditProject />,
+          },
+
+          {
             path: 'inKindDonation',
             element: <InKindDonations />,
           },
@@ -98,15 +105,15 @@ export const router = createBrowserRouter([
             element: <Projects isTrash={true} />,
           },
           {
-            path: "financial-operations",
+            path: 'financial-operations',
             element: <FinancialOperations />,
           },
           {
-            path: "financial-operations/add",
+            path: 'financial-operations/add',
             element: <AddFinancialOperations />,
           },
           {
-            path: "campaigns-trash",
+            path: 'campaigns-trash',
             element: <Campaigns isTrash={true} />,
           },
 

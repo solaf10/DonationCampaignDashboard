@@ -4,6 +4,7 @@ import {
   useGetStatus,
 } from '../../../customHooks/queries/useProjects';
 import CustomInput from '../../locations/CustomInput';
+import config from '../../../constants/enviroment';
 
 const Progress = ({ formData, setFormData, errors, styles }) => {
   const {
@@ -24,8 +25,10 @@ const Progress = ({ formData, setFormData, errors, styles }) => {
 
   const showOtherSectorInput = formData.sector === 'غير ذلك';
 
-  const selectedImage = formData.cover_image
-    ? URL.createObjectURL(formData.cover_image)
+  const selectedImage = formData?.cover_image
+    ? formData.cover_image instanceof File
+      ? URL.createObjectURL(formData.cover_image)
+      : config.baseUrl + formData.cover_image
     : '';
 
   return (

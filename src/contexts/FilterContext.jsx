@@ -17,8 +17,12 @@ export const FiltersProvider = ({ children }) => {
     government: '',
     city: '',
     district_uuid: '',
-    category: '',
+
+    sector: '',
+    funding_source: '',
+
     status: [],
+    progress_percentage: 0,
   });
 
   return (

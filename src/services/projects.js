@@ -36,12 +36,6 @@ export const getProjectDetails = async (id) => {
 
   return res.data;
 };
-
-export const searchProjects = async (body) => {
-  const res = await api.post(`/${config.projects.search}`, body);
-
-  return res.data;
-};
 export const filterProjects = async (body) => {
   const res = await api.post(`/${config.projects.filter}`, body);
 

@@ -8,7 +8,6 @@ import {
   getSingleProject,
   getStatus,
   getUnAttachedProjects,
-  searchProjects,
 } from '../../services/projects';
 
 export default function useProjects() {
@@ -55,26 +54,47 @@ export function useGetProjectDetails(id, enabled) {
   });
 }
 
-export const useSearchProjects = (search) => {
-  return useQuery({
-    queryKey: ['projects', search],
-    queryFn: () =>
-      searchProjects({
-        district_name: search,
-      }),
-    enabled: !!search.trim(), // don't run if search is empty
+const buildFilterFormData = (filters) => {
+  const data = new FormData();
+
+  if (filters.sector) {
+    data.append('sector', filters.sector);
+  }
+
+  if (filters.government) {
+    data.append('governorate_uuid', filters.government);
+  }
+  if (filters.name) {
+    data.append('name', filters.name);
+  }
+
+  if (filters.city) {
+    data.append('city_uuid', filters.city);
+  }
+
+  if (filters.district_uuid) {
+    data.append('district_uuid', filters.district_uuid);
+  }
+
+  if (filters.funding_source) {
+    data.append('funding_source', filters.funding_source);
+  }
+
+  if (filters.progress_percentage) {
+    data.append('progress_percentage', filters.progress_percentage);
+  }
+
+  filters.status.forEach((status) => {
+    data.append('status[]', status);
   });
+
+  return data;
 };
-export const useFilterProjects = (governmentId, cityId) => {
+
+export const useFilterProjects = (body) => {
+  const data = buildFilterFormData(body);
   return useQuery({
-    queryKey: ['projects', 'filter', [governmentId, cityId]],
-    queryFn: () =>
-      filterProjects({
-        ...(governmentId ? { governorate_uuid: governmentId } : {}),
-        ...(cityId ? { city_uuid: cityId } : {}),
-      }),
-    enabled: Boolean(
-      (governmentId && governmentId !== 'all') || (cityId && cityId !== 'all'),
-    ),
+    queryKey: ['projects', 'filter', JSON.stringify(body)],
+    queryFn: () => filterProjects(data),
   });
 };

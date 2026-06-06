@@ -43,7 +43,7 @@ const config = {
     search: 'project/searchByname',
     add: 'project/add',
     edit: 'project/update',
-    filter: 'project/filter',
+    filter: 'projects/filter',
     projectDetails: 'project/show',
     delete: 'project/delete',
     fundingSources: 'project/fundingsource',

@@ -8,6 +8,7 @@ import {
   LinearProgress,
   IconButton,
   Button,
+  Chip,
 } from '@mui/material';
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -19,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { controlSuccessDialog } from '../../redux/slices/ModalContollerSlice';
 import SuccessMessageDialog from '../SuccessMessageDialog';
+import { getStatusColor } from '../../utils/methods';
 
 export default function ProjectCard({
   uuid,
@@ -28,6 +30,7 @@ export default function ProjectCard({
   progress_percentage,
   cover_image,
   sector,
+  status,
   isTrash,
 }) {
   const navigate = useNavigate();
@@ -47,12 +50,34 @@ export default function ProjectCard({
         minHeight: '300px',
         width: '100%',
         borderRadius: 2,
+        overflow: 'hidden',
+        position: 'relative',
         '&:hover': {
           boxShadow: 4,
         },
       }}
     >
-      {/* صورة المشروع */}
+      {/* حالة المشروع */}
+      <Chip
+        label={status}
+        size='small'
+        className={'status-conditions ' + getStatusColor(status || '')}
+        sx={{
+          position: 'absolute',
+          top: 12,
+          left: 12,
+          zIndex: 2,
+
+          fontWeight: 700,
+          px: 1,
+          backdropFilter: 'blur(6px)',
+
+          '& .MuiChip-label': {
+            px: 1,
+          },
+        }}
+      />
+
       <CardMedia
         component='img'
         height='180'
@@ -180,6 +205,7 @@ export default function ProjectCard({
             <IconButton
               size='small'
               sx={{ color: '#607d8b', border: '1px solid #e0e0e0' }}
+              onClick={() => navigate(`/content/projects/edit/${uuid}`)}
             >
               {isTrash ? (
                 <RecyclingRounded fortSize='small' />

@@ -7,6 +7,7 @@ import DeleteItemLogic from './DeleteItemLogic';
 import { useParams } from 'react-router-dom';
 import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
 import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 /* تحويل روابط يوتيوب لأي صيغة إلى embed */
 const getYoutubeEmbedUrl = (url) => {

@@ -13,23 +13,31 @@ import ProjectCard from '../components/ProjectCard/ProjectCard';
 import Title from '../components/Title';
 import FilterDrawer from '../components/FilterDrawer';
 
-import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { AddRounded } from '@mui/icons-material';
+import { AddRounded, FilterAltOutlined } from '@mui/icons-material';
 import CustomInput from '../components/locations/CustomInput';
-import useProjects from '../customHooks/queries/useProjects';
+import useProjects, {
+  useFilterProjects,
+} from '../customHooks/queries/useProjects';
 import SuccessMessageDialog from '../components/SuccessMessageDialog';
 import DeleteItemLogic from '../components/DeleteItemLogic';
 import CustomPagination from '../components/CustomPagination';
 import config from '../constants/enviroment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProjectCardSkeleton from '../components/Skeletons/ProjectCardSkeleton';
+import ProjectFilterDrawer from '../components/ProjectFilterDrawer';
+import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
+import { useFilters } from '../contexts/FilterContext';
+import TableMessage from '../components/TableMessage';
 
 export default function Projects({ isTrash = false }) {
-  const [openFilter, setOpenFilter] = useState(false);
+  const { projectFilters, setProjectFilters } = useFilters();
+
   const [page, setPage] = useState(0);
+
+  const dispatch = useDispatch();
 
   const {
     data: projectsData,
@@ -37,7 +45,27 @@ export default function Projects({ isTrash = false }) {
     error: projectsError,
   } = useProjects();
 
-  const projects = projectsData?.data || [];
+  const allProjects = projectsData?.data || [];
+
+  const {
+    data: filteredProjectsData,
+    isPending: isFiltering,
+    refetch,
+    error: filterProjectsError,
+  } = useFilterProjects(projectFilters, false);
+  const filteredProjects = filteredProjectsData?.data || [];
+
+  const hasFilters =
+    projectFilters.name ||
+    projectFilters.government ||
+    projectFilters.city ||
+    projectFilters.district_uuid ||
+    projectFilters.sector ||
+    projectFilters.funding_source ||
+    projectFilters.progress_percentage ||
+    projectFilters.status.length > 0;
+
+  const projects = hasFilters ? filteredProjects : allProjects;
 
   const itemsPerPage = 8;
   const navigate = useNavigate();
@@ -66,41 +94,43 @@ export default function Projects({ isTrash = false }) {
     }
   }, [projects.length, page]);
 
-  const cards = isFetchingProjects
-    ? Array.from({ length: 8 }).map((_, index) => (
-        <Grid item size={3} key={index}>
-          <ProjectCardSkeleton />
-        </Grid>
-      ))
-    : paginatedProjects.map((project) => (
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          size={3}
-          key={project.uuid}
-          sx={{ display: 'flex' }}
-        >
-          <ProjectCard
-            name={project.name}
-            governorate_name={
-              project.district.city.governorate.governorate_name
-            }
-            cover_image={config.baseUrl + project.cover_image}
-            progress_percentage={project?.progress_percentage}
-            estimated_cost={project.estimated_cost}
-            sector={
-              project.on_the_other_hand
-                ? project.on_the_other_hand
-                : project.sector
-            }
-            uuid={project.uuid}
-            isTrash={isTrash}
-            onDetailsClick={() => navigate(`/projects/${project.uuid}`)}
-          />
-        </Grid>
-      ));
+  const cards =
+    isFetchingProjects || isFiltering
+      ? Array.from({ length: 8 }).map((_, index) => (
+          <Grid item size={3} key={index}>
+            <ProjectCardSkeleton />
+          </Grid>
+        ))
+      : paginatedProjects.map((project) => (
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            size={3}
+            key={project.uuid}
+            sx={{ display: 'flex' }}
+          >
+            <ProjectCard
+              name={project.name}
+              governorate_name={
+                project.district.city.governorate.governorate_name
+              }
+              cover_image={config.baseUrl + project.cover_image}
+              progress_percentage={project?.progress_percentage}
+              estimated_cost={project.estimated_cost}
+              sector={
+                project.on_the_other_hand
+                  ? project.on_the_other_hand
+                  : project.sector
+              }
+              status={project.status}
+              uuid={project.uuid}
+              isTrash={isTrash}
+              onDetailsClick={() => navigate(`/projects/${project.uuid}`)}
+            />
+          </Grid>
+        ));
 
   return (
     <Container className='projects' maxWidth='lg' sx={{ px: 2 }}>
@@ -129,12 +159,19 @@ export default function Projects({ isTrash = false }) {
                 color: 'var(--main-color)', // لون اللابل عند focus
               },
             }}
+            value={projectFilters?.name || ''}
+            setValue={(e) =>
+              setProjectFilters((prev) => ({ ...prev, name: e.target.value }))
+            }
+            isNestedState={true}
           />
 
           <p style={{ fontSize: '14px' }}>عدد الحملات: {projects.length}</p>
         </div>
         <IconButton
-          onClick={() => setOpenFilter(true)}
+          onClick={() =>
+            dispatch(controlControlLocationModal({ type: 'add', id: null }))
+          }
           sx={{
             backgroundColor: '#eeeeee',
             borderRadius: 2,
@@ -142,11 +179,15 @@ export default function Projects({ isTrash = false }) {
           }}
           className='filter-btn'
         >
-          <FilterListIcon className='icon' />
+          <FilterAltOutlined className='icon' />
         </IconButton>
       </div>
 
-      <FilterDrawer open={openFilter} onClose={() => setOpenFilter(false)} />
+      {/* <FilterDrawer open={openFilter} onClose={() => setOpenFilter(false)} /> */}
+      <ProjectFilterDrawer
+        refilterProjects={refetch}
+        filterProjectsError={filterProjectsError}
+      />
 
       <Box
         sx={{
@@ -156,9 +197,69 @@ export default function Projects({ isTrash = false }) {
           justifyContent: 'center',
         }}
       >
-        <Grid container spacing={3} alignItems='stretch' sx={{ width: '100%' }}>
-          {cards}
-        </Grid>
+        <Box
+          sx={{
+            width: '100%',
+            minHeight: 450,
+            mt: 2,
+          }}
+        >
+          {projectsError ? (
+            <Box
+              sx={{
+                height: 450,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <TableMessage
+                message={
+                  projectsError?.message || 'حدث خطأ أثناء تحميل المشاريع'
+                }
+                isError={true}
+              />
+            </Box>
+          ) : !isFetchingProjects && !isFiltering && projects.length === 0 ? (
+            <Box
+              sx={{
+                height: 450,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                  height: '475px',
+                  borderRadius: '14px',
+                  backgroundColor: 'white',
+                }}
+              >
+                <TableMessage
+                  message={
+                    hasFilters
+                      ? 'لا توجد مشاريع مطابقة للفلاتر المحددة'
+                      : 'لا توجد مشاريع حالياً'
+                  }
+                />
+              </Box>
+            </Box>
+          ) : (
+            <Grid
+              container
+              spacing={3}
+              alignItems='stretch'
+              sx={{ width: '100%' }}
+            >
+              {cards}
+            </Grid>
+          )}
+        </Box>
       </Box>
 
       {/* Pagination */}

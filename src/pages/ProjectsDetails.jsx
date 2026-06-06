@@ -27,10 +27,7 @@ import { useSingleProject } from '../customHooks/queries/useProjects';
 import MediaSection from '../components/MediaSection';
 import { AddRounded, ChevronLeft } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  controlControlMediaModal,
-  controlSuccessDialog,
-} from '../redux/slices/ModalContollerSlice';
+import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
 import config from '../constants/enviroment';
 import ProjectsBill from '../components/ProjectsBill';
 import DeleteItemLogic from '../components/DeleteItemLogic';
@@ -92,7 +89,7 @@ export default function ProjectDetails() {
     error: projectDetailsError,
   } = useSingleProject(id);
 
-  const project = projectData?.data || {};
+  const project = projectData?.data?.project || {};
 
   const progressValue = parseInt(project.progress_percentage) || 0;
 
@@ -176,7 +173,7 @@ export default function ProjectDetails() {
             <Button
               variant='contained'
               startIcon={<EditIcon />}
-              // onClick={handleEdit}
+              onClick={() => navigate(`/content/projects/edit/${id}`)}
               sx={buttonStyles}
             >
               تعديل
