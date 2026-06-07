@@ -166,11 +166,7 @@ const Campaigns = ({ isTrash = false }) => {
 
   const deletedItemUrl = `/${config.campaigns.delete}/${deletedItemID}`;
 
-  const {
-    mutate: restore,
-    isPending: isRestoring,
-    error: restoreError,
-  } = useRestore(['campaigns']);
+  const { mutate: restore, isPending: isRestoring } = useRestore(['campaigns']);
 
   const handleRestore = (id) => {
     restore(`/${config.campaigns.restore}/${id}`);

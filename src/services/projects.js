@@ -6,6 +6,11 @@ export const getProjects = async () => {
 
   return res.data;
 };
+export const getProjectsTrash = async () => {
+  const res = await api.get(`/${config.projects.trash}`);
+
+  return res.data;
+};
 export const getUnAttachedProjects = async () => {
   const res = await api.get(`/${config.projects.unattached}`);
 

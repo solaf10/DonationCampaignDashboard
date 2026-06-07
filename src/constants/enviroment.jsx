@@ -62,6 +62,8 @@ const config = {
       deleteVideo: 'videos/delete',
       deleteImage: 'images/delete',
     },
+    restore: 'project/restore',
+    trash: 'project/deleted',
   },
   activities: 'api/activities',
   contact: 'api/contactForms/contact-us/',

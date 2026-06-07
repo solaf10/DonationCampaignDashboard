@@ -12,15 +12,11 @@ import {
 import ProjectCard from '../components/ProjectCard/ProjectCard';
 import Title from '../components/Title';
 import FilterDrawer from '../components/FilterDrawer';
-
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { AddRounded, FilterAltOutlined } from '@mui/icons-material';
 import CustomInput from '../components/locations/CustomInput';
-import useProjects, {
-  useFilterProjects,
-} from '../customHooks/queries/useProjects';
 import SuccessMessageDialog from '../components/SuccessMessageDialog';
 import DeleteItemLogic from '../components/DeleteItemLogic';
 import CustomPagination from '../components/CustomPagination';
@@ -31,6 +27,8 @@ import ProjectFilterDrawer from '../components/ProjectFilterDrawer';
 import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
 import { useFilters } from '../contexts/FilterContext';
 import TableMessage from '../components/TableMessage';
+import useRestore from '../customHooks/mutations/useRestore';
+import useGetProjectsLogic from '../customHooks/useGetProjectsLogic';
 
 export default function Projects({ isTrash = false }) {
   const { projectFilters, setProjectFilters } = useFilters();
@@ -40,50 +38,34 @@ export default function Projects({ isTrash = false }) {
   const dispatch = useDispatch();
 
   const {
-    data: projectsData,
-    isPending: isFetchingProjects,
-    error: projectsError,
-  } = useProjects();
-
-  const allProjects = projectsData?.data || [];
-
-  const {
-    data: filteredProjectsData,
-    isPending: isFiltering,
+    projects,
+    isFetchingProjects,
+    isFiltering,
+    projectsError,
+    filterProjectsError,
     refetch,
-    error: filterProjectsError,
-  } = useFilterProjects(projectFilters, false);
-  const filteredProjects = filteredProjectsData?.data || [];
+    hasFilters,
+  } = useGetProjectsLogic(isTrash);
 
-  const hasFilters =
-    projectFilters.name ||
-    projectFilters.government ||
-    projectFilters.city ||
-    projectFilters.district_uuid ||
-    projectFilters.sector ||
-    projectFilters.funding_source ||
-    projectFilters.progress_percentage ||
-    projectFilters.status.length > 0;
-
-  const projects = hasFilters ? filteredProjects : allProjects;
-
+  // PaginationLogic
   const itemsPerPage = 8;
   const navigate = useNavigate();
 
   const startIndex = page * itemsPerPage;
 
-  const paginatedProjects = projects.slice(
+  const paginatedProjects = projects?.slice(
     startIndex,
     startIndex + itemsPerPage,
   );
 
+  // deleteLogic
   const deletedItemID = useSelector(
     (state) => state.modalController.clickedDialogID,
   );
   const deletedItemUrl = `/${config.projects.delete}/${deletedItemID}`;
 
   useEffect(() => {
-    const totalPages = Math.ceil(projects.length / itemsPerPage);
+    const totalPages = Math.ceil(projects?.length / itemsPerPage);
 
     if (page >= totalPages && totalPages > 0) {
       setPage(totalPages - 1);
@@ -92,13 +74,16 @@ export default function Projects({ isTrash = false }) {
     if (totalPages === 0) {
       setPage(0);
     }
-  }, [projects.length, page]);
+  }, [projects?.length, page]);
+
+  // RestoreLogic
+  const { mutate: restore, isPending: isRestoring } = useRestore(['projects']);
 
   const cards =
-    isFetchingProjects || isFiltering
+    isFetchingProjects || isFiltering || isRestoring
       ? Array.from({ length: 8 }).map((_, index) => (
           <Grid item size={3} key={index}>
-            <ProjectCardSkeleton />
+            <ProjectCardSkeleton isTrash={isTrash} />
           </Grid>
         ))
       : paginatedProjects.map((project) => (
@@ -128,6 +113,7 @@ export default function Projects({ isTrash = false }) {
               uuid={project.uuid}
               isTrash={isTrash}
               onDetailsClick={() => navigate(`/projects/${project.uuid}`)}
+              restore={restore}
             />
           </Grid>
         ));
@@ -146,42 +132,44 @@ export default function Projects({ isTrash = false }) {
         )}
       </Title>
 
-      <div className='filters-holder'>
-        {/* filter holder */}
-        <div className='input-holder'>
-          <CustomInput
-            inputType='textField'
-            placeholder='ابحث حسب الاسم'
-            styles={{
-              width: '400px',
-              height: 'auto',
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: 'var(--main-color)', // لون اللابل عند focus
-              },
-            }}
-            value={projectFilters?.name || ''}
-            setValue={(e) =>
-              setProjectFilters((prev) => ({ ...prev, name: e.target.value }))
-            }
-            isNestedState={true}
-          />
+      {!isTrash && (
+        <div className='filters-holder'>
+          {/* filter holder */}
+          <div className='input-holder'>
+            <CustomInput
+              inputType='textField'
+              placeholder='ابحث حسب الاسم'
+              styles={{
+                width: '400px',
+                height: 'auto',
+                '& .MuiInputLabel-root.Mui-focused': {
+                  color: 'var(--main-color)', // لون اللابل عند focus
+                },
+              }}
+              value={projectFilters?.name || ''}
+              setValue={(e) =>
+                setProjectFilters((prev) => ({ ...prev, name: e.target.value }))
+              }
+              isNestedState={true}
+            />
 
-          <p style={{ fontSize: '14px' }}>عدد الحملات: {projects.length}</p>
+            <p style={{ fontSize: '14px' }}>عدد الحملات: {projects?.length}</p>
+          </div>
+          <IconButton
+            onClick={() =>
+              dispatch(controlControlLocationModal({ type: 'add', id: null }))
+            }
+            sx={{
+              backgroundColor: '#eeeeee',
+              borderRadius: 2,
+              m: 1,
+            }}
+            className='filter-btn'
+          >
+            <FilterAltOutlined className='icon' />
+          </IconButton>
         </div>
-        <IconButton
-          onClick={() =>
-            dispatch(controlControlLocationModal({ type: 'add', id: null }))
-          }
-          sx={{
-            backgroundColor: '#eeeeee',
-            borderRadius: 2,
-            m: 1,
-          }}
-          className='filter-btn'
-        >
-          <FilterAltOutlined className='icon' />
-        </IconButton>
-      </div>
+      )}
 
       {/* <FilterDrawer open={openFilter} onClose={() => setOpenFilter(false)} /> */}
       <ProjectFilterDrawer
@@ -220,7 +208,7 @@ export default function Projects({ isTrash = false }) {
                 isError={true}
               />
             </Box>
-          ) : !isFetchingProjects && !isFiltering && projects.length === 0 ? (
+          ) : !isFetchingProjects && !isFiltering && projects?.length === 0 ? (
             <Box
               sx={{
                 height: 450,
@@ -265,17 +253,19 @@ export default function Projects({ isTrash = false }) {
       {/* Pagination */}
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
         <CustomPagination
-          count={projects.length}
+          count={projects?.length || 0}
           page={page}
           rowsPerPage={8}
           onPageChange={setPage}
         />
       </Box>
-      <DeleteItemLogic
-        deletedItemTitle='المشروع'
-        baseQuery={['projects']}
-        url={deletedItemUrl}
-      />
+      {!isTrash && (
+        <DeleteItemLogic
+          deletedItemTitle='المشروع'
+          baseQuery={['projects']}
+          url={deletedItemUrl}
+        />
+      )}
     </Container>
   );
 }

@@ -15,10 +15,11 @@ import { toast } from 'react-toastify';
 import { Box, Typography } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import ErrorMessage from './Messages/ErrorMessage';
+import useAddCampaignToProject from '../customHooks/mutations/useAddCampaignToProject';
 
 const AddBySelectionModal = ({ entriesType, modalTitle }) => {
   const [searchedKey, setSearchedKey] = useState('');
-  const [selectedProjects, setSelectedProjects] = useState([]);
+  const [selectedEntries, setSelectedEntries] = useState([]);
 
   const selectedAddSrcId = useSelector(
     (state) => state.modalController.selectedAddSrcID,
@@ -41,16 +42,12 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
     isPending: isGettingCampaigns,
     error: campaignsError,
   } = useCampaigns();
-  /* const {
-    data: filteredCampaignsData,
-    isPending: isFilteringCampaigns,
-    error: filterCampaignsError,
-  } = useSearchCampaigns(searchedKey); */
 
-  /*  const campaigns = searchedKey
-    ? (filteredCampaignsData?.data ?? [])
-    : (campaignsData?.data ?? []); */
-  const campaigns = campaignsData?.data || [];
+  const campaigns = searchedKey
+    ? campaignsData?.data.filter((c) =>
+        c.name.toLowerCase().includes(searchedKey.toLowerCase()),
+      ) || []
+    : campaignsData?.data || [];
 
   const entries = entriesType === 'projects' ? projects : campaigns;
 
@@ -61,7 +58,7 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
   const dispatch = useDispatch();
 
   const handleSelectProject = (project) => {
-    setSelectedProjects((prev) => {
+    setSelectedEntries((prev) => {
       const exists = prev.find((p) => p.uuid === project.uuid);
 
       if (exists) {
@@ -134,7 +131,7 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
           <div
             key={entry.uuid}
             className={`project-card ${
-              selectedProjects.find((p) => p.uuid === entry.uuid)
+              selectedEntries.find((p) => p.uuid === entry.uuid)
                 ? 'selected'
                 : ''
             }`}
@@ -144,42 +141,73 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
             <p className='location'>{entry.location}</p>
           </div>
         ));
+
   const {
     mutate: addProjectToCampaign,
-    isPending: isAdding,
+    isPending: isAddingProject,
     error: addProjectError,
   } = useAddProjectToCampaign(selectedAddSrcId);
+
+  const {
+    mutate: addCampaignToProject,
+    isPending: isAddingCampaign,
+    error: addCampaignError,
+  } = useAddCampaignToProject(selectedAddSrcId);
+
   const location = useLocation();
   const navigate = useNavigate();
   const isAddPage = location.pathname.includes('/campaigns/add');
   const queryClient = useQueryClient();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const body = new FormData();
-    if (entries.length === 0) return;
-    selectedProjects.forEach((p) => {
-      body.append('project_uuid[]', p.uuid);
-    });
-    addProjectToCampaign(body, {
-      onSuccess: () => {
-        dispatch(controlAddBySelectionModal(null));
 
-        if (isAddPage) {
-          navigate('/content/campaigns');
-          dispatch(controlSuccessDialog({ type: 'add', id: null }));
-          queryClient.invalidateQueries({
-            queryKey: ['campaigns'],
-          });
-        } else {
+    if (entries.length === 0 || selectedEntries.length === 0) return;
+
+    const body = new FormData();
+
+    // الحالة 1: ربط مشاريع بحملة
+    if (entriesType === 'projects') {
+      selectedEntries.forEach((p) => {
+        body.append('project_uuid[]', p.uuid);
+      });
+
+      addProjectToCampaign(body, {
+        onSuccess: () => {
+          dispatch(controlAddBySelectionModal(null));
+
           queryClient.invalidateQueries({
             queryKey: ['campaigns', selectedAddSrcId],
           });
-        }
 
-        toast.success('تمت إضافة المشاريع بنجاح!');
-      },
-    });
+          toast.success('تمت إضافة المشاريع إلى الحملة بنجاح!');
+        },
+      });
+    }
+
+    // الحالة 2: ربط حملات بمشروع
+    else {
+      selectedEntries.forEach(() => {
+        body.append('campaign_uuid', selectedEntries[0].uuid);
+      });
+
+      addCampaignToProject(body, {
+        onSuccess: () => {
+          dispatch(controlAddBySelectionModal(null));
+
+          queryClient.invalidateQueries({
+            queryKey: ['projects', selectedAddSrcId],
+          });
+
+          toast.success('تم ربط الحملات بالمشروع بنجاح!');
+        },
+      });
+    }
   };
+
+  const isAdding = isAddingProject || isAddingCampaign;
+  const error = entriesType === 'projects' ? addProjectError : addCampaignError;
+
   if (isFetchingProjects || isGettingCampaigns)
     return (
       <Box
@@ -215,12 +243,10 @@ const AddBySelectionModal = ({ entriesType, modalTitle }) => {
       onSubmit={handleSubmit}
       isLoading={isAdding}
       isDisabled={
-        isAdding || entries.length === 0 || selectedProjects?.length === 0
+        isAdding || entries.length === 0 || selectedEntries.length === 0
       }
     >
-      {addProjectError && (
-        <ErrorMessage>{addProjectError.message}</ErrorMessage>
-      )}
+      {error && <ErrorMessage>{error.message}</ErrorMessage>}
       <CustomInput
         inputType='input'
         label={`ابحث عن ${entriesType === 'projects' ? 'مشاريع' : 'حملات'}`}

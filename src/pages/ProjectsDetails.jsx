@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
 import {
   Grid,
@@ -27,7 +27,10 @@ import { useSingleProject } from '../customHooks/queries/useProjects';
 import MediaSection from '../components/MediaSection';
 import { AddRounded, ChevronLeft } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
+import {
+  controlAddBySelectionModal,
+  controlSuccessDialog,
+} from '../redux/slices/ModalContollerSlice';
 import config from '../constants/enviroment';
 import ProjectsBill from '../components/ProjectsBill';
 import DeleteItemLogic from '../components/DeleteItemLogic';
@@ -36,6 +39,9 @@ import CampaignDetailsSkeleton from '../components/Skeletons/CampaignDetailsSkel
 import ControlMediaModal from '../components/ControlMediaModal';
 import ProjectMediaCard from '../components/ProjectMediaCard';
 import InfoCard from '../components/InfoCard';
+import LinkIcon from '@mui/icons-material/Link';
+import AddBySelectionModal from '../components/AddBySelectionModal';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -89,11 +95,12 @@ export default function ProjectDetails() {
     error: projectDetailsError,
   } = useSingleProject(id);
 
-  const project = projectData?.data?.project || {};
+  const project = projectData?.data?.project || null;
+  const campaign = projectData?.data?.campaigns[0] || null;
 
-  const progressValue = parseInt(project.progress_percentage) || 0;
+  const progressValue = parseInt(project?.progress_percentage || '') || 0;
 
-  const requirements = project.requirements
+  const requirements = project?.requirements
     ?.split(/[،,\n]/)
     .map((item) =>
       item
@@ -170,6 +177,39 @@ export default function ProjectDetails() {
           </Box>
 
           <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              onClick={() =>
+                campaign
+                  ? navigate(`/content/campaigns/${campaign.uuid}`)
+                  : dispatch(controlAddBySelectionModal(project.uuid))
+              }
+              startIcon={campaign ? <VisibilityOutlinedIcon /> : <LinkIcon />}
+              sx={{
+                ...buttonStyles,
+                gap: '0px',
+
+                // الحالة المرتبطة
+                ...(campaign
+                  ? {
+                      border: '1px solid #c8e6c9',
+                      color: '#2e7d32',
+                      backgroundColor: '#f1f8f4',
+                      '&:hover': {
+                        backgroundColor: '#e8f5e9',
+                      },
+                    }
+                  : {
+                      border: '1px solid var(--main-color)',
+                      color: 'white',
+                      backgroundColor: 'var(--main-color)',
+                      '&:hover': {
+                        backgroundColor: '#0e7c7b',
+                      },
+                    }),
+              }}
+            >
+              {campaign ? 'عرض الحملة' : 'ربط بحملة'}
+            </Button>
             <Button
               variant='contained'
               startIcon={<EditIcon />}
@@ -285,20 +325,9 @@ export default function ProjectDetails() {
                 label={
                   project?.district?.city?.governorate?.governorate_name +
                   ' - ' +
-                  project?.district?.city?.city_name
-                }
-                sx={{
-                  bgcolor: 'rgba(255,255,255,0.14)',
-                  color: 'white',
-                  backdropFilter: 'blur(10px)',
-                }}
-              />
-
-              <Chip
-                label={
-                  project.on_the_other_hand
-                    ? project.on_the_other_hand
-                    : project.sector
+                  project?.district?.city?.city_name +
+                  ' - ' +
+                  project?.district?.district_name
                 }
                 sx={{
                   bgcolor: 'rgba(255,255,255,0.14)',
@@ -314,9 +343,9 @@ export default function ProjectDetails() {
         <Grid container spacing={2} mb={4}>
           <Grid size={4}>
             <InfoCard
-              icon={<LocationOnIcon />}
-              title='الموقع'
-              value={project.district?.district_name}
+              icon={<LinkIcon />}
+              title='الحملة المرتبطة'
+              value={campaign ? campaign?.name : 'غير مرتبط بعد'}
               bg='#e8f5e9'
               color='#457461'
             />
@@ -446,6 +475,11 @@ export default function ProjectDetails() {
         url={deletedItemUrl}
         onSuccess={() => navigate('/content/projects')}
         modalType='delete-project'
+      />
+
+      <AddBySelectionModal
+        entriesType='campaigns'
+        modalTitle='ربط المشروع بحملة'
       />
     </Box>
   );

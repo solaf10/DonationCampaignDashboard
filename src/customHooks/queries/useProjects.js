@@ -4,6 +4,7 @@ import {
   getFundingSources,
   getProjectDetails,
   getProjects,
+  getProjectsTrash,
   getSectors,
   getSingleProject,
   getStatus,
@@ -12,6 +13,13 @@ import {
 
 export default function useProjects() {
   return useQuery({ queryKey: ['projects'], queryFn: getProjects });
+}
+
+export function useProjectsTrash() {
+  return useQuery({
+    queryKey: ['projects', 'trash'],
+    queryFn: getProjectsTrash,
+  });
 }
 
 export function useGetUnAttachedProjects() {

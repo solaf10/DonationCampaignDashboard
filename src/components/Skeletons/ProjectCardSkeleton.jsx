@@ -1,6 +1,6 @@
 import { Card, CardContent, Skeleton, Box } from '@mui/material';
 
-export default function ProjectCardSkeleton() {
+export default function ProjectCardSkeleton({ isTrash = false }) {
   return (
     <Card
       sx={{
@@ -74,26 +74,35 @@ export default function ProjectCardSkeleton() {
         </Box>
 
         {/* الأزرار */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            mt: 'auto',
-            pt: 2,
-          }}
-        >
+        {isTrash ? (
           <Skeleton
             variant='rounded'
-            width={110}
+            width='100%'
             height={36}
-            sx={{ borderRadius: 2 }}
+            sx={{ borderRadius: 99 }}
           />
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Skeleton variant='circular' width={34} height={34} />
-            <Skeleton variant='circular' width={34} height={34} />
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mt: 'auto',
+              pt: 2,
+            }}
+          >
+            <Skeleton
+              variant='rounded'
+              width={110}
+              height={36}
+              sx={{ borderRadius: 2 }}
+            />
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Skeleton variant='circular' width={34} height={34} />
+              <Skeleton variant='circular' width={34} height={34} />
+            </Box>
           </Box>
-        </Box>
+        )}
       </CardContent>
     </Card>
   );

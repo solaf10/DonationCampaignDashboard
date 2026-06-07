@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import { controlSuccessDialog } from '../../redux/slices/ModalContollerSlice';
 import SuccessMessageDialog from '../SuccessMessageDialog';
 import { getStatusColor } from '../../utils/methods';
+import config from '../../constants/enviroment';
 
 export default function ProjectCard({
   uuid,
@@ -32,6 +33,7 @@ export default function ProjectCard({
   sector,
   status,
   isTrash,
+  restore,
 }) {
   const navigate = useNavigate();
 
@@ -190,61 +192,72 @@ export default function ProjectCard({
         </Box>
 
         {/* الأزرار */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            pt: 2,
-            direction: 'rtl',
-            border: 'none',
-          }}
-        >
-          {/* أيقونات التعديل والحذف */}
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <IconButton
-              size='small'
-              sx={{ color: '#607d8b', border: '1px solid #e0e0e0' }}
-              onClick={() => navigate(`/content/projects/edit/${uuid}`)}
-            >
-              {isTrash ? (
-                <RecyclingRounded fortSize='small' />
-              ) : (
-                <EditOutlinedIcon fontSize='small' />
-              )}
-            </IconButton>
-            <IconButton
-              size='small'
-              sx={{
-                color: 'red',
-                border: '1px solid #ffcccc',
-                backgroundColor: '#fff5f5',
-              }}
-              onClick={() =>
-                dispatch(controlSuccessDialog({ type: 'delete', id: uuid }))
-              }
-            >
-              <DeleteOutlinedIcon fontSize='small' />
-            </IconButton>
-          </Box>
 
-          <Button
-            variant='contained'
-            size='small'
-            onClick={() => navigate(`/content/projects/${uuid}`)}
+        {isTrash ? (
+          <div className='table-holder'>
+            <Button
+              className='button restore'
+              onClick={() => restore(`/${config.projects.restore}/${uuid}`)}
+              sx={{ width: '100%', mt: 1.5, gap: 1 }}
+            >
+              <RecyclingRounded fortSize='small' />
+              <span>استعادة</span>
+            </Button>
+          </div>
+        ) : (
+          <Box
             sx={{
-              backgroundColor: 'var(--main-color)',
-              color: 'white',
-              px: 3,
-              borderRadius: 2,
-              textTransform: 'none',
-              '&:hover': { backgroundColor: 'var(--main-color)' },
-              fontSize: 13,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              pt: 2,
+              direction: 'rtl',
+              border: 'none',
             }}
           >
-            معرفة المزيد
-          </Button>
-        </Box>
+            {/* أيقونات التعديل والحذف */}
+
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <IconButton
+                size='small'
+                sx={{ color: '#607d8b', border: '1px solid #e0e0e0' }}
+                onClick={() => navigate(`/content/projects/edit/${uuid}`)}
+              >
+                <EditOutlinedIcon fontSize='small' />
+              </IconButton>
+              <IconButton
+                size='small'
+                sx={{
+                  color: 'red',
+                  border: '1px solid #ffcccc',
+                  backgroundColor: '#fff5f5',
+                }}
+                onClick={() =>
+                  dispatch(controlSuccessDialog({ type: 'delete', id: uuid }))
+                }
+              >
+                <DeleteOutlinedIcon fontSize='small' />
+              </IconButton>
+            </Box>
+
+            <Button
+              variant='contained'
+              size='small'
+              onClick={() => navigate(`/content/projects/${uuid}`)}
+              sx={{
+                backgroundColor: 'var(--main-color)',
+                color: 'white',
+                px: 3,
+                borderRadius: 2,
+                textTransform: 'none',
+                '&:hover': { backgroundColor: 'var(--main-color)' },
+                fontSize: 13,
+              }}
+            >
+              معرفة المزيد
+            </Button>
+          </Box>
+        )}
       </CardContent>
     </Card>
   );
