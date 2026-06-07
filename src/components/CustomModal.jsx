@@ -12,6 +12,7 @@ export default function CustomModal({
   isLoading,
   isDisabled,
   extraActions,
+  customSubmitBtnStyles,
 }) {
   const style = {
     position: 'absolute',
@@ -84,6 +85,7 @@ export default function CustomModal({
                 backgroundColor: '#014a5b',
                 borderRadius: '999px',
                 padding: '8px 24px',
+                ...customSubmitBtnStyles,
               }}
               className='btn'
               type='submit'

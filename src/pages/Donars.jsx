@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 import config from '../constants/enviroment';
 import { formatDate } from '../customHooks/useGetCampaignsLogic';
 import { getCurrency } from '../utils/methods';
+import PaycheckVerifyModal from '../components/PaycheckVerifyModal';
 
 const columns = [
   { id: 'name', label: 'الاسم' },
@@ -130,6 +131,7 @@ const Donars = () => {
           error={donarsError?.message}
         />
       </div>
+      <PaycheckVerifyModal />
     </PageContainer>
   );
 };
