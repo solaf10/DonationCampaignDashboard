@@ -35,7 +35,6 @@ const steps = [
   'الموقع',
   'التمويل والتنفيذ',
   'تفاصيل المشروع',
-  'الوسائط',
 ];
 
 const icons = {
@@ -369,16 +368,9 @@ const EditProject = () => {
             errors={errors}
             styles={styles}
           />
-        ) : activeStep === 3 ? (
+        ) : (
           /* ================= INFO ================= */
           <Progress
-            formData={formData}
-            setFormData={setFormData}
-            errors={errors}
-            styles={styles}
-          />
-        ) : (
-          <Media
             formData={formData}
             setFormData={setFormData}
             errors={errors}

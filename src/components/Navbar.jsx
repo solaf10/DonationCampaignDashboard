@@ -1,17 +1,38 @@
-import { Badge } from '@mui/material';
+import { Avatar, Badge } from '@mui/material';
 import './Navbar.css';
 import PageContainer from './PageContainer';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import ProfileModal from './ProfileModal';
+import { useState } from 'react';
+import PersonIcon from '@mui/icons-material/Person';
 
 const Navbar = () => {
+  const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+
   return (
     <nav>
       <PageContainer>
         <div className='admin-info'>
-          <img src='/admin.jpg' alt='admin' />
+          <Avatar
+            src={
+              user?.profile && user.profile !== 'null'
+                ? user.profile
+                : undefined
+            }
+            sx={{
+              width: '50px',
+              height: '50px',
+              borderRadius: '50%',
+              cursor: 'pointer',
+            }}
+            onClick={() => setIsProfileDialogOpen(true)}
+          >
+            {!user?.profile && <PersonIcon sx={{ fontSize: '36px' }} />}
+          </Avatar>
           <div className='text'>
-            <p className='name'>بتول عبدالهادي</p>
-            <p className='role'>مسؤول</p>
+            <p className='name'>{user?.name}</p>
+            <p className='role'>{user?.type}</p>
           </div>
         </div>
         <div className='actions'>
@@ -39,6 +60,10 @@ const Navbar = () => {
           </div>
         </div>
       </PageContainer>
+      <ProfileModal
+        open={isProfileDialogOpen}
+        onClose={() => setIsProfileDialogOpen(false)}
+      />
     </nav>
   );
 };

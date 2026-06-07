@@ -10,6 +10,8 @@ const useLogin = () => {
     mutationFn: login,
     onSuccess: (data) => {
       localStorage.setItem('token', data.data.token);
+      const user = data?.data?.user;
+      localStorage.setItem('user', JSON.stringify(user));
       navigate('/content');
     },
     onError: () => {
