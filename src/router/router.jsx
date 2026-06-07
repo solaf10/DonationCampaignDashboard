@@ -13,18 +13,17 @@ import ActiveStepProvider from '../contexts/ActiveStepContext';
 import AddProject from '../pages/AddProject';
 import Projects from '../pages/Projects';
 import ProjectsDetails from '../pages/ProjectsDetails';
-import Organizations from '../pages/Organizations';
-import BusinessDonars from '../pages/businessDonars';
-import Donars from '../pages/Donars';
 import ProtectedRoute from '../utils/ProtectedRoute';
 import AddProjectAdditionalSteps from '../pages/AddProjectAdditionalSteps';
 import { FiltersProvider } from '../contexts/FilterContext';
 import InKindDonations from '../pages/InKindDonations';
 import InKindDonationDetails from '../pages/InKindDonationDetails';
-import IndividualDonars from '../pages/IndividualDonars';
 import FinancialOperations from '../pages/FinancialOperations';
 import AddFinancialOperations from '../pages/AddFinancialOperations';
 import EditProject from '../pages/EditProject';
+import DonarsStats from '../pages/DonarsStats';
+import Donars from '../pages/Donars';
+import DonarDetails from '../pages/DonarDetails';
 
 export const router = createBrowserRouter([
   {
@@ -120,22 +119,27 @@ export const router = createBrowserRouter([
           /* Donars */
           {
             path: 'donars',
-            element: <Donars />,
+            element: <DonarsStats />,
+          },
+
+          {
+            path: 'donars/:id',
+            element: <DonarDetails />,
           },
 
           {
             path: 'individuals',
-            element: <IndividualDonars />,
+            element: <Donars />,
           },
 
           {
             path: 'organizations',
-            element: <Organizations />,
+            element: <Donars />,
           },
 
           {
             path: 'business',
-            element: <BusinessDonars />,
+            element: <Donars />,
           },
         ],
       },

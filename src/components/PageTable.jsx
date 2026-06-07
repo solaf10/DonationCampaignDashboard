@@ -23,7 +23,11 @@ import {
   controlControlLocationModal,
   openMoreInfoMenu,
 } from '../redux/slices/ModalContollerSlice';
-import { EditCalendarRounded, RecyclingRounded } from '@mui/icons-material';
+import {
+  EditCalendarRounded,
+  RecyclingRounded,
+  VerifiedOutlined,
+} from '@mui/icons-material';
 import CustomTablePagination from './CustomTablePagination';
 import { getStatusColor } from '../utils/methods';
 import TableMessage from './TableMessage';
@@ -37,6 +41,7 @@ const PageTable = ({
   hasNoResult,
   error,
   handleRestore,
+  renderCell,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -87,6 +92,7 @@ const PageTable = ({
                   <TableCell
                     key={column.id}
                     sx={{
+                      width: column?.width,
                       backgroundColor: '#f7f9f9',
                       fontWeight: 600,
                     }}
@@ -133,7 +139,7 @@ const PageTable = ({
                             height={32}
                             sx={{ mx: 'auto' }}
                           />
-                        ) : column.id === 'action' ? (
+                        ) : column.id === 'edit' || column.id === 'verify' ? (
                           <Skeleton
                             variant='rounded'
                             width={90}
@@ -204,7 +210,7 @@ const PageTable = ({
                               </IconButton>
                             </TableCell>
                           );
-                        } else if (column.id === 'action') {
+                        } else if (column.id === 'edit') {
                           return (
                             <TableCell key={column.id + row.uuid}>
                               <Button
@@ -225,16 +231,50 @@ const PageTable = ({
                               </Button>
                             </TableCell>
                           );
+                        } else if (
+                          column.id === 'verify' &&
+                          row['status'] === 'قيد التدقيق'
+                        ) {
+                          return (
+                            <TableCell key={column.id + row.uuid}>
+                              <Button
+                                className='button'
+                                onClick={(e) => {
+                                  e.stopPropagation();
+
+                                  dispatch(
+                                    controlControlLocationModal({
+                                      type: 'verify',
+                                      id: row.uuid,
+                                    }),
+                                  );
+                                }}
+                              >
+                                <VerifiedOutlined className='icon' />
+                                <span>تحقق</span>
+                              </Button>
+                            </TableCell>
+                          );
                         }
 
-                        if (column.id === 'status') {
+                        if (column.id === 'status' || column.id === 'pending') {
+                          let status = '';
+                          if (row[column.id] === 'قيد التدقيق') {
+                            status =
+                              row['method'] === 'تبرع'
+                                ? 'تدقيق مباشر'
+                                : 'تدقيق غير مباشر';
+                          }
+
                           return (
                             <TableCell key={column.id + row.uuid}>
                               <Chip
                                 label={row[column.id]}
                                 className={
                                   'status-conditions ' +
-                                  getStatusColor(row[column.id])
+                                  getStatusColor(
+                                    status ? status : row[column.id],
+                                  )
                                 }
                               />
                             </TableCell>
@@ -242,8 +282,19 @@ const PageTable = ({
                         }
 
                         return (
-                          <TableCell key={column.id + row.uuid}>
-                            {row[column.id] === null ? (
+                          <TableCell
+                            key={column.id + row.uuid}
+                            sx={
+                              column?.width && {
+                                width: column.width,
+                                maxWidth: column.width,
+                                whiteSpace: 'normal',
+                                wordBreak: 'break-word',
+                              }
+                            }
+                          >
+                            {row[column.id] === null ||
+                            row[column.id] === undefined ? (
                               <span style={{ color: '#8a8a8a' }}>&mdash;</span>
                             ) : (
                               row[column.id]

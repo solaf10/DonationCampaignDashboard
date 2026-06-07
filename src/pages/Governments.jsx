@@ -14,7 +14,7 @@ import PageTable from '../components/PageTable';
 
 const columns = [
   { id: 'governorate_name', label: 'الاسم' },
-  { id: 'action', label: 'الإجراءات' },
+  { id: 'edit', label: 'الإجراءات' },
 ];
 
 const Governments = () => {

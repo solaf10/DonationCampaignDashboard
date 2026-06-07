@@ -65,7 +65,13 @@ const config = {
     restore: 'project/restore',
     trash: 'project/deleted',
   },
-  activities: 'api/activities',
-  contact: 'api/contactForms/contact-us/',
+  donars: {
+    all: {
+      individuals: 'donaters/all',
+      organizations: 'orgnasation/all',
+      business: 'bussinessman/all',
+    },
+    donarDetails: 'donater/show',
+  },
 };
 export default config;

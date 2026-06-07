@@ -25,6 +25,7 @@ const Navbar = () => {
               height: '50px',
               borderRadius: '50%',
               cursor: 'pointer',
+              backgroundColor: '#d9d9d9',
             }}
             onClick={() => setIsProfileDialogOpen(true)}
           >

@@ -29,20 +29,26 @@ export const getStatusColor = (status) => {
   switch (status) {
     case 'نشطة':
     case 'مكتمل':
+    case 'متوافق':
+    case 'مدفوع':
       return 'success-status';
 
     case 'جديدة':
     case 'قيد التنفيذ':
+    case 'تدقيق غير مباشر':
       return 'draft-status';
 
     case 'متوقفة':
     case 'متوقف':
+    case 'تدقيق مباشر':
       return 'warning-status';
 
     case 'مخطط له':
+    case 'غير مدفوع':
       return 'completed-status';
 
     case 'منتهية':
+    case 'غير متوافق':
       return 'error-status';
 
     default:
@@ -137,4 +143,9 @@ export const hasFormData = (formData) => {
 
     return value !== '' && value !== null && value !== undefined;
   });
+};
+
+/* ----------------------------- Donars only ---------------------------- */
+export const getCurrency = (currency) => {
+  return currency === 'SYP' ? 'ل.س' : currency === 'USD' ? '$' : '€';
 };

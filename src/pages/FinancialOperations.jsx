@@ -24,7 +24,7 @@ export default function FinancialOperations() {
     { id: 'paid-amount', label: ' المبلغ المدفوع' },
     { id: 'remaining-amount', label: ' المبلغ المتبقي' },
     { id: 'status', label: 'الحالة' },
-    { id: 'action', label: 'الإجراءات' },
+    { id: 'edit', label: 'الإجراءات' },
   ];
   const rows = [
     {

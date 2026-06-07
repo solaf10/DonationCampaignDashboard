@@ -13,7 +13,7 @@ import PageTable from '../components/PageTable';
 const columns = [
   { id: 'city_name', label: 'الحي' },
   { id: 'governorate_name', label: 'المحافظة' },
-  { id: 'action', label: 'الإجراءات' },
+  { id: 'edit', label: 'الإجراءات' },
 ];
 
 const Cities = () => {

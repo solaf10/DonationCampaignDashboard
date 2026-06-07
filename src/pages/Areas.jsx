@@ -15,7 +15,7 @@ const columns = [
   { id: 'district_name', label: 'المنطقة' },
   { id: 'city_name', label: 'الحي' },
   { id: 'governorate_name', label: 'المحافظة' },
-  { id: 'action', label: 'الإجراءات' },
+  { id: 'edit', label: 'الإجراءات' },
 ];
 
 const Areas = () => {

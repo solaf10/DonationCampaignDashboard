@@ -94,6 +94,7 @@ export default function ProfileModal({ open, onClose }) {
               border: '5px solid white',
               zIndex: '11',
               boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+              backgroundColor: '#d9d9d9',
             }}
           >
             {!user?.profile && <PersonIcon sx={{ fontSize: '64px' }} />}

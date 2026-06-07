@@ -1,128 +1,135 @@
-import { Box, Grid, InputAdornment, TextField } from '@mui/material';
-import PageContainer from '../components/PageContainer';
+import { useState } from 'react';
+import CustomInput from '../components/locations/CustomInput';
+import { AddRounded } from '@mui/icons-material';
 import Title from '../components/Title';
-import SearchIcon from '@mui/icons-material/Search';
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
-import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
-import {
-  HistoryEduOutlined,
-  VolunteerActivismOutlined,
-} from '@mui/icons-material';
-import DonorsInfoCard from '../components/DonorsInfoCard';
-import StarDonarsSection from '../components/StarDonarsSection';
+import PageContainer from '../components/PageContainer';
+import PageTable from '../components/PageTable';
+import useDonars from '../customHooks/queries/useDonars';
+import { useLocation } from 'react-router-dom';
+import config from '../constants/enviroment';
+import { formatDate } from '../customHooks/useGetCampaignsLogic';
+import { getCurrency } from '../utils/methods';
 
-const infos = [
-  {
-    id: 1,
-    icon: <GroupsOutlinedIcon className='icon' />,
-    label: 'إجمالي المتبرعين',
-    value: '5345',
-    details: {
-      label: 'هذا الشهر',
-      value: '+89 جديد',
-    },
-  },
-  {
-    id: 2,
-    icon: <AttachMoneyOutlinedIcon className='icon' />,
-    label: 'إجمالي التبرعات',
-    value: '600,000$',
-    details: {
-      label: 'هذا الشهر',
-      value: '3000$+',
-    },
-  },
-  {
-    id: 3,
-    icon: <HistoryEduOutlined className='icon' />,
-    label: 'إجمالي التعهدات',
-    value: '230,000$',
-    details: {
-      label: 'مسدد',
-      value: '43',
-    },
-  },
-  {
-    id: 4,
-    icon: <VolunteerActivismOutlined className='icon' />,
-    label: 'متوسط التبرع',
-    value: '89,000$',
-    details: {
-      label: 'أعلى تبرع',
-      value: '3000$',
-    },
-  },
+const columns = [
+  { id: 'name', label: 'الاسم' },
+  { id: 'last_donation', label: 'آخر تبرع' },
+  { id: 'campaignName', label: 'الحملة', width: '180px' },
+  { id: 'date', label: 'تاريخ الاستحقاق' },
+  { id: 'method', label: 'نوع التبرع' },
+  { id: 'status', label: 'حالة التبرع' },
+  { id: 'pending', label: 'حالة الدفع' },
+  { id: 'verify', label: 'الإجراءات' },
 ];
 
-const topDonors = [
-  {
-    id: 1,
-    name: 'أحمد محمد',
-    type: 'فرد',
-    amount: '100,000 ل.س',
-    image: '/1st-place-medal.png',
-  },
-  {
-    id: 2,
-    name: 'شركة النور',
-    type: 'منظمة',
-    amount: '500,000 ل.س',
-    image: '/2nd-place-medal.png',
-  },
-  {
-    id: 3,
-    name: 'خالد العلي',
-    type: 'رجل أعمال',
-    amount: '1,200,000 ل.س',
-  },
-  {
-    id: 4,
-    name: 'مبادرة الخير',
-    type: 'منظمة',
-    amount: '300,000 ل.س',
-  },
-  {
-    id: 5,
-    name: 'سارة حسن',
-    type: 'فرد',
-    amount: '75,000 ل.س',
-  },
-];
+const nativeSelectStyles = {
+  minWidth: '100px',
+};
 
 const Donars = () => {
-  const infoCards = infos.map((info) => (
-    <DonorsInfoCard
-      size={3}
-      key={info.id}
-      icon={info.icon}
-      label={info.label}
-      value={info.value}
-      details={info.details}
-    />
-  ));
+  const [searchedKey, setSearchedKey] = useState('');
+  const [order, setOrder] = useState('');
+  const [donationType, setDonationType] = useState('');
+  const [destination, setDestination] = useState('');
+
+  const location = useLocation();
+  const locationTypeArr = location.pathname.split('/');
+  const locationType = locationTypeArr[locationTypeArr?.length - 1];
+
+  const url = `/${config.donars.all?.[locationType]}`;
+
+  const {
+    data: donarsData,
+    isFetching: isDonarsFetching,
+    error: donarsError,
+  } = useDonars(locationType, url);
+
+  const donars = donarsData?.data || [];
+
+  const rows = donars?.map((donar) => {
+    const currency = getCurrency(donar?.currency_type);
+
+    return {
+      ...donar,
+      name: donar?.user?.name,
+      date: formatDate(donar?.date),
+      campaignName: donar?.campaing?.name,
+      last_donation: `${donar?.last_donation}\u00A0${currency}`,
+    };
+  });
+
   return (
     <PageContainer>
-      <Title pageTitle='إدارة المتبرعين' />
+      <Title pageTitle='إدارة المتبرعين' subtitle='منظمات داعمة' />
 
-      <Grid container spacing={2} marginBottom={2}>
-        {infoCards}
-      </Grid>
-      <Grid container spacing={3}>
-        <Grid size={6}>
-          <h2
-            style={{
-              fontSize: '32px',
-              fontWeight: '600',
-              marginBottom: '8px',
-            }}
-          >
-            أبرز المتبرعين
-          </h2>
-          <StarDonarsSection topDonors={topDonors} />
-        </Grid>
-        <Grid size={6}></Grid>
-      </Grid>
+      {/* Table & filter */}
+
+      {/* filter holder */}
+      <div className='table-content organizations'>
+        {/* filter holder */}
+        <div className='filters-holder'>
+          <div className='input-holder'>
+            <CustomInput
+              inputType='textField'
+              placeholder='ابحث حسب الاسم'
+              styles={{
+                width: '400px',
+                height: 'auto',
+                '& .MuiInputLabel-root.Mui-focused': {
+                  color: 'var(--main-color)', // لون اللابل عند focus
+                },
+              }}
+              value={searchedKey}
+              setValue={setSearchedKey}
+            />
+            <CustomInput
+              label='الترتيب'
+              inputType='nativeSelect'
+              styles={nativeSelectStyles}
+              value={order}
+              setValue={setOrder}
+            >
+              <option value='' disabled style={{ display: 'none' }}></option>
+              <option value='all'>الكل</option>
+              <option value='Alhamra'>حمص</option>
+              <option value='Alghuta'>حماة</option>
+            </CustomInput>
+            <CustomInput
+              label='طريقة التبرع'
+              inputType='nativeSelect'
+              styles={nativeSelectStyles}
+              value={donationType}
+              setValue={setDonationType}
+            >
+              <option value='' disabled style={{ display: 'none' }}></option>
+              <option value='all'>الكل</option>
+              <option value='Alhamra'>الحمراء</option>
+              <option value='Alghuta'>الغوطة</option>
+            </CustomInput>
+            <CustomInput
+              label='الوجهة'
+              inputType='nativeSelect'
+              styles={nativeSelectStyles}
+              value={destination}
+              setValue={setDestination}
+            >
+              <option value='' disabled style={{ display: 'none' }}></option>
+              <option value='all'>الكل</option>
+              <option value='Alhamra'>الحمراء</option>
+              <option value='Alghuta'>الغوطة</option>
+            </CustomInput>
+          </div>
+
+          <p>عدد المنظمات: {rows.length}</p>
+        </div>
+        <PageTable
+          columns={columns}
+          rows={rows}
+          pageLink={`/content/donars`}
+          isLoading={isDonarsFetching}
+          /* hasNoResult={isFiltered && rows?.length === 0} */
+          error={donarsError?.message}
+        />
+      </div>
     </PageContainer>
   );
 };
