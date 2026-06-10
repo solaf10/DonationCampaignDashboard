@@ -135,37 +135,9 @@ export default function AddFinancialOperations({ onSubmit, onCancel }) {
     <div>
       <Link to={"/content/financial-operations"}>
         <PageContainer className={"title"}>
-          {/* <div>
-            <Typography
-              fontWeight={700}
-              lineHeight={1.8}
-              className={"Toastify__toast-body"}
-              // onClick={() => navigate(-1)}
-              sx={{
-                fontSize: "var(--main-title-font)",
-                color: "var(--toastify-color-dark);",
-                cursor: "pointer",
-              }}
-            >
-              إضافة عملية مالية{" "}
-            </Typography>
-            <Typography
-              lineHeight={1.8}
-              className={"Toastify__toast-body"}
-              // onClick={() => navigate(-1)}
-              sx={{
-                fontFamily: "-apple-system",
-                fontSize: "var(--body-text)",
-                color: " #7a7a7a",
-                marginBottom: "24px",
-              }}
-            >
-              يمكنك إضافة عملية دفع واحدة فقط للتفصيل خلال اليوم{" "}
-            </Typography>
-          </div> */}
           <Title
-            pageTitle="إدارة العمليات المالية"
-            subtitle="يمكنك اضافة عملية مالية واحدة للمشروع باليوم"
+            pageTitle="ضافة عملية مالية"
+            subtitle="يمكنك إضافة عملية دفع واحدة فقط للتفصيل خلال اليوم  "
           ></Title>
           <Box
             sx={{

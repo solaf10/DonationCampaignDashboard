@@ -1,5 +1,5 @@
-import config from '../constants/enviroment';
-import api from './axios';
+import config from "../constants/enviroment";
+import api from "./axios";
 
 export const getProjects = async () => {
   const res = await api.get(`/${config.projects.all}`);
