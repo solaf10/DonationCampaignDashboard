@@ -198,7 +198,8 @@ body {
   }
 }
 .campaigns,
-.projects {
+.projects,
+.donars {
   .filters-holder {
     align-items: center;
     padding-bottom: 15px;

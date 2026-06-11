@@ -17,6 +17,7 @@ import InfoCard from '../components/InfoCard';
 import PersonIcon from '@mui/icons-material/Person';
 import { formatDate } from '../customHooks/useGetCampaignsLogic';
 import DonarDetailsSkeleton from '../components/Skeletons/DonarDetailsSkeleton';
+import PaycheckVerifyModal from '../components/PaycheckVerifyModal';
 
 const columns = [
   { id: 'last_donation', label: 'آخر تبرع' },
@@ -96,7 +97,7 @@ const DonarDetails = () => {
     ...donation,
     name: donation?.user?.name,
     date: formatDate(donation?.date),
-    /* campaignName: donation?.campaing?.name, */
+    campaignName: donation?.campaing?.name,
     last_donation: `${donation?.last_donation}\u00A0${getCurrency(donation?.currency_type)}`,
   }));
 
@@ -195,6 +196,7 @@ const DonarDetails = () => {
         /* hasNoResult={isFiltered && rows?.length === 0} */
         /* error={donarsError?.message} */
       />
+      <PaycheckVerifyModal />
     </PageContainer>
   );
 };

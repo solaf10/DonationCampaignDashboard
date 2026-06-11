@@ -32,6 +32,7 @@ import { toast } from 'react-toastify';
 import { useFilters } from '../contexts/FilterContext';
 import useRestore from '../customHooks/mutations/useRestore';
 import FilterCampaignsDrawer from '../components/FilterCampaignDrawer';
+import FilterDrawer from '../components/FilterDrawer';
 
 const columns = [
   { id: 'name', label: 'اسم الحملة' },
@@ -176,6 +177,17 @@ const Campaigns = ({ isTrash = false }) => {
     refilterCampaigns();
   }, [campaignFilters, refilterCampaigns]);
 
+  const handleReset = () => {
+    setCampaignFilters((prev) => ({
+      ...prev,
+      government: '',
+      city: '',
+      district_uuid: '',
+      project_uuid: '',
+      status: [],
+    }));
+  };
+
   return (
     <PageContainer>
       <Title
@@ -264,11 +276,13 @@ const Campaigns = ({ isTrash = false }) => {
         baseQuery={['campaigns']}
         url={deletedItemUrl}
       />
-      <FilterCampaignsDrawer
-        refilterCampaigns={refilterCampaigns}
-        isFiltering={isFiltering}
-        filterCampaignsError={fetchingError}
-      />
+      <FilterDrawer title='تصفية الحملات' onReset={handleReset}>
+        <FilterCampaignsDrawer
+          refilterCampaigns={refilterCampaigns}
+          isFiltering={isFiltering}
+          filterCampaignsError={fetchingError}
+        />
+      </FilterDrawer>
     </PageContainer>
   );
 };

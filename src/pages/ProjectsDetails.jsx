@@ -116,6 +116,9 @@ export default function ProjectDetails() {
   );
   const deletedItemUrl = `/${config.projects.delete}/${deletedItemID}`;
 
+  if (isFetchingProjectDetails)
+    return <CampaignDetailsSkeleton infos={[...Array(6)]} />;
+
   if (!project) {
     return (
       <Box sx={{ p: 5 }}>
@@ -123,8 +126,6 @@ export default function ProjectDetails() {
       </Box>
     );
   }
-  if (isFetchingProjectDetails)
-    return <CampaignDetailsSkeleton infos={[...Array(6)]} />;
 
   return (
     <Box

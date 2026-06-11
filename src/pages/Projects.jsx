@@ -118,6 +118,19 @@ export default function Projects({ isTrash = false }) {
           </Grid>
         ));
 
+  const handleReset = () => {
+    setProjectFilters((prev) => ({
+      ...prev,
+      government: '',
+      city: '',
+      district_uuid: '',
+      funding_source: '',
+      sector: '',
+      status: [],
+      progress_percentage: 0,
+    }));
+  };
+
   return (
     <Container className='projects' maxWidth='lg' sx={{ px: 2 }}>
       <Title
@@ -171,11 +184,12 @@ export default function Projects({ isTrash = false }) {
         </div>
       )}
 
-      {/* <FilterDrawer open={openFilter} onClose={() => setOpenFilter(false)} /> */}
-      <ProjectFilterDrawer
-        refilterProjects={refetch}
-        filterProjectsError={filterProjectsError}
-      />
+      <FilterDrawer title='تصفية متقدمة' onReset={handleReset}>
+        <ProjectFilterDrawer
+          refilterProjects={refetch}
+          filterProjectsError={filterProjectsError}
+        />
+      </FilterDrawer>
 
       <Box
         sx={{
