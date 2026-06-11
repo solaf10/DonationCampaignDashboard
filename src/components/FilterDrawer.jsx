@@ -21,11 +21,9 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 import { useState } from 'react';
-
 export default function FilterDrawer({ open, onClose }) {
-  // ✔️ خليت progress لحاله (كما هو عندك)
+ 
   const [progress, setProgress] = useState(0);
 
   const [status, setStatus] = useState({

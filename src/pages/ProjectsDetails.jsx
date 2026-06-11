@@ -96,8 +96,7 @@ export default function ProjectDetails() {
   } = useSingleProject(id);
 
   const project = projectData?.data?.project || null;
-  const campaign = projectData?.data?.campaigns[0] || null;
-
+const campaign = projectData?.data?.campaigns?.[0] || null;
   const progressValue = parseInt(project?.progress_percentage || '') || 0;
 
   const requirements = project?.requirements
@@ -116,6 +115,10 @@ export default function ProjectDetails() {
   );
   const deletedItemUrl = `/${config.projects.delete}/${deletedItemID}`;
 
+  
+  if (isFetchingProjectDetails)
+    return <CampaignDetailsSkeleton infos={[...Array(6)]} />;
+  
   if (!project) {
     return (
       <Box sx={{ p: 5 }}>
@@ -123,8 +126,6 @@ export default function ProjectDetails() {
       </Box>
     );
   }
-  if (isFetchingProjectDetails)
-    return <CampaignDetailsSkeleton infos={[...Array(6)]} />;
 
   return (
     <Box
@@ -172,7 +173,7 @@ export default function ProjectDetails() {
                 color: 'var(--main-color)',
               }}
             >
-              {project.name}
+              {project?.name}
             </Typography>
           </Box>
 
@@ -180,8 +181,8 @@ export default function ProjectDetails() {
             <Button
               onClick={() =>
                 campaign
-                  ? navigate(`/content/campaigns/${campaign.uuid}`)
-                  : dispatch(controlAddBySelectionModal(project.uuid))
+                  ? navigate(`/content/campaigns/${campaign?.uuid}`)
+                  : dispatch(controlAddBySelectionModal(project?.uuid))
               }
               startIcon={campaign ? <VisibilityOutlinedIcon /> : <LinkIcon />}
               sx={{
@@ -235,7 +236,7 @@ export default function ProjectDetails() {
                 dispatch(
                   controlSuccessDialog({
                     type: 'delete-project',
-                    id: project.uuid,
+                    id: project?.uuid,
                   }),
                 )
               }
@@ -257,8 +258,8 @@ export default function ProjectDetails() {
         >
           <Box
             component='img'
-            src={config.baseUrl + project.cover_image}
-            alt={project.name}
+            src={config.baseUrl + project?.cover_image}
+            alt={project?.name}
             sx={{
               width: '100%',
               height: '100%',
@@ -304,7 +305,7 @@ export default function ProjectDetails() {
                 lineHeight: 1.1,
               }}
             >
-              {project.name}
+              {project?.name}
             </Typography>
 
             <Box
@@ -356,9 +357,9 @@ export default function ProjectDetails() {
               icon={<CategoryIcon />}
               title='القطاع'
               value={
-                project.on_the_other_hand
-                  ? project.on_the_other_hand
-                  : project.sector
+                project?.on_the_other_hand
+                  ? project?.on_the_other_hand
+                  : project?.sector
               }
               bg='#e3f2fd'
               color='#1565c0'
@@ -369,7 +370,7 @@ export default function ProjectDetails() {
             <InfoCard
               icon={<BusinessIcon />}
               title='الجهة المنفذة'
-              value={project.funding_source}
+              value={project?.funding_source}
               bg='#fff3e0'
               color='#ef6c00'
             />
@@ -379,7 +380,7 @@ export default function ProjectDetails() {
             <InfoCard
               icon={<AccountBalanceIcon />}
               title='الجهة الممولة'
-              value={project.Implementing_party}
+              value={project?.Implementing_party}
               bg='#fce4ec'
               color='#c2185b'
             />
@@ -389,7 +390,7 @@ export default function ProjectDetails() {
             <InfoCard
               icon={<AttachMoneyIcon />}
               title='الكلفة'
-              value={`${project.estimated_cost}`}
+              value={`${project?.estimated_cost}`}
               bg='#e8f5e9'
               color='#2e7d32'
             />
@@ -448,23 +449,23 @@ export default function ProjectDetails() {
           />
 
           {/* BILL */}
-          <ProjectsBill details={project.details} projectID={project.uuid} />
+          <ProjectsBill details={project?.details} projectID={project?.uuid} />
         </Grid>
 
         {/* Image GALLERY */}
         <ProjectMediaCard
           title='صور المشروع'
           mediaType='image'
-          mediaItems={project.images}
-          altBase={project.name}
+          mediaItems={project?.images}
+          altBase={project?.name}
         />
 
         {/* Videos GALLERY */}
         <ProjectMediaCard
           title='فيديوهات المشروع'
           mediaType='video'
-          mediaItems={project.videos}
-          altBase={project.name}
+          mediaItems={project?.videos}
+          altBase={project?.name}
         />
       </Box>
 
