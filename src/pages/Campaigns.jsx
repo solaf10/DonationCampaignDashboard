@@ -232,7 +232,7 @@ const Campaigns = ({ isTrash = false }) => {
             <IconButton
               className='filter-btn'
               onClick={() =>
-                dispatch(controlControlLocationModal({ type: 'add' }))
+                dispatch(controlControlLocationModal({ type: 'filter' }))
               }
             >
               <FilterAltOutlined className='icon' />

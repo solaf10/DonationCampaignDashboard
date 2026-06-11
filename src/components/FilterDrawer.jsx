@@ -15,14 +15,22 @@ const FilterDrawer = ({
     (state) => state.modalController.isControlLocationModalOpen,
   );
 
+  const selectedType = useSelector(
+    (state) => state.modalController.controlLocationModalType,
+  );
+
   const handleClose = () =>
     dispatch({
       type: 'modalController/controlControlLocationModal',
-      payload: { type: 'add', id: null },
+      payload: { type: 'filter', id: null },
     });
 
   return (
-    <Drawer anchor='right' open={isOpen} onClose={handleClose}>
+    <Drawer
+      anchor='right'
+      open={isOpen && selectedType === 'filter'}
+      onClose={handleClose}
+    >
       <Box
         sx={{
           width: 320,

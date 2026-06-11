@@ -170,7 +170,9 @@ export default function Projects({ isTrash = false }) {
           </div>
           <IconButton
             onClick={() =>
-              dispatch(controlControlLocationModal({ type: 'add', id: null }))
+              dispatch(
+                controlControlLocationModal({ type: 'filter', id: null }),
+              )
             }
             sx={{
               backgroundColor: '#eeeeee',

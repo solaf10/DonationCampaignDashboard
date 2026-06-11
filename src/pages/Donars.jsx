@@ -120,7 +120,7 @@ const Donars = () => {
               m: 1,
             }}
             onClick={() =>
-              dispatch(controlControlLocationModal({ type: 'add' }))
+              dispatch(controlControlLocationModal({ type: 'filter' }))
             }
             className='filter-btn'
           >
