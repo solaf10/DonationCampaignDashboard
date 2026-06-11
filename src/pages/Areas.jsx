@@ -121,6 +121,13 @@ const Areas = () => {
           rows={rows}
           columns={columns}
           isLoading={isSearching || isFetchingAreas || isFiltering}
+          error={
+            areasError
+              ? areasError?.message
+              : citiesError
+                ? citiesError?.message
+                : governmentsError?.message
+          }
         />
       </div>
 

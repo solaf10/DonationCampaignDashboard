@@ -8,7 +8,6 @@ import {
   FormControlLabel,
   IconButton,
 } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { useGetStatus } from '../customHooks/queries/useCampaigns';
 import useProjects from '../customHooks/queries/useProjects';
@@ -25,12 +24,6 @@ const checkboxStyle = {
 
 const FilterCampaignsDrawer = ({ refilterCampaigns, filterCampaignsError }) => {
   const { campaignFilters, setCampaignFilters } = useFilters();
-
-  const isOpen = useSelector(
-    (state) => state.modalController.isControlLocationModalOpen,
-  );
-
-  const dispatch = useDispatch();
 
   const { data: statusData } = useGetStatus();
   const statusCases = statusData?.data || [];
@@ -63,117 +56,57 @@ const FilterCampaignsDrawer = ({ refilterCampaigns, filterCampaignsError }) => {
     }));
   };
 
-  const handleReset = () => {
-    setCampaignFilters((prev) => ({
-      ...prev,
-      government: '',
-      city: '',
-      district_uuid: '',
-      project_uuid: '',
-      status: [],
-    }));
-  };
-
-  const handleClose = () =>
-    dispatch({
-      type: 'modalController/controlControlLocationModal',
-      payload: { type: 'add', id: null },
-    });
-
   return (
-    <Drawer anchor='right' open={isOpen} onClose={handleClose}>
-      <Box
-        sx={{
-          width: 320,
-          p: 3,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Typography fontSize={20} fontWeight='bold'>
-            تصفية متقدمة
-          </Typography>
-
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
-
-        {filterCampaignsError && (
-          <Typography sx={{ color: 'red' }}>
-            {filterCampaignsError.message}
-          </Typography>
-        )}
-
-        {/* نفس تصميمك الأصلي */}
-        <Location formData={campaignFilters} setFormData={setCampaignFilters} />
-
-        {/* project autocomplete بنفس CustomInput */}
-        <CustomInput
-          inputType='autocomplete'
-          label='المشروع'
-          value={
-            projects.find((p) => p.uuid === campaignFilters.project_uuid) ||
-            null
-          }
-          setValue={(project) =>
-            setCampaignFilters((prev) => ({
-              ...prev,
-              project_uuid: project?.uuid || '',
-            }))
-          }
-          placeholder='ابحث عن مشروع...'
-          isNestedState
-        >
-          {projects}
-        </CustomInput>
-
-        {/* status */}
-        <Typography fontSize={16} fontWeight='bold'>
-          حالة الحملة
+    <>
+      {filterCampaignsError && (
+        <Typography sx={{ color: 'red' }}>
+          {filterCampaignsError.message}
         </Typography>
+      )}
 
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          {statusCases.map((status) => (
-            <FormControlLabel
-              key={status}
-              control={
-                <Checkbox
-                  checked={campaignFilters.status.includes(status)}
-                  onChange={() => handleCheckbox(status)}
-                  sx={checkboxStyle}
-                />
-              }
-              label={status}
-            />
-          ))}
-        </Box>
+      {/* نفس تصميمك الأصلي */}
+      <Location formData={campaignFilters} setFormData={setCampaignFilters} />
 
-        {/* RESET فقط */}
-        <Button
-          variant='contained'
-          onClick={handleReset}
-          sx={{
-            mt: 2,
-            borderRadius: '999px',
-            backgroundColor: '#E5E7EB',
-            color: '#000',
-            boxShadow: 'none',
-            '&:hover': { boxShadow: 'none' },
-          }}
-        >
-          إعادة تعيين
-        </Button>
+      {/* project autocomplete بنفس CustomInput */}
+      <CustomInput
+        inputType='autocomplete'
+        label='المشروع'
+        value={
+          projects.find((p) => p.uuid === campaignFilters.project_uuid) || null
+        }
+        setValue={(project) =>
+          setCampaignFilters((prev) => ({
+            ...prev,
+            project_uuid: project?.uuid || '',
+          }))
+        }
+        placeholder='ابحث عن مشروع...'
+        isNestedState
+      >
+        {projects}
+      </CustomInput>
+
+      {/* status */}
+      <Typography fontSize={16} fontWeight='bold'>
+        حالة الحملة
+      </Typography>
+
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        {statusCases.map((status) => (
+          <FormControlLabel
+            key={status}
+            control={
+              <Checkbox
+                checked={campaignFilters.status.includes(status)}
+                onChange={() => handleCheckbox(status)}
+                sx={checkboxStyle}
+              />
+            }
+            label={status}
+          />
+        ))}
       </Box>
-    </Drawer>
+    </>
   );
 };
 

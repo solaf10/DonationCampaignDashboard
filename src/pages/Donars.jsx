@@ -1,15 +1,20 @@
-import { useState } from 'react';
 import CustomInput from '../components/locations/CustomInput';
-import { AddRounded } from '@mui/icons-material';
+import { AddRounded, FilterAltOutlined } from '@mui/icons-material';
 import Title from '../components/Title';
 import PageContainer from '../components/PageContainer';
 import PageTable from '../components/PageTable';
-import useDonars from '../customHooks/queries/useDonars';
-import { useLocation } from 'react-router-dom';
+import useDonars, { useFilterDonars } from '../customHooks/queries/useDonars';
+import { useSearchParams } from 'react-router-dom';
 import config from '../constants/enviroment';
 import { formatDate } from '../customHooks/useGetCampaignsLogic';
 import { getCurrency } from '../utils/methods';
 import PaycheckVerifyModal from '../components/PaycheckVerifyModal';
+import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
+import { useFilters } from '../contexts/FilterContext';
+import { useDispatch } from 'react-redux';
+import { IconButton } from '@mui/material';
+import DonarsFilterDrawer from '../components/DonarsFilterDrawer';
+import FilterDrawer from '../components/FilterDrawer';
 
 const columns = [
   { id: 'name', label: 'الاسم' },
@@ -22,19 +27,14 @@ const columns = [
   { id: 'verify', label: 'الإجراءات' },
 ];
 
-const nativeSelectStyles = {
-  minWidth: '100px',
-};
-
 const Donars = () => {
-  const [searchedKey, setSearchedKey] = useState('');
-  const [order, setOrder] = useState('');
-  const [donationType, setDonationType] = useState('');
-  const [destination, setDestination] = useState('');
+  const { donarFilters, setDonarFilters } = useFilters();
 
-  const location = useLocation();
-  const locationTypeArr = location.pathname.split('/');
-  const locationType = locationTypeArr[locationTypeArr?.length - 1];
+  const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
+
+  // fetchDonars
+  const locationType = searchParams.get('type');
 
   const url = `/${config.donars.all?.[locationType]}`;
 
@@ -44,7 +44,21 @@ const Donars = () => {
     error: donarsError,
   } = useDonars(locationType, url);
 
-  const donars = donarsData?.data || [];
+  const hasFilters =
+    donarFilters?.name ||
+    donarFilters?.pending ||
+    donarFilters?.method ||
+    donarFilters?.status;
+  const {
+    data: filteredDonarsData,
+    isFetching: isFiltering,
+    error: filterError,
+    refetch,
+  } = useFilterDonars(donarFilters);
+
+  const donars = hasFilters
+    ? filteredDonarsData?.data || []
+    : donarsData?.data || [];
 
   const rows = donars?.map((donar) => {
     const currency = getCurrency(donar?.currency_type);
@@ -58,6 +72,14 @@ const Donars = () => {
     };
   });
 
+  const handleReset = () => {
+    setDonarFilters({
+      pending: '',
+      status: '',
+      currency_type: '',
+    });
+  };
+
   return (
     <PageContainer>
       <Title pageTitle='إدارة المتبرعين' subtitle='منظمات داعمة' />
@@ -65,7 +87,7 @@ const Donars = () => {
       {/* Table & filter */}
 
       {/* filter holder */}
-      <div className='table-content organizations'>
+      <div className='table-content donars'>
         {/* filter holder */}
         <div className='filters-holder'>
           <div className='input-holder'>
@@ -79,59 +101,48 @@ const Donars = () => {
                   color: 'var(--main-color)', // لون اللابل عند focus
                 },
               }}
-              value={searchedKey}
-              setValue={setSearchedKey}
+              value={donarFilters?.name}
+              setValue={(value) =>
+                setDonarFilters((prev) => ({
+                  ...prev,
+                  name: value,
+                }))
+              }
             />
-            <CustomInput
-              label='الترتيب'
-              inputType='nativeSelect'
-              styles={nativeSelectStyles}
-              value={order}
-              setValue={setOrder}
-            >
-              <option value='' disabled style={{ display: 'none' }}></option>
-              <option value='all'>الكل</option>
-              <option value='Alhamra'>حمص</option>
-              <option value='Alghuta'>حماة</option>
-            </CustomInput>
-            <CustomInput
-              label='طريقة التبرع'
-              inputType='nativeSelect'
-              styles={nativeSelectStyles}
-              value={donationType}
-              setValue={setDonationType}
-            >
-              <option value='' disabled style={{ display: 'none' }}></option>
-              <option value='all'>الكل</option>
-              <option value='Alhamra'>الحمراء</option>
-              <option value='Alghuta'>الغوطة</option>
-            </CustomInput>
-            <CustomInput
-              label='الوجهة'
-              inputType='nativeSelect'
-              styles={nativeSelectStyles}
-              value={destination}
-              setValue={setDestination}
-            >
-              <option value='' disabled style={{ display: 'none' }}></option>
-              <option value='all'>الكل</option>
-              <option value='Alhamra'>الحمراء</option>
-              <option value='Alghuta'>الغوطة</option>
-            </CustomInput>
-          </div>
 
-          <p>عدد المنظمات: {rows.length}</p>
+            <p style={{ fontSize: '14px' }}>عدد المتبرعين: {rows?.length}</p>
+          </div>
+          {/* filter Model btn */}
+          <IconButton
+            sx={{
+              backgroundColor: '#eeeeee',
+              borderRadius: 2,
+              m: 1,
+            }}
+            onClick={() =>
+              dispatch(controlControlLocationModal({ type: 'filter' }))
+            }
+            className='filter-btn'
+          >
+            <FilterAltOutlined className='icon' />
+          </IconButton>
         </div>
         <PageTable
           columns={columns}
           rows={rows}
           pageLink={`/content/donars`}
-          isLoading={isDonarsFetching}
-          /* hasNoResult={isFiltered && rows?.length === 0} */
+          isLoading={isDonarsFetching || isFiltering}
+          hasNoResult={hasFilters && rows?.length === 0}
           error={donarsError?.message}
         />
       </div>
       <PaycheckVerifyModal />
+      <FilterDrawer title='تصفية المتبرعين' onReset={handleReset}>
+        <DonarsFilterDrawer
+          refilterDonars={refetch}
+          filterDonarsError={filterError}
+        />
+      </FilterDrawer>
     </PageContainer>
   );
 };

@@ -41,7 +41,6 @@ const PageTable = ({
   hasNoResult,
   error,
   handleRestore,
-  renderCell,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -178,7 +177,12 @@ const PageTable = ({
                       hover
                       key={row.uuid}
                       onClick={() =>
-                        pageLink ? navigate(pageLink + `/${row.uuid}`) : null
+                        pageLink
+                          ? navigate(
+                              pageLink +
+                                `/${pageLink.includes('donars') ? row?.user?.uuid : row.uuid}`,
+                            )
+                          : null
                       }
                       style={{ cursor: pageLink ? 'pointer' : 'unset' }}
                       sx={{
@@ -233,7 +237,8 @@ const PageTable = ({
                           );
                         } else if (
                           column.id === 'verify' &&
-                          row['status'] === 'قيد التدقيق'
+                          row['status'] === 'قيد التدقيق' &&
+                          row['pending'] === 'مدفوع'
                         ) {
                           return (
                             <TableCell key={column.id + row.uuid}>
@@ -245,7 +250,7 @@ const PageTable = ({
                                   dispatch(
                                     controlControlLocationModal({
                                       type: 'verify',
-                                      id: row.uuid,
+                                      id: row?.uuid,
                                     }),
                                   );
                                 }}

@@ -72,6 +72,9 @@ const config = {
       business: 'bussinessman/all',
     },
     donarDetails: 'donater/show',
+    paycheck: 'show/image',
+    verify: 'verify',
+    filter: 'donaters/filter',
   },
 };
 export default config;

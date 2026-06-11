@@ -11,8 +11,18 @@ export const getSingleDonar = async (id) => {
 
   return res.data;
 };
-export const filterCampaigns = async (body) => {
-  const res = await api.post(`/${config.campaigns.filter}`, body);
+export const getPaycheck = async (id) => {
+  const res = await api.get(`/${config.donars.paycheck}/${id}`);
+
+  return res.data;
+};
+export const verifyPaycheck = async (id, body) => {
+  const res = await api.post(`/${config.donars.verify}/${id}`, body);
+
+  return res.data;
+};
+export const filterDonars = async (body) => {
+  const res = await api.post(`/${config.donars.filter}`, body);
 
   return res.data;
 };

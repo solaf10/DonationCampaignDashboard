@@ -24,6 +24,12 @@ export const FiltersProvider = ({ children }) => {
     status: [],
     progress_percentage: 0,
   });
+  const [donarFilters, setDonarFilters] = useState({
+    name: '',
+    pending: '',
+    status: '',
+    currency_type: '',
+  });
 
   return (
     <FiltersContext.Provider
@@ -33,6 +39,9 @@ export const FiltersProvider = ({ children }) => {
 
         projectFilters,
         setProjectFilters,
+
+        donarFilters,
+        setDonarFilters,
       }}
     >
       {children}

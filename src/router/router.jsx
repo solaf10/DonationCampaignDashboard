@@ -117,29 +117,17 @@ export const router = createBrowserRouter([
           },
 
           /* Donars */
-          {
+          /*  {
             path: 'donars',
             element: <DonarsStats />,
+          }, */
+          {
+            path: 'donars',
+            element: <Donars />,
           },
-
           {
             path: 'donars/:id',
             element: <DonarDetails />,
-          },
-
-          {
-            path: 'individuals',
-            element: <Donars />,
-          },
-
-          {
-            path: 'organizations',
-            element: <Donars />,
-          },
-
-          {
-            path: 'business',
-            element: <Donars />,
           },
         ],
       },

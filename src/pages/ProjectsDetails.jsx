@@ -115,10 +115,9 @@ const campaign = projectData?.data?.campaigns?.[0] || null;
   );
   const deletedItemUrl = `/${config.projects.delete}/${deletedItemID}`;
 
-  
   if (isFetchingProjectDetails)
     return <CampaignDetailsSkeleton infos={[...Array(6)]} />;
-  
+
   if (!project) {
     return (
       <Box sx={{ p: 5 }}>

@@ -13,8 +13,6 @@ import {
 
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useDispatch, useSelector } from 'react-redux';
-
 import Location from './Stepper/Projects/Location';
 import CustomInput from './locations/CustomInput';
 
@@ -34,12 +32,6 @@ const checkboxStyle = {
 
 const ProjectFilterDrawer = ({ refilterProjects, filterProjectsError }) => {
   const { projectFilters, setProjectFilters } = useFilters();
-
-  const isOpen = useSelector(
-    (state) => state.modalController.isControlLocationModalOpen,
-  );
-
-  const dispatch = useDispatch();
 
   const {
     data: sectorsData,
@@ -76,194 +68,128 @@ const ProjectFilterDrawer = ({ refilterProjects, filterProjectsError }) => {
     }));
   };
 
-  const handleReset = () => {
-    setProjectFilters((prev) => ({
-      ...prev,
-      government: '',
-      city: '',
-      district_uuid: '',
-      funding_source: '',
-      sector: '',
-      status: [],
-      progress_percentage: 0,
-    }));
-  };
-
-  const handleClose = () =>
-    dispatch({
-      type: 'modalController/controlControlLocationModal',
-      payload: { type: 'add', id: null },
-    });
-
   return (
-    <Drawer anchor='right' open={isOpen} onClose={handleClose}>
-      <Box
-        sx={{
-          width: 320,
-          p: 3,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-        }}
+    <>
+      {filterProjectsError && (
+        <ErrorMessage>{filterProjectsError.message}</ErrorMessage>
+      )}
+
+      {/* الموقع */}
+      <Location formData={projectFilters} setFormData={setProjectFilters} />
+
+      <CustomInput
+        label='الجهة الممولة'
+        inputType='select'
+        value={projectFilters.funding_source || ''}
+        setValue={(e) =>
+          setProjectFilters((prev) => ({
+            ...prev,
+            funding_source: e.target.value,
+          }))
+        }
+        isNestedState={true}
+        isDisabled={isFetchingFundingSrc}
+        helperText={
+          isFetchingFundingSrc
+            ? 'جارِ جلب الجهات الممولة...'
+            : fundingSrcError
+              ? 'حدث خطأ أثناء جلب الجهات الممولة'
+              : funders.length === 0
+                ? 'لا توجد جهات ممولة حالياً'
+                : ''
+        }
+        isRequired={true}
       >
-        {/* Header */}
+        {funders.map((src) => (
+          <MenuItem key={src} value={src}>
+            {src}
+          </MenuItem>
+        ))}
+      </CustomInput>
+
+      {/* الحالة */}
+      <Typography fontSize={16} fontWeight='bold'>
+        حالة المشروع
+      </Typography>
+
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        {status.map((status) => (
+          <FormControlLabel
+            key={status}
+            control={
+              <Checkbox
+                checked={projectFilters.status.includes(status)}
+                onChange={() => handleCheckbox(status)}
+                sx={checkboxStyle}
+              />
+            }
+            label={status}
+          />
+        ))}
+      </Box>
+
+      <CustomInput
+        label='القطاع'
+        inputType='select'
+        value={projectFilters.sector || ''}
+        setValue={(e) =>
+          setProjectFilters((prev) => ({
+            ...prev,
+            sector: e.target.value,
+          }))
+        }
+        isNestedState={true}
+        isDisabled={isFetchingSectors}
+        helperText={
+          isFetchingSectors
+            ? 'جارِ جلب القطاعات...'
+            : sectorsError
+              ? 'حدث خطأ أثناء جلب القطاعات'
+              : sectors.length === 0
+                ? 'لا توجد قطاعات متاحة حالياً'
+                : ''
+        }
+      >
+        {sectors.map((sector) => (
+          <MenuItem key={sector} value={sector}>
+            {sector}
+          </MenuItem>
+        ))}
+      </CustomInput>
+
+      {/* نسبة الإنجاز */}
+      <Typography fontSize={16} fontWeight='bold'>
+        نسبة الإنجاز
+      </Typography>
+
+      <Box px={1}>
+        <Slider
+          value={projectFilters.progress_percentage}
+          onChange={(_, value) =>
+            setProjectFilters((prev) => ({
+              ...prev,
+              progress_percentage: value,
+            }))
+          }
+          valueLabelDisplay='auto'
+          sx={{
+            color: 'var(--main-color)',
+          }}
+        />
+
         <Box
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
           }}
         >
-          <Typography fontSize={20} fontWeight='bold'>
-            تصفية متقدمة
+          <Typography fontSize={13}>
+            {projectFilters?.progress_percentage}%
           </Typography>
-
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
+          <Typography fontSize={13}>100%</Typography>
         </Box>
-
-        {filterProjectsError && (
-          <ErrorMessage>{filterProjectsError.message}</ErrorMessage>
-        )}
-
-        {/* الموقع */}
-        <Location formData={projectFilters} setFormData={setProjectFilters} />
-
-        <CustomInput
-          label='الجهة الممولة'
-          inputType='select'
-          value={projectFilters.funding_source || ''}
-          setValue={(e) =>
-            setProjectFilters((prev) => ({
-              ...prev,
-              funding_source: e.target.value,
-            }))
-          }
-          isNestedState={true}
-          isDisabled={isFetchingFundingSrc}
-          helperText={
-            isFetchingFundingSrc
-              ? 'جارِ جلب الجهات الممولة...'
-              : fundingSrcError
-                ? 'حدث خطأ أثناء جلب الجهات الممولة'
-                : funders.length === 0
-                  ? 'لا توجد جهات ممولة حالياً'
-                  : ''
-          }
-          isRequired={true}
-        >
-          {funders.map((src) => (
-            <MenuItem key={src} value={src}>
-              {src}
-            </MenuItem>
-          ))}
-        </CustomInput>
-
-        {/* الحالة */}
-        <Typography fontSize={16} fontWeight='bold'>
-          حالة المشروع
-        </Typography>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          {status.map((status) => (
-            <FormControlLabel
-              key={status}
-              control={
-                <Checkbox
-                  checked={projectFilters.status.includes(status)}
-                  onChange={() => handleCheckbox(status)}
-                  sx={checkboxStyle}
-                />
-              }
-              label={status}
-            />
-          ))}
-        </Box>
-
-        <CustomInput
-          label='القطاع'
-          inputType='select'
-          value={projectFilters.sector || ''}
-          setValue={(e) =>
-            setProjectFilters((prev) => ({
-              ...prev,
-              sector: e.target.value,
-            }))
-          }
-          isNestedState={true}
-          isDisabled={isFetchingSectors}
-          helperText={
-            isFetchingSectors
-              ? 'جارِ جلب القطاعات...'
-              : sectorsError
-                ? 'حدث خطأ أثناء جلب القطاعات'
-                : sectors.length === 0
-                  ? 'لا توجد قطاعات متاحة حالياً'
-                  : ''
-          }
-        >
-          {sectors.map((sector) => (
-            <MenuItem key={sector} value={sector}>
-              {sector}
-            </MenuItem>
-          ))}
-        </CustomInput>
-
-        {/* نسبة الإنجاز */}
-        <Typography fontSize={16} fontWeight='bold'>
-          نسبة الإنجاز
-        </Typography>
-
-        <Box px={1}>
-          <Slider
-            value={projectFilters.progress_percentage}
-            onChange={(_, value) =>
-              setProjectFilters((prev) => ({
-                ...prev,
-                progress_percentage: value,
-              }))
-            }
-            valueLabelDisplay='auto'
-            sx={{
-              color: 'var(--main-color)',
-            }}
-          />
-
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Typography fontSize={13}>
-              {projectFilters?.progress_percentage}%
-            </Typography>
-            <Typography fontSize={13}>100%</Typography>
-          </Box>
-        </Box>
-
-        {/* Reset */}
-        <Button
-          variant='contained'
-          onClick={handleReset}
-          sx={{
-            mt: 2,
-            borderRadius: '999px',
-            backgroundColor: '#E5E7EB',
-            color: '#000',
-            boxShadow: 'none',
-
-            '&:hover': {
-              boxShadow: 'none',
-              backgroundColor: '#D1D5DB',
-            },
-          }}
-        >
-          إعادة تعيين
-        </Button>
       </Box>
-    </Drawer>
+    </>
   );
 };
 
