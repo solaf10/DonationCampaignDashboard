@@ -41,7 +41,6 @@ const PageTable = ({
   hasNoResult,
   error,
   handleRestore,
-  renderCell,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);

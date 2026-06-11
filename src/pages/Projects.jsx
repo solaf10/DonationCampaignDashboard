@@ -29,6 +29,7 @@ import { useFilters } from '../contexts/FilterContext';
 import TableMessage from '../components/TableMessage';
 import useRestore from '../customHooks/mutations/useRestore';
 import useGetProjectsLogic from '../customHooks/useGetProjectsLogic';
+import ProjectsMessage from '../components/Messages/ProjectsMessage';
 
 export default function Projects({ isTrash = false }) {
   const { projectFilters, setProjectFilters } = useFilters();
@@ -86,7 +87,7 @@ export default function Projects({ isTrash = false }) {
             <ProjectCardSkeleton isTrash={isTrash} />
           </Grid>
         ))
-      : paginatedProjects.map((project) => (
+      : paginatedProjects?.map((project) => (
           <Grid
             item
             xs={12}
@@ -209,50 +210,18 @@ export default function Projects({ isTrash = false }) {
           }}
         >
           {projectsError ? (
-            <Box
-              sx={{
-                height: 450,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <TableMessage
-                message={
-                  projectsError?.message || 'حدث خطأ أثناء تحميل المشاريع'
-                }
-                isError={true}
-              />
-            </Box>
+            <ProjectsMessage
+              message={projectsError?.message || 'حدث خطأ أثناء تحميل المشاريع'}
+              isError={true}
+            />
           ) : !isFetchingProjects && !isFiltering && projects?.length === 0 ? (
-            <Box
-              sx={{
-                height: 450,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '100%',
-                  height: '475px',
-                  borderRadius: '14px',
-                  backgroundColor: 'white',
-                }}
-              >
-                <TableMessage
-                  message={
-                    hasFilters
-                      ? 'لا توجد مشاريع مطابقة للفلاتر المحددة'
-                      : 'لا توجد مشاريع حالياً'
-                  }
-                />
-              </Box>
-            </Box>
+            <ProjectsMessage
+              message={
+                hasFilters
+                  ? 'لا توجد مشاريع مطابقة للفلاتر المحددة'
+                  : 'لا توجد مشاريع حالياً'
+              }
+            />
           ) : (
             <Grid
               container

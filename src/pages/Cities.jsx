@@ -33,8 +33,8 @@ const Cities = () => {
   // fetch governments
   const {
     data: governmentsData,
-    /* isPending: isGovernmentFetching,
-    error: governmentsError, */
+    isPending: isGovernmentFetching,
+    error: governmentsError,
   } = useGovernments();
 
   const governments = governmentsData?.data || [];
@@ -97,6 +97,7 @@ const Cities = () => {
           rows={rows}
           columns={columns}
           isLoading={isFetchingCities || isFiltering || isSearchLoading}
+          error={citiesError ? citiesError?.message : governmentsError?.message}
         />
       </div>
 

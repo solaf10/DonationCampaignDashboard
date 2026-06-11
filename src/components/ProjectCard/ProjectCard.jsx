@@ -54,10 +54,12 @@ export default function ProjectCard({
         borderRadius: 2,
         overflow: 'hidden',
         position: 'relative',
+        cursor: !isTrash ? 'pointer' : 'unset',
         '&:hover': {
           boxShadow: 4,
         },
       }}
+      onClick={() => (!isTrash ? navigate(`/content/projects/${uuid}`) : null)}
     >
       {/* حالة المشروع */}
       <Chip
@@ -221,7 +223,10 @@ export default function ProjectCard({
               <IconButton
                 size='small'
                 sx={{ color: '#607d8b', border: '1px solid #e0e0e0' }}
-                onClick={() => navigate(`/content/projects/edit/${uuid}`)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/content/projects/edit/${uuid}`);
+                }}
               >
                 <EditOutlinedIcon fontSize='small' />
               </IconButton>
@@ -232,9 +237,10 @@ export default function ProjectCard({
                   border: '1px solid #ffcccc',
                   backgroundColor: '#fff5f5',
                 }}
-                onClick={() =>
-                  dispatch(controlSuccessDialog({ type: 'delete', id: uuid }))
-                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(controlSuccessDialog({ type: 'delete', id: uuid }));
+                }}
               >
                 <DeleteOutlinedIcon fontSize='small' />
               </IconButton>
@@ -243,7 +249,10 @@ export default function ProjectCard({
             <Button
               variant='contained'
               size='small'
-              onClick={() => navigate(`/content/projects/${uuid}`)}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/content/projects/${uuid}`);
+              }}
               sx={{
                 backgroundColor: 'var(--main-color)',
                 color: 'white',

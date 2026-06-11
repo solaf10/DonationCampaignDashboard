@@ -55,7 +55,7 @@ const Campaigns = ({ isTrash = false }) => {
 
   const { campaignFilters, setCampaignFilters } = useFilters();
 
-  const isSearching = !!campaignFilters.name?.trim();
+  /* const isSearching = !!campaignFilters.name?.trim(); */
 
   const isFiltered =
     !!campaignFilters?.government ||

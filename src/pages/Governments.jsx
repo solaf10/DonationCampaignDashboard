@@ -75,6 +75,7 @@ const Governments = () => {
           rows={rows}
           columns={columns}
           isLoading={isGovernmentFetching || isSearchLoading}
+          error={governmentError?.message}
         />
       </div>
 
