@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+
 import { useParams, useNavigate } from 'react-router-dom';
 
 import {
@@ -29,19 +29,79 @@ import IconButton from '@mui/material/IconButton';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import BusinessCenterOutlinedIcon from '@mui/icons-material/BusinessCenterOutlined';
-import donationsData from '../components/data/InKindDonationData';
+import InKindDonationDetailsSkelton from '../components/Skeletons/InKindDonationDetailsSkelton';
+// import donationsData from '../components/data/InKindDonationData';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function InKindDonationDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  const donation = donationsData.find((item) => item.uuid === Number(id));
+const [donation, setDonation] = useState(null);
+const [loading, setLoading] = useState(true);
+  // const donation = donationsData.find((item) => item.uuid === Number(id));
   const [lightboxImg, setLightboxImg] = useState(null);
   const [deliveryStatus, setDeliveryStatus] = useState(
     donation?.delivery_status || '',
   );
+useEffect(() => {
+  fetchDonation();
+}, [id]);
 
+const fetchDonation = async () => {
+  try {
+    const token = localStorage.getItem('token');
+
+    const response = await axios.get(
+      'http://127.0.0.1:8000/api/donation/all',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      }
+    );
+
+    const item = response.data.data.find(
+      (d) => d.uuid === id
+    );
+
+    const formatted = {
+      uuid: item.uuid,
+      donor_name: item.user?.name,
+      email: item.user?.email,
+      phone: item.user?.phone,
+      user_type: item.user?.type,
+
+      donation_name: item.name_of_material,
+      donation_type: item.type,
+      location: item.governorate?.governorate_name,
+      quantity: item.amount,
+      item_condition: item.status_of_materail,
+
+      delivery_status:
+        item.status === 'تم استلامه'
+          ? 'تم التسليم'
+          : 'لم يتم التسليم',
+
+      images:
+        item.images?.map(
+          (img) => `http://127.0.0.1:8000${img.url}`
+        ) || [],
+    };
+
+    setDonation(formatted);
+    setDeliveryStatus(formatted.delivery_status);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+};
   const [openStatusDialog, setOpenStatusDialog] = useState(false);
+  if (loading) {
+  return <InKindDonationDetailsSkelton />;
+}
   if (!donation) {
     return (
       <Box p={4}>
@@ -50,6 +110,10 @@ export default function InKindDonationDetails() {
     );
   }
 
+
+if (!donation) {
+  return <Typography>لا يوجد بيانات</Typography>;
+}
   return (
     <Box
       sx={{
@@ -299,58 +363,75 @@ export default function InKindDonationDetails() {
           </Box>
         </Box>
         {/* المعلومات */}
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 2,
-            width: '100%',
-            mt: 3,
-          }}
-        >
-          {[
-            {
-              icon: <PersonIcon />,
-              title: 'اسم المتبرع',
-              value: donation.donor_name,
-            },
-            {
-              icon: <CategoryIcon />,
-              title: 'نوع التبرع',
-              value: donation.donation_type,
-            },
-            {
-              icon: <LocationOnIcon />,
-              title: 'الموقع',
-              value: donation.location,
-            },
-            {
-              icon: <InventoryIcon />,
-              title: 'الكمية',
-              value: donation.quantity,
-            },
-            {
-              icon: <CheckCircleOutlineIcon />,
-              title: 'حالة المواد',
-              value: donation.item_condition,
-            },
-            {
-              icon: <CheckCircleOutlineIcon />,
-              title: 'حالة التسليم',
-              value: deliveryStatus,
-              isDeliveryStatus: true,
-            },
-          ].map((item, i) => (
-            <Box
-              key={i}
-              sx={{
-                flex: 1,
-              }}
-            >
-              <InfoCard {...item} onEdit={() => setOpenStatusDialog(true)} />
-            </Box>
-          ))}
-        </Box>
-
+    <Box
+  sx={{
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 2,
+    width: '100%',
+    mt: 3,
+  }}
+>
+  {[
+   {
+  icon: <PersonIcon />,
+  title: 'اسم المتبرع',
+  value: donation.donor_name,
+  iconBg: '#E8F5E9',
+  iconColor: '#2E7D32',
+},
+{
+  icon: <CategoryIcon />,
+  title: 'نوع التبرع',
+  value: donation.donation_type,
+  iconBg: '#E3F2FD',
+  iconColor: '#1565C0',
+},
+{
+  icon: <LocationOnIcon />,
+  title: 'الموقع',
+  value: donation.location,
+  iconBg: '#FFF3E0',
+  iconColor: '#EF6C00',
+},
+{
+  icon: <InventoryIcon />,
+  title: 'الكمية',
+  value: donation.quantity,
+  iconBg: '#F3E5F5',
+  iconColor: '#7B1FA2',
+},
+{
+  icon: <CheckCircleOutlineIcon />,
+  title: 'حالة المواد',
+  value: donation.item_condition,
+  iconBg: '#FCE4EC',
+  iconColor: '#D81B60 ',
+},
+{
+  icon: <CheckCircleOutlineIcon />,
+  title: 'حالة التسليم',
+  value: deliveryStatus,
+  isDeliveryStatus: true,
+  iconBg: '#E8F5E9',
+  iconColor: '  #388E3C',
+},
+   
+  ].map((item, i) => (
+    <Box
+      key={i}
+      sx={{
+        width: {
+          xs: '100%',
+          sm: 'calc(50% - 8px)',
+          md: 'calc(33.333% - 11px)',
+        },
+      }}
+    >
+      <InfoCard {...item} onEdit={() => setOpenStatusDialog(true)} />
+    </Box>
+  ))}
+</Box>
         {/* صور التبرع */}
         <Card
           sx={{
@@ -455,56 +536,92 @@ export default function InKindDonationDetails() {
     </Box>
   );
 }
-function InfoCard({ icon, title, value, isDeliveryStatus, onEdit }) {
+function InfoCard({
+  icon,
+  title,
+  value,
+  isDeliveryStatus,
+  onEdit,
+  iconBg,
+  iconColor,
+}) {
   return (
     <Card
       sx={{
-        p: 2.5,
-        borderRadius: 4,
+        p: 3,
+        borderRadius: 5,
+        background: '#FAFAFA',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+        border: '1px solid #F1F5F9',
+        height: '100%',
       }}
     >
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'flex-start',
         }}
       >
         <Box
           sx={{
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             gap: 2,
           }}
         >
           <Avatar
             sx={{
-              bgcolor: '#E8F5E9',
-              color: '#457461',
+              width: 56,
+              height: 56,
+              bgcolor: iconBg,
+              color: iconColor,
             }}
           >
             {icon}
           </Avatar>
 
-          <Box>
-            <Typography variant='caption'>{title}</Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography
+              sx={{
+                color: '#666',
+                fontSize: 14,
+                mb: 0.5,
+              }}
+            >
+              {title}
+            </Typography>
 
-            <Typography fontWeight={700}>{value}</Typography>
+            <Typography
+              sx={{
+                fontWeight: 800,
+                fontSize: 20,
+                color: '#111827',
+                lineHeight: 1.5,
+              }}
+            >
+              {value}
+            </Typography>
           </Box>
         </Box>
 
-        {isDeliveryStatus && value === 'لم يتم التسليم' && (
+        {isDeliveryStatus && value === 'لم يتم استلامه بعد' && (
           <IconButton
             onClick={onEdit}
-            size='small'
+            size="small"
             sx={{
-              width: 28,
-              height: 28,
-              bgcolor: '#E8F5E9',
-              color: '#457461',
+              width: 30,
+              height: 30,
+              bgcolor: '#FCE4EC',
+              color: '#D81B60',
 
               '&:hover': {
-                bgcolor: '#D7EED9',
+                bgcolor: '#F8BBD0',
               },
             }}
           >
