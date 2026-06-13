@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Box, Container, Grid, IconButton, Typography } from "@mui/material";
-import { AddRounded, FilterList } from "@mui/icons-material";
-import CustomInput from "../components/locations/CustomInput";
-import FilterDrawer from "../components/FilterDrawer";
-import Title from "../components/Title";
-import PageTable from "../components/PageTable";
-import usePayments from "../customHooks/queries/usePayments";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Box, Container, Grid, IconButton, Typography } from '@mui/material';
+import { AddRounded, FilterList } from '@mui/icons-material';
+import CustomInput from '../components/locations/CustomInput';
+import FilterDrawer from '../components/FilterDrawer';
+import Title from '../components/Title';
+import PageTable from '../components/PageTable';
+import usePayments from '../customHooks/queries/usePayments';
 export default function FinancialOperations() {
   const [openFilter, setOpenFilter] = useState(false);
   // const {
@@ -23,27 +23,28 @@ export default function FinancialOperations() {
     error: paymentsError,
   } = usePayments();
 
-  console.log("isPending =", isPending);
-  console.log("data =", paymentsData);
-  console.log("error =", paymentsError);
+  console.log('isPending =', isPending);
+  console.log('data =', paymentsData);
+  console.log('error =', paymentsError);
 
-  if (isPending) return <p>جاري التحميل...</p>;
-  if (isError) return <p>حدث خطأ: {paymentsError.message}</p>;
   const navigate = useNavigate();
+
+  /*   if (isPending) return <p>جاري التحميل...</p>;
+  if (isError) return <p>حدث خطأ: {paymentsError.message}</p>; */
   // const projects = paymentsData?.data || [];
   const columns = [
-    { id: "project-name", label: "اسم المشروع" },
-    { id: "details", label: " المتطلب" },
-    { id: "pending-date", label: " تاريخ الاستحقاق" },
-    { id: "cost", label: " الكلفة" },
-    { id: "paid-amount", label: " المبلغ المدفوع" },
-    { id: "remaining-amount", label: " المبلغ المتبقي" },
-    { id: "status", label: "الحالة" },
-    { id: "action", label: "الإجراءات" },
+    { id: 'project-name', label: 'اسم المشروع' },
+    { id: 'details', label: ' المتطلب' },
+    { id: 'pending-date', label: ' تاريخ الاستحقاق' },
+    { id: 'cost', label: ' الكلفة' },
+    { id: 'paid-amount', label: ' المبلغ المدفوع' },
+    { id: 'remaining-amount', label: ' المبلغ المتبقي' },
+    { id: 'status', label: 'الحالة' },
+    { id: 'action', label: 'الإجراءات' },
   ];
   const rows = [];
   return (
-    <Container className="projects" maxWidth="lg" sx={{ px: 2 }}>
+    <Container className='projects' maxWidth='lg' sx={{ px: 2 }}>
       {/* <Grid container spacing={4} className="title">
         <Grid
           item
@@ -93,23 +94,23 @@ export default function FinancialOperations() {
           </Link>
         </Grid>
       </Grid> */}
-      <Title pageTitle="إدارة العمليات المالية" subtitle="">
-        <Link to="/content/financial-operations/add" className="btn">
+      <Title pageTitle='إدارة العمليات المالية' subtitle=''>
+        <Link to='/content/financial-operations/add' className='btn'>
           <span>إضافة عملية مالية</span>
           <AddRounded />
         </Link>
       </Title>
-      <div className="filters-holder">
+      <div className='filters-holder'>
         {/* filter holder */}
-        <div className="input-holder">
+        <div className='input-holder'>
           <CustomInput
-            inputType="textField"
-            placeholder="ابحث حسب الاسم"
+            inputType='textField'
+            placeholder='ابحث حسب الاسم'
             styles={{
-              width: "400px",
-              height: "auto",
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "var(--main-color)", // لون اللابل عند focus
+              width: '400px',
+              height: 'auto',
+              '& .MuiInputLabel-root.Mui-focused': {
+                color: 'var(--main-color)', // لون اللابل عند focus
               },
             }}
           />
@@ -119,13 +120,13 @@ export default function FinancialOperations() {
         <IconButton
           onClick={() => setOpenFilter(true)}
           sx={{
-            backgroundColor: "#eeeeee",
+            backgroundColor: '#eeeeee',
             borderRadius: 2,
             m: 1,
           }}
-          className="filter-btn"
+          className='filter-btn'
         >
-          <FilterList className="icon" />
+          <FilterList className='icon' />
         </IconButton>
       </div>
 
@@ -142,7 +143,7 @@ export default function FinancialOperations() {
       <PageTable
         columns={columns}
         rows={rows}
-        oageLink="/content/financial-operations"
+        oageLink='/content/financial-operations'
       />
       {/* <Grid container spacing={4} alignItems="stretch" sx={{ width: "100%" }}>
           {projects.map((project) => (

@@ -76,5 +76,20 @@ const config = {
     verify: 'verify',
     filter: 'donaters/filter',
   },
+  news: {
+    all: 'blogs/all',
+    add: 'project/add',
+    edit: 'project/update',
+    filter: 'blog/filter',
+    newsDetails: 'blog/show',
+    delete: 'blogs/delete',
+    categories: 'blogs/category',
+    media: {
+      upload: 'blog/upload',
+      deleteImage: 'images/blog/delete',
+    },
+    restore: 'blogs/restore',
+    trash: 'blogs/deleted',
+  },
 };
 export default config;

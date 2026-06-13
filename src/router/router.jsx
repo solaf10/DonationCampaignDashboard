@@ -24,6 +24,8 @@ import EditProject from '../pages/EditProject';
 import DonarsStats from '../pages/DonarsStats';
 import Donars from '../pages/Donars';
 import DonarDetails from '../pages/DonarDetails';
+import News from '../pages/News';
+import NewsDetails from '../pages/NewsDetails';
 
 export const router = createBrowserRouter([
   {
@@ -60,6 +62,8 @@ export const router = createBrowserRouter([
           { path: 'areas', element: <Areas /> },
           { path: 'campaigns', element: <Campaigns /> },
           { path: 'campaigns/:id', element: <CampaignsDetails /> },
+          { path: 'news', element: <News /> },
+          { path: 'news/:id', element: <NewsDetails /> },
 
           {
             path: 'campaigns/add',
@@ -102,6 +106,10 @@ export const router = createBrowserRouter([
           {
             path: 'projects-trash',
             element: <Projects isTrash={true} />,
+          },
+          {
+            path: 'news-trash',
+            element: <News isTrash={true} />,
           },
           {
             path: 'financial-operations',

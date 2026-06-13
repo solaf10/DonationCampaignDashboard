@@ -7,7 +7,11 @@ import {
 } from '@mui/material';
 import './Sidebar.css';
 import { NavLink, useLocation } from 'react-router-dom';
-import { RecyclingRounded } from '@mui/icons-material';
+import {
+  DashboardOutlined,
+  NewspaperOutlined,
+  RecyclingRounded,
+} from '@mui/icons-material';
 import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
 import { useDispatch } from 'react-redux';
 import SuccessMessageDialog from './SuccessMessageDialog';
@@ -20,20 +24,7 @@ const links = [
     href: '/content/dashboard',
     label: 'لوحة التحكم',
     isAccordion: false,
-    icon: (
-      <svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='17'
-        height='17'
-        viewBox='0 0 17 17'
-        className='icon link-icon'
-      >
-        <path
-          d='M15.4231 7.92308L10.8077 7.92308C10.6547 7.92308 10.5079 7.98386 10.3997 8.09205C10.2916 8.20025 10.2308 8.34699 10.2308 8.5L10.2308 15.4231C10.2308 15.5761 10.2916 15.7228 10.3997 15.831C10.5079 15.9392 10.6547 16 10.8077 16L15.4231 16C15.5761 16 15.7228 15.9392 15.831 15.831C15.9392 15.7228 16 15.5761 16 15.4231L16 8.5C16 8.34699 15.9392 8.20025 15.831 8.09205C15.7228 7.98386 15.5761 7.92308 15.4231 7.92308ZM15.4231 1L10.8077 1C10.6547 1 10.5079 1.06078 10.3997 1.16898C10.2916 1.27717 10.2308 1.42391 10.2308 1.57692L10.2308 3.89615C10.2308 4.04916 10.2916 4.19591 10.3997 4.3041C10.5079 4.41229 10.6547 4.47308 10.8077 4.47308L15.4231 4.47308C15.5761 4.47308 15.7228 4.41229 15.831 4.3041C15.9392 4.19591 16 4.04916 16 3.89615L16 1.57692C16 1.42391 15.9392 1.27717 15.831 1.16898C15.7228 1.06078 15.5761 1 15.4231 1ZM6.19231 1L1.57692 1C1.42391 1 1.27717 1.06078 1.16898 1.16898C1.06078 1.27717 1 1.42391 1 1.57692L1 8.5C1 8.65301 1.06078 8.79975 1.16898 8.90795C1.27717 9.01614 1.42391 9.07692 1.57692 9.07692L6.19231 9.07692C6.34532 9.07692 6.49206 9.01614 6.60025 8.90795C6.70845 8.79975 6.76923 8.65301 6.76923 8.5L6.76923 1.57692C6.76923 1.42391 6.70845 1.27717 6.60025 1.16898C6.49206 1.06078 6.34532 1 6.19231 1ZM6.19231 12.5269L1.57692 12.5269C1.42391 12.5269 1.27717 12.5877 1.16898 12.6959C1.06078 12.8041 1 12.9508 1 13.1038L1 15.4231C1 15.5761 1.06078 15.7228 1.16898 15.831C1.27717 15.9392 1.42391 16 1.57692 16L6.19231 16C6.34532 16 6.49206 15.9392 6.60025 15.831C6.70845 15.7228 6.76923 15.5761 6.76923 15.4231L6.76923 13.1038C6.76923 12.9508 6.70845 12.8041 6.60025 12.6959C6.49206 12.5877 6.34532 12.5269 6.19231 12.5269Z'
-          fill='#004A5B'
-        />
-      </svg>
-    ),
+    icon: <DashboardOutlined />,
   },
 
   {
@@ -146,9 +137,16 @@ const links = [
       </svg>
     ),
   },
+  {
+    id: 6,
+    href: '/content/news',
+    label: 'إدارة آخر الأخبار',
+    isAccordion: false,
+    icon: <NewspaperOutlined />,
+  },
 
   {
-    id: 5,
+    id: 7,
     label: 'إدارة المتبرعين',
     isAccordion: true,
     baseHref: 'donars',
@@ -191,7 +189,7 @@ const links = [
   },
 
   {
-    id: 6,
+    id: 8,
     href: '/content/financial-operations',
     label: 'العمليات المالية',
     isAccordion: false,
@@ -213,13 +211,14 @@ const links = [
   },
 
   {
-    id: 7,
+    id: 9,
     label: 'سلة المهملات',
     isAccordion: true,
     icon: <RecyclingRounded />,
     children: [
       { id: 71, href: '/content/projects-trash', label: 'المشاريع' },
       { id: 72, href: '/content/campaigns-trash', label: 'الحملات' },
+      { id: 73, href: '/content/news-trash', label: 'الأخبار' },
     ],
   },
 ];

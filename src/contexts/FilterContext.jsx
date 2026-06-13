@@ -30,6 +30,11 @@ export const FiltersProvider = ({ children }) => {
     status: '',
     currency_type: '',
   });
+  const [newsFilters, setNewsFilters] = useState({
+    title: '',
+    category: [],
+    method: '',
+  });
 
   return (
     <FiltersContext.Provider
@@ -42,6 +47,9 @@ export const FiltersProvider = ({ children }) => {
 
         donarFilters,
         setDonarFilters,
+
+        newsFilters,
+        setNewsFilters,
       }}
     >
       {children}

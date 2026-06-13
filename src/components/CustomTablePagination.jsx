@@ -84,7 +84,7 @@ const CustomTablePagination = ({
 
   return (
     <TablePagination
-      rowsPerPageOptions={[5, 10, 25]}
+      rowsPerPageOptions={[20, 40, 60]}
       component='div'
       count={count}
       rowsPerPage={rowsPerPage}

@@ -4,9 +4,10 @@ import { controlControlMediaModal } from '../redux/slices/ModalContollerSlice';
 import Media from './Stepper/Projects/Media';
 import { useEffect, useState } from 'react';
 import useUploadProjectMedia from '../customHooks/mutations/useUploadProjectMedia';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ErrorMessage from './Messages/ErrorMessage';
+import useUploadNewsMedia from '../customHooks/mutations/useUploadNewsMedia';
 
 const ControlMediaModal = () => {
   const [formData, setFormData] = useState({ images: [], videos: [] });
@@ -20,14 +21,27 @@ const ControlMediaModal = () => {
 
   const dispatch = useDispatch();
   const params = useParams();
+  const location = useLocation();
 
   const isImage = mediaType === 'image';
+  const isProject = location.pathname.includes('project');
 
   const {
-    mutate: upload,
-    isPending: isUploading,
-    error: uploadingError,
+    mutate: uploadProjectMedia,
+    isPending: isUploadingProjectMedia,
+    error: uploadingProjectMediaError,
   } = useUploadProjectMedia(params.id);
+  const {
+    mutate: uploadNewsMedia,
+    isPending: isUploadingNewsMedia,
+    error: uploadingNewsMediaError,
+  } = useUploadNewsMedia(params.id);
+
+  const upload = isProject ? uploadProjectMedia : uploadNewsMedia;
+  const isUploading = isProject
+    ? isUploadingProjectMedia
+    : isUploadingNewsMedia;
+  const uploadingError = isProject ? uploadProjectMedia : uploadNewsMedia;
 
   const handleSubmit = (e) => {
     e.preventDefault();

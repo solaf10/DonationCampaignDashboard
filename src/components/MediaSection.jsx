@@ -4,10 +4,9 @@ import config from '../constants/enviroment';
 import CloseIcon from '@mui/icons-material/Close';
 import ControlMediaModal from './ControlMediaModal';
 import DeleteItemLogic from './DeleteItemLogic';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { controlSuccessDialog } from '../redux/slices/ModalContollerSlice';
 import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 
 /* تحويل روابط يوتيوب لأي صيغة إلى embed */
 const getYoutubeEmbedUrl = (url) => {
@@ -41,14 +40,23 @@ const MediaSection = ({
   isDeleteMode,
 }) => {
   const params = useParams();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const [lightboxMedia, setLightboxMedia] = useState(null);
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(null);
 
   const isVideo = mediaType === 'video';
+  const isProject = location.pathname?.includes('project');
 
-  const deletedItemUrl = `/${isVideo ? config.projects.media.deleteVideo : config.projects.media.deleteImage}/${params?.id}/${selectedMediaIndex}`;
+  const projectDeletedMedia = isVideo
+    ? config.projects.media.deleteVideo
+    : config.projects.media.deleteImage;
+  const newsDeletedMedia = isVideo
+    ? config.news.media.deleteVideo
+    : config.news.media.deleteImage;
+
+  const deletedItemUrl = `/${isProject ? projectDeletedMedia : newsDeletedMedia}/${params?.id}/${selectedMediaIndex}`;
 
   const handleDelete = (mediaIndex) => {
     (dispatch(
@@ -144,7 +152,7 @@ const MediaSection = ({
         <ControlMediaModal />
         <DeleteItemLogic
           deletedItemTitle={isVideo ? 'الفيديو' : 'الصورة'}
-          baseQuery={['projects', params?.id]}
+          baseQuery={[isProject ? 'projects' : 'news', params?.id]}
           url={deletedItemUrl}
           modalType={`delete-${mediaType}`}
         />
