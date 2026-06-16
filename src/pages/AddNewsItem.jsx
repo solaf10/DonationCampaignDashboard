@@ -141,7 +141,6 @@ const AddNewsItem = ({ isEdit = false }) => {
     payload.append('excerpt', formData.excerpt);
     if (formData?.cover_image)
       payload.append('cover_image', formData.cover_image);
-    payload.append('images[]', formData.cover_image);
 
     if (isEdit) {
       const mutationOptions = {
