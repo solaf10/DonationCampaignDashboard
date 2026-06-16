@@ -352,7 +352,7 @@ const AddNewsItem = ({ isEdit = false }) => {
       {!isEdit && (
         <ControlMediaModal
           onSuccess={() => {
-            dispatch(controlControlLocationModal({ type: 'add' }));
+            dispatch(controlSuccessDialog({ type: 'add', id: null }));
             navigate(-1);
           }}
         />
