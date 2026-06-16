@@ -23,13 +23,15 @@ export default function ProfileModal({ open, onClose }) {
       onClose={onClose}
       fullWidth
       maxWidth='sm'
-      PaperProps={{
-        sx: {
-          borderRadius: 5,
-          width: '100%',
-          maxWidth: 420,
-          border: 'none!important',
-          backgroundColor: 'transparent',
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: 5,
+            width: '100%',
+            maxWidth: 420,
+            border: 'none!important',
+            backgroundColor: 'transparent',
+          },
         },
       }}
     >

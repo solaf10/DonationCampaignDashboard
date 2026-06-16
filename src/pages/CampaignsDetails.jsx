@@ -314,7 +314,7 @@ const CampaignsDetails = () => {
         </Box>
 
         {/* 🔥 infos */}
-        <Grid container spacing={2} mt={3} className='infos-holder'>
+        <Grid container spacing={2} sx={{ mt: 3 }} className='infos-holder'>
           {infos.slice(0, 3).map((info) => (
             <DonorsInfoCard
               key={info.id}
@@ -327,7 +327,7 @@ const CampaignsDetails = () => {
         </Grid>
 
         {/* 🔥 desc + projects */}
-        <Grid container spacing={3} mt={3}>
+        <Grid container spacing={3} sx={{ mt: 3 }}>
           <Requirements
             secTitle='أهداف الحملة'
             requirements={campaign?.purposes?.trim().split(/,|،/)}
