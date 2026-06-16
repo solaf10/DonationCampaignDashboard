@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import ErrorMessage from './Messages/ErrorMessage';
 import useUploadNewsMedia from '../customHooks/mutations/useUploadNewsMedia';
 
-const ControlMediaModal = () => {
+const ControlMediaModal = ({ onSuccess }) => {
   const [formData, setFormData] = useState({ images: [], videos: [] });
   const [errors, setErrors] = useState({ images: null, videos: null });
   const [error, setError] = useState(null);
@@ -18,6 +18,9 @@ const ControlMediaModal = () => {
     (state) => state.modalController.isControlMediaModalOpen,
   );
   const mediaType = useSelector((state) => state.modalController.mediaType);
+  const selectedNewsID = useSelector(
+    (state) => state.modalController.selectedMediaItemID,
+  );
 
   const dispatch = useDispatch();
   const params = useParams();
@@ -35,7 +38,7 @@ const ControlMediaModal = () => {
     mutate: uploadNewsMedia,
     isPending: isUploadingNewsMedia,
     error: uploadingNewsMediaError,
-  } = useUploadNewsMedia(params.id);
+  } = useUploadNewsMedia(params?.id ? params.id : selectedNewsID);
 
   const upload = isProject ? uploadProjectMedia : uploadNewsMedia;
   const isUploading = isProject
@@ -57,6 +60,7 @@ const ControlMediaModal = () => {
       onSuccess: () => {
         toast.success(`تم إضافة ${isImage ? 'الصور' : 'الفيديوهات'} بنجاح!`);
         dispatch(controlControlMediaModal({ type: mediaType, id: null }));
+        if (onSuccess) onSuccess();
       },
       onError: (err) => {
         setError(err.message);
@@ -75,7 +79,7 @@ const ControlMediaModal = () => {
       closeHandler={() =>
         dispatch(controlControlMediaModal({ type: mediaType, id: null }))
       }
-      modalTitle={isImage ? 'إضافة صورة' : 'إضافة فيديو'}
+      modalTitle={isImage ? 'إضافة صور' : 'إضافة فيديو'}
       submitBtnTitle='إضافة'
       /* styles={{ width: '400px' }} */
       onSubmit={handleSubmit}

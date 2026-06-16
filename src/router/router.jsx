@@ -26,6 +26,7 @@ import Donars from '../pages/Donars';
 import DonarDetails from '../pages/DonarDetails';
 import News from '../pages/News';
 import NewsDetails from '../pages/NewsDetails';
+import AddNewsItem from '../pages/AddNewsItem';
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +65,19 @@ export const router = createBrowserRouter([
           { path: 'campaigns/:id', element: <CampaignsDetails /> },
           { path: 'news', element: <News /> },
           { path: 'news/:id', element: <NewsDetails /> },
+
+          {
+            path: 'news/add',
+            element: <AddNewsItem />,
+          },
+          {
+            path: 'news/edit/:id',
+            element: <AddNewsItem isEdit={true} />,
+          },
+          {
+            path: 'news/edit/:id',
+            element: <EditCampaign />,
+          },
 
           {
             path: 'campaigns/add',

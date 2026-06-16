@@ -226,6 +226,7 @@ const AddCampaign = () => {
             setFormData={setFormData}
             styles={styles}
             errors={errors}
+            setErrors={setErrors}
           />
         ) : activeStep === 1 ? (
           <Schedule

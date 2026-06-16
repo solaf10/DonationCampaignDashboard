@@ -18,6 +18,7 @@ const Textarea = ({
 }) => {
   const customStyles = {
     width: '100%',
+    height: '130px',
     fontFamily: 'Cairo',
     /* 🔹 شكل الحقل */
     '& .MuiOutlinedInput-root': {
@@ -63,7 +64,7 @@ const Textarea = ({
     ...styles,
   };
   return (
-    <FormControl sx={customStyles}>
+    <FormControl sx={{ ...customStyles, height: styles?.height ?? '195px' }}>
       <Typography
         sx={{
           mb: 1,
@@ -78,7 +79,6 @@ const Textarea = ({
         <TextField
           placeholder={placeholder}
           multiline
-          rows={5}
           variant='outlined'
           fullWidth
           value={value}
@@ -86,6 +86,17 @@ const Textarea = ({
             isNestedState ? setValue(e) : setValue(e.target.value)
           }
           error={!!errorMsg}
+          sx={{
+            height: '100%',
+            '& .MuiOutlinedInput-root': {
+              height: '100%',
+              alignItems: 'flex-start',
+            },
+            '& textarea': {
+              height: '100% !important',
+              overflow: 'auto',
+            },
+          }}
         />
       ) : (
         <TextField

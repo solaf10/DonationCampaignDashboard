@@ -39,6 +39,18 @@ const buttonStyles = {
   },
 };
 
+const getParagraphs = (text) => {
+  return text
+    .trim()
+    .split(/\r?\n\s*\r?\n+/) // split into paragraphs
+    .map((p) =>
+      p
+        .replace(/\r?\n+/g, ' ') // Merge line breaks داخل الفقرة إلى مسافات (keep it as one paragraph)
+        .replace(/\s+/g, ' ') // clean up the res
+        .trim(),
+    );
+};
+
 const NewsDetails = () => {
   const params = useParams();
   const navigate = useNavigate();
@@ -59,6 +71,27 @@ const NewsDetails = () => {
     (state) => state.modalController.clickedDialogID,
   );
   const deletedItemUrl = `/${config.news.delete}/${deletedItemID}`;
+
+  const articlesArr = getParagraphs(newsItem?.content || '');
+
+  const articles = articlesArr.map((paragraph, i) => (
+    <Typography
+      mb={3}
+      key={i}
+      dangerouslySetInnerHTML={{ __html: paragraph }}
+      sx={{
+        '& a': {
+          color: 'var(--main-color)',
+          textDecoration: 'underline',
+          fontWeight: 600,
+        },
+
+        '& a:hover': {
+          opacity: 0.8,
+        },
+      }}
+    />
+  ));
 
   if (isFetchingNewsDetails) return <NewsDetailsSkeleton />;
 
@@ -258,7 +291,7 @@ const NewsDetails = () => {
               flexDirection: 'column',
             }}
           >
-            {newsItem?.content}
+            {articles}
           </Box>
         </Card>
 

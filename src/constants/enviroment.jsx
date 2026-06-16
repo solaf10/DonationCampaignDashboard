@@ -78,8 +78,8 @@ const config = {
   },
   news: {
     all: 'blogs/all',
-    add: 'project/add',
-    edit: 'project/update',
+    add: 'blog/store',
+    edit: 'blog/upload',
     filter: 'blog/filter',
     newsDetails: 'blog/show',
     delete: 'blogs/delete',

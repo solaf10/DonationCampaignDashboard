@@ -155,7 +155,7 @@ export default function CustomInput({
 }) {
   const handleChange = (e) => {
     console.log(e);
-    if (isNestedState) setValue();
+    if (isNestedState) setValue(e);
     else setValue(e.target.value);
   };
 

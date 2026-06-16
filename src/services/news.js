@@ -26,12 +26,12 @@ export const filterNews = async (body) => {
 
   return res.data;
 };
-export const addProject = async (body) => {
-  const res = await api.post(`/${config.projects.add}`, body);
+export const addNewsItem = async (body) => {
+  const res = await api.post(`/${config.news.add}`, body);
   return res.data;
 };
-export const editProject = async (id, body) => {
-  const res = await api.post(`/${config.projects.edit}/${id}`, body);
+export const editNewsItem = async (id, body) => {
+  const res = await api.post(`/${config.news.edit}/${id}`, body);
   return res.data;
 };
 export const addProjectDetail = async (id, body) => {

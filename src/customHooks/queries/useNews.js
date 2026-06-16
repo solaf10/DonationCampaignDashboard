@@ -28,10 +28,11 @@ export function useGetCategories() {
     queryFn: getCategories,
   });
 }
-export function useSingleNews(id) {
+export function useSingleNews(id, isEnabled = true) {
   return useQuery({
     queryKey: ['news', id],
     queryFn: () => getSingleNews(id),
+    enabled: isEnabled,
   });
 }
 export function useGetProjectDetails(id, enabled) {
