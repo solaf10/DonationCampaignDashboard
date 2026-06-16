@@ -8,7 +8,7 @@ import Schedule from '../components/Stepper/Campaigns/Schedule';
 import {
   EventOutlined,
   FactCheckOutlined,
-  InfoOutline,
+  InfoOutlined,
   PaymentsOutlined,
 } from '@mui/icons-material';
 import AddBySelectionModal from '../components/AddBySelectionModal';
@@ -39,7 +39,7 @@ const steps = [
 ];
 
 const icons = {
-  1: <InfoOutline fontSize='small' />,
+  1: <InfoOutlined fontSize='small' />,
   2: <EventOutlined fontSize='small' />,
   3: <PaymentsOutlined fontSize='small' />,
   4: <FactCheckOutlined fontSize='small' />,

@@ -1,5 +1,5 @@
+import { CheckCircleOutlineOutlined } from '@mui/icons-material';
 import { Box, Card, Grid, Typography } from '@mui/material';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const Requirements = ({ secTitle, requirements }) => {
   return (
@@ -37,7 +37,7 @@ const Requirements = ({ secTitle, requirements }) => {
                 borderBottom: '1px solid #edf0f4',
               }}
             >
-              <CheckCircleOutlineIcon
+              <CheckCircleOutlineOutlined
                 sx={{
                   color: '#6B9E8A',
                   mt: 0.2,

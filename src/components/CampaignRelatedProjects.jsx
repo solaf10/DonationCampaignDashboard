@@ -3,7 +3,7 @@ import { Box, Card, Grid, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch } from 'react-redux';
 import { controlAddBySelectionModal } from '../redux/slices/ModalContollerSlice';
-import { DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { DeleteOutlineOutlined, EditOutlined } from '@mui/icons-material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import MoreMenu from './MoreMenu';

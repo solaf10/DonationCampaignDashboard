@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from 'react-router-dom';
 
 import {
@@ -24,7 +23,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import CategoryIcon from '@mui/icons-material/Category';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import IconButton from '@mui/material/IconButton';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
@@ -33,75 +31,70 @@ import InKindDonationDetailsSkelton from '../components/Skeletons/InKindDonation
 // import donationsData from '../components/data/InKindDonationData';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { CheckCircleOutlineOutlined } from '@mui/icons-material';
 
 export default function InKindDonationDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-const [donation, setDonation] = useState(null);
-const [loading, setLoading] = useState(true);
+  const [donation, setDonation] = useState(null);
+  const [loading, setLoading] = useState(true);
   // const donation = donationsData.find((item) => item.uuid === Number(id));
   const [lightboxImg, setLightboxImg] = useState(null);
   const [deliveryStatus, setDeliveryStatus] = useState(
     donation?.delivery_status || '',
   );
-useEffect(() => {
-  fetchDonation();
-}, [id]);
+  useEffect(() => {
+    fetchDonation();
+  }, [id]);
 
-const fetchDonation = async () => {
-  try {
-    const token = localStorage.getItem('token');
+  const fetchDonation = async () => {
+    try {
+      const token = localStorage.getItem('token');
 
-    const response = await axios.get(
-      'http://127.0.0.1:8000/api/donation/all',
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
+      const response = await axios.get(
+        'http://127.0.0.1:8000/api/donation/all',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+          },
         },
-      }
-    );
+      );
 
-    const item = response.data.data.find(
-      (d) => d.uuid === id
-    );
+      const item = response.data.data.find((d) => d.uuid === id);
 
-    const formatted = {
-      uuid: item.uuid,
-      donor_name: item.user?.name,
-      email: item.user?.email,
-      phone: item.user?.phone,
-      user_type: item.user?.type,
+      const formatted = {
+        uuid: item.uuid,
+        donor_name: item.user?.name,
+        email: item.user?.email,
+        phone: item.user?.phone,
+        user_type: item.user?.type,
 
-      donation_name: item.name_of_material,
-      donation_type: item.type,
-      location: item.governorate?.governorate_name,
-      quantity: item.amount,
-      item_condition: item.status_of_materail,
+        donation_name: item.name_of_material,
+        donation_type: item.type,
+        location: item.governorate?.governorate_name,
+        quantity: item.amount,
+        item_condition: item.status_of_materail,
 
-      delivery_status:
-        item.status === 'تم استلامه'
-          ? 'تم التسليم'
-          : 'لم يتم التسليم',
+        delivery_status:
+          item.status === 'تم استلامه' ? 'تم التسليم' : 'لم يتم التسليم',
 
-      images:
-        item.images?.map(
-          (img) => `http://127.0.0.1:8000${img.url}`
-        ) || [],
-    };
+        images:
+          item.images?.map((img) => `http://127.0.0.1:8000${img.url}`) || [],
+      };
 
-    setDonation(formatted);
-    setDeliveryStatus(formatted.delivery_status);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setLoading(false);
-  }
-};
+      setDonation(formatted);
+      setDeliveryStatus(formatted.delivery_status);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const [openStatusDialog, setOpenStatusDialog] = useState(false);
   if (loading) {
-  return <InKindDonationDetailsSkelton />;
-}
+    return <InKindDonationDetailsSkelton />;
+  }
   if (!donation) {
     return (
       <Box p={4}>
@@ -110,10 +103,9 @@ const fetchDonation = async () => {
     );
   }
 
-
-if (!donation) {
-  return <Typography>لا يوجد بيانات</Typography>;
-}
+  if (!donation) {
+    return <Typography>لا يوجد بيانات</Typography>;
+  }
   return (
     <Box
       sx={{
@@ -363,75 +355,74 @@ if (!donation) {
           </Box>
         </Box>
         {/* المعلومات */}
-    <Box
-  sx={{
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: 2,
-    width: '100%',
-    mt: 3,
-  }}
->
-  {[
-   {
-  icon: <PersonIcon />,
-  title: 'اسم المتبرع',
-  value: donation.donor_name,
-  iconBg: '#E8F5E9',
-  iconColor: '#2E7D32',
-},
-{
-  icon: <CategoryIcon />,
-  title: 'نوع التبرع',
-  value: donation.donation_type,
-  iconBg: '#E3F2FD',
-  iconColor: '#1565C0',
-},
-{
-  icon: <LocationOnIcon />,
-  title: 'الموقع',
-  value: donation.location,
-  iconBg: '#FFF3E0',
-  iconColor: '#EF6C00',
-},
-{
-  icon: <InventoryIcon />,
-  title: 'الكمية',
-  value: donation.quantity,
-  iconBg: '#F3E5F5',
-  iconColor: '#7B1FA2',
-},
-{
-  icon: <CheckCircleOutlineIcon />,
-  title: 'حالة المواد',
-  value: donation.item_condition,
-  iconBg: '#FCE4EC',
-  iconColor: '#D81B60 ',
-},
-{
-  icon: <CheckCircleOutlineIcon />,
-  title: 'حالة التسليم',
-  value: deliveryStatus,
-  isDeliveryStatus: true,
-  iconBg: '#E8F5E9',
-  iconColor: '  #388E3C',
-},
-   
-  ].map((item, i) => (
-    <Box
-      key={i}
-      sx={{
-        width: {
-          xs: '100%',
-          sm: 'calc(50% - 8px)',
-          md: 'calc(33.333% - 11px)',
-        },
-      }}
-    >
-      <InfoCard {...item} onEdit={() => setOpenStatusDialog(true)} />
-    </Box>
-  ))}
-</Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 2,
+            width: '100%',
+            mt: 3,
+          }}
+        >
+          {[
+            {
+              icon: <PersonIcon />,
+              title: 'اسم المتبرع',
+              value: donation.donor_name,
+              iconBg: '#E8F5E9',
+              iconColor: '#2E7D32',
+            },
+            {
+              icon: <CategoryIcon />,
+              title: 'نوع التبرع',
+              value: donation.donation_type,
+              iconBg: '#E3F2FD',
+              iconColor: '#1565C0',
+            },
+            {
+              icon: <LocationOnIcon />,
+              title: 'الموقع',
+              value: donation.location,
+              iconBg: '#FFF3E0',
+              iconColor: '#EF6C00',
+            },
+            {
+              icon: <InventoryIcon />,
+              title: 'الكمية',
+              value: donation.quantity,
+              iconBg: '#F3E5F5',
+              iconColor: '#7B1FA2',
+            },
+            {
+              icon: <CheckCircleOutlineOutlined />,
+              title: 'حالة المواد',
+              value: donation.item_condition,
+              iconBg: '#FCE4EC',
+              iconColor: '#D81B60 ',
+            },
+            {
+              icon: <CheckCircleOutlineOutlined />,
+              title: 'حالة التسليم',
+              value: deliveryStatus,
+              isDeliveryStatus: true,
+              iconBg: '#E8F5E9',
+              iconColor: '  #388E3C',
+            },
+          ].map((item, i) => (
+            <Box
+              key={i}
+              sx={{
+                width: {
+                  xs: '100%',
+                  sm: 'calc(50% - 8px)',
+                  md: 'calc(33.333% - 11px)',
+                },
+              }}
+            >
+              <InfoCard {...item} onEdit={() => setOpenStatusDialog(true)} />
+            </Box>
+          ))}
+        </Box>
         {/* صور التبرع */}
         <Card
           sx={{
@@ -613,7 +604,7 @@ function InfoCard({
         {isDeliveryStatus && value === 'لم يتم استلامه بعد' && (
           <IconButton
             onClick={onEdit}
-            size="small"
+            size='small'
             sx={{
               width: 30,
               height: 30,

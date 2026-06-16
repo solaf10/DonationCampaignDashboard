@@ -17,7 +17,6 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BusinessIcon from '@mui/icons-material/Business';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import CategoryIcon from '@mui/icons-material/Category';
 import CloseIcon from '@mui/icons-material/Close';
@@ -96,7 +95,7 @@ export default function ProjectDetails() {
   } = useSingleProject(id);
 
   const project = projectData?.data?.project || null;
-const campaign = projectData?.data?.campaigns?.[0] || null;
+  const campaign = projectData?.data?.campaigns?.[0] || null;
   const progressValue = parseInt(project?.progress_percentage || '') || 0;
 
   const requirements = project?.requirements

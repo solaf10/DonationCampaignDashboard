@@ -3,8 +3,8 @@ import { Typography, Box } from '@mui/material';
 import CustomInput from '../../locations/CustomInput';
 import config from '../../../constants/enviroment';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import { useLocation } from 'react-router-dom';
+import { DeleteOutlineOutlined } from '@mui/icons-material';
 
 const styles = {
   marginBottom: '24px',
@@ -321,7 +321,7 @@ const Media = ({ formData, setFormData, errors, mediaType = 'both' }) => {
                         },
                       }}
                     >
-                      <DeleteOutlineRoundedIcon fontSize='small' />
+                      <DeleteOutlineOutlined fontSize='small' />
                     </Box>
                   </Box>
                 </Box>

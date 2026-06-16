@@ -5,14 +5,12 @@ import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
 import {
   AddRounded,
-  DeleteOutline,
+  DeleteOutlineOutlined,
   EditOutlined,
   FilterAltOutlined,
-  PauseCircleOutline,
   RecyclingRounded,
   VisibilityOutlined,
 } from '@mui/icons-material';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { Link, useNavigate } from 'react-router-dom';
 import MoreMenu from '../components/MoreMenu';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,7 +33,7 @@ import FilterNewsDrawer from '../components/FilterNewsDrawer';
 
 const columns = [
   { id: 'title', label: 'الاسم' },
-  { id: 'image', label: 'الصورة' },
+  { id: 'cover_image', label: 'الصورة' },
   { id: 'category', label: 'التصنيف' },
   { id: 'publish_date', label: 'تاريخ النشر' },
   { id: 'actions', label: '' },
@@ -81,7 +79,7 @@ const News = ({ isTrash = false }) => {
 
     {
       label: 'حذف',
-      icon: <DeleteOutline fontSize='small' />,
+      icon: <DeleteOutlineOutlined fontSize='small' />,
       onClick: () =>
         dispatch(
           controlSuccessDialog({

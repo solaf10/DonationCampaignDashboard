@@ -9,11 +9,11 @@ import {
   Delete,
   EditCalendarRounded,
   FlagOutlined,
+  PauseCircleOutlineOutlined,
+  PlayCircleOutlineOutlined,
   TrendingUpOutlined,
   WorkOutlineOutlined,
 } from '@mui/icons-material';
-import PauseCircleOutline from '@mui/icons-material/PauseCircleOutline';
-import PlayCircleOutline from '@mui/icons-material/PlayCircleOutline';
 import './CampaignsDetails.css';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import AddModal from '../components/AddBySelectionModal';
@@ -167,7 +167,7 @@ const CampaignsDetails = () => {
             {/* 🟠 إيقاف الحملة */}
             {campaign?.status === 'جديدة' && (
               <button className='button warning' onClick={handlePause}>
-                <PauseCircleOutline className='icon' />
+                <PauseCircleOutlineOutlined className='icon' />
                 إيقاف
               </button>
             )}
@@ -175,7 +175,7 @@ const CampaignsDetails = () => {
             {/* 🟢 استئناف الحملة */}
             {campaign?.status === 'متوقفة' && (
               <button className='button success' onClick={handleResume}>
-                <PlayCircleOutline className='icon' />
+                <PlayCircleOutlineOutlined className='icon' />
                 استئناف
               </button>
             )}

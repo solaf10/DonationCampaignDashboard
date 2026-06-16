@@ -14,8 +14,7 @@ import {
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import { RecyclingRounded } from '@mui/icons-material';
+import { DeleteOutlineOutlined, RecyclingRounded } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { controlSuccessDialog } from '../../redux/slices/ModalContollerSlice';
@@ -242,7 +241,7 @@ export default function ProjectCard({
                   dispatch(controlSuccessDialog({ type: 'delete', id: uuid }));
                 }}
               >
-                <DeleteOutlinedIcon fontSize='small' />
+                <DeleteOutlineOutlined fontSize='small' />
               </IconButton>
             </Box>
 

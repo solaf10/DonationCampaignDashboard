@@ -49,9 +49,9 @@ const useGetNewsLogic = (isTrash) => {
       newsItem?.category === 'غير ذلك'
         ? newsItem?.on_the_other_hand
         : newsItem?.category,
-    image: (
+    cover_image: (
       <img
-        src={config.baseUrl + newsItem?.images?.[0]?.url}
+        src={config.baseUrl + newsItem?.cover_image}
         alt='news'
         width={60}
         height={60}

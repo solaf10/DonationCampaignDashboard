@@ -94,7 +94,7 @@ const Textarea = ({
             },
             '& textarea': {
               height: '100% !important',
-              overflow: 'auto',
+              overflowY: 'auto !important',
             },
           }}
         />

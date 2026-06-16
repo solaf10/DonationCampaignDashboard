@@ -11,7 +11,7 @@ import {
   openMoreInfoMenu,
 } from '../redux/slices/ModalContollerSlice';
 import config from '../constants/enviroment';
-import { AddRounded, DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { AddRounded, DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import AddProjectDetailModal from './AddProjectDetailModal';
 import { useState } from 'react';
 import MoreMenu from './MoreMenu';
@@ -53,7 +53,7 @@ const ProjectsBill = ({ details, projectID }) => {
 
     {
       label: 'حذف',
-      icon: <DeleteOutline fontSize='small' />,
+      icon: <DeleteOutlined fontSize='small' />,
       onClick: () =>
         dispatch(
           controlSuccessDialog({

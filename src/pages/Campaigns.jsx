@@ -5,14 +5,14 @@ import PageContainer from '../components/PageContainer';
 import Title from '../components/Title';
 import {
   AddRounded,
-  DeleteOutline,
+  DeleteOutlineOutlined,
   EditOutlined,
   FilterAltOutlined,
-  PauseCircleOutline,
+  PauseCircleOutlineOutlined,
+  PlayCircleOutlineOutlined,
   RecyclingRounded,
   VisibilityOutlined,
 } from '@mui/icons-material';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { Link, useNavigate } from 'react-router-dom';
 import MoreMenu from '../components/MoreMenu';
 import { useDispatch, useSelector } from 'react-redux';
@@ -93,7 +93,7 @@ const Campaigns = ({ isTrash = false }) => {
       ? [
           {
             label: 'إيقاف مؤقت للحملة',
-            icon: <PauseCircleOutline fontSize='small' />,
+            icon: <PauseCircleOutlineOutlined fontSize='small' />,
             onClick: () =>
               stopCampaign(undefined, {
                 onSuccess: () => {
@@ -111,7 +111,7 @@ const Campaigns = ({ isTrash = false }) => {
       ? [
           {
             label: 'استئناف الحملة',
-            icon: <PlayCircleOutlineIcon fontSize='small' />,
+            icon: <PlayCircleOutlineOutlined fontSize='small' />,
             onClick: () =>
               resumeCampaign(undefined, {
                 onSuccess: () => {
@@ -147,7 +147,7 @@ const Campaigns = ({ isTrash = false }) => {
       ? [
           {
             label: 'حذف',
-            icon: <DeleteOutline fontSize='small' />,
+            icon: <DeleteOutlineOutlined fontSize='small' />,
             onClick: () =>
               dispatch(
                 controlSuccessDialog({

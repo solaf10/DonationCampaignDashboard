@@ -7,7 +7,7 @@ import Schedule from '../components/Stepper/Campaigns/Schedule';
 import {
   ArticleOutlined,
   EventOutlined,
-  InfoOutline,
+  InfoOutlined,
   PaymentsOutlined,
   PhotoLibraryOutlined,
 } from '@mui/icons-material';
@@ -41,7 +41,7 @@ import { toast } from 'react-toastify';
 const steps = ['معلومات الخبر', 'محتوى الخبر', 'صورة الغلاف'];
 
 const icons = {
-  1: <InfoOutline fontSize='small' />,
+  1: <InfoOutlined fontSize='small' />,
   2: <ArticleOutlined fontSize='small' />,
   3: <PhotoLibraryOutlined fontSize='small' />,
 };
@@ -124,18 +124,21 @@ const AddNewsItem = ({ isEdit = false }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (isDataNotChanged) return;
+
     const payload = new FormData();
 
-    const content = `${formData?.content} ${formData?.hasLink ? `<a href=${formData?.linkHref} target='_blank'>${formData?.linkTitle}</a>` : ''}`;
+    const fullContent = `${formData.content.trim()} ${formData?.hasLink ? `<a href=${formData?.linkHref} target='_blank'>${formData?.linkTitle}</a>` : ''}`;
 
     payload.append('title', formData.title);
-    payload.append('content', content);
+    payload.append('content', fullContent);
     payload.append('category', formData.category);
 
-    payload.append('on_the_other_hand', formData.on_the_other_hand);
+    if (formData.on_the_other_hand)
+      payload.append('on_the_other_hand', formData.on_the_other_hand);
 
     payload.append('excerpt', formData.excerpt);
-
     if (formData?.cover_image)
       payload.append('cover_image', formData.cover_image);
     payload.append('images[]', formData.cover_image);
@@ -250,24 +253,28 @@ const AddNewsItem = ({ isEdit = false }) => {
     initialFormData.hasLink === formData.hasLink &&
     formData.cover_image === null;
 
-  useEffect(() => {
-    if (isEdit && newsItem) {
-      const data = {
-        title,
-        category,
-        on_the_other_hand,
-        excerpt,
-        content: hasLink ? contentWithoutAnchor : content,
-        selectedImageLink: config.baseUrl + cover_image,
-        hasLink,
-        linkHref,
-        linkTitle,
-      };
+  const [isInitialized, setIsInitialized] = useState(false);
 
-      setFormData(data);
-      setInitialFormData(data);
-    }
-  }, [isEdit, newsItem]);
+  useEffect(() => {
+    if (!isEdit || !newsItemData || isInitialized) return;
+
+    const data = {
+      title,
+      category,
+      on_the_other_hand,
+      excerpt,
+      content: hasLink ? contentWithoutAnchor : content,
+      selectedImageLink: config.baseUrl + cover_image,
+      cover_image: null,
+      hasLink,
+      linkHref,
+      linkTitle,
+    };
+
+    setFormData(data);
+    setInitialFormData(data);
+    setIsInitialized(true);
+  }, [isEdit, newsItemData, isInitialized]);
 
   return (
     <PageContainer>
@@ -275,15 +282,12 @@ const AddNewsItem = ({ isEdit = false }) => {
         pageTitle={`${isEdit ? 'تعديل' : 'إضافة'} خبر جديد`}
         subtitle={`أكمل الخطوات التالية ل${isEdit ? 'تعديل' : 'إضافة'} خبر جديد`}
       />
-      {activeStep === steps?.length - 1 &&
-        isDataNotChanged &&
-        !isEditting &&
-        isEdit && (
-          <ErrorMessage warning={true}>
-            لم تتغير أي بيانات بعد. الرجاء تعديل حقل واحد على الأقل قبل حفظ
-            التعديل.
-          </ErrorMessage>
-        )}
+      {activeStep === steps?.length - 1 && isDataNotChanged && isEdit && (
+        <ErrorMessage warning={true}>
+          لم تتغير أي بيانات بعد. الرجاء تعديل حقل واحد على الأقل قبل حفظ
+          التعديل.
+        </ErrorMessage>
+      )}
       {(addError || editError) && (
         <ErrorMessage>
           {isEdit ? editError?.message : addError.message}
@@ -318,6 +322,7 @@ const AddNewsItem = ({ isEdit = false }) => {
             setFormData={setFormData}
             styles={styles}
             errors={errors}
+            setErrors={setErrors}
           />
         ) : activeStep === 1 ? (
           <Content

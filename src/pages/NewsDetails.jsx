@@ -61,7 +61,7 @@ const NewsDetails = () => {
 
   const {
     data: newsItemData,
-    isPending: isFetchingNewsDetails,
+    isFetching: isFetchingNewsDetails,
     error: newsDetailsError,
   } = useSingleNews(id);
 
@@ -279,16 +279,17 @@ const NewsDetails = () => {
             height: '100%',
           }}
         >
-          <Typography variant='h5' fontWeight={800} mb={3}>
+          <Typography variant='h5' fontWeight={800} sx={{ marginBottom: 3 }}>
             المقال
           </Typography>
 
           <Box
             sx={{
-              /* height: '272px', */
+              height: '272px',
               overflowY: 'auto',
               display: 'flex',
               flexDirection: 'column',
+              gap: 2,
             }}
           >
             {articles}

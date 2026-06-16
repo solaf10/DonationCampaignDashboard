@@ -7,7 +7,7 @@ import Basic from '../components/Stepper/Campaigns/Basic';
 import Schedule from '../components/Stepper/Campaigns/Schedule';
 import {
   EventOutlined,
-  InfoOutline,
+  InfoOutlined,
   PaymentsOutlined,
 } from '@mui/icons-material';
 import AddBySelectionModal from '../components/AddBySelectionModal';
@@ -31,7 +31,7 @@ import ErrorMessage from '../components/Messages/ErrorMessage';
 const steps = ['معلومات الحملة', 'جدولة للحملة', 'التمويل والوسائط'];
 
 const icons = {
-  1: <InfoOutline fontSize='small' />,
+  1: <InfoOutlined fontSize='small' />,
   2: <EventOutlined fontSize='small' />,
   3: <PaymentsOutlined fontSize='small' />,
 };
