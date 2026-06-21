@@ -23,76 +23,39 @@ export default function FinancialOperations() {
     error: paymentsError,
   } = usePayments();
 
-  console.log("isPending =", isPending);
-  console.log("data =", paymentsData);
-  console.log("error =", paymentsError);
+  // console.log("isPending =", isPending);
+  // console.log("data =", paymentsData?.data);
+  // console.log("error =", paymentsError);
 
-  if (isPending) return <p>جاري التحميل...</p>;
-  if (isError) return <p>حدث خطأ: {paymentsError.message}</p>;
+  // if (isPending) return <p>جاري التحميل...</p>;
+  // if (isError) return <p>حدث خطأ: {paymentsError.message}</p>;
   const navigate = useNavigate();
   // const projects = paymentsData?.data || [];
   const columns = [
-    { id: "project-name", label: "اسم المشروع" },
-    { id: "details", label: " المتطلب" },
-    { id: "pending-date", label: " تاريخ الاستحقاق" },
+    { id: "project_name", label: "اسم المشروع" },
+    { id: "detail", label: " المتطلب" },
+    { id: "pending_date", label: " تاريخ الاستحقاق" },
+    { id: "paid_amount", label: " المبلغ المدفوع" },
     { id: "cost", label: " الكلفة" },
-    { id: "paid-amount", label: " المبلغ المدفوع" },
-    { id: "remaining-amount", label: " المبلغ المتبقي" },
+    { id: "remaining_amount", label: " المبلغ المتبقي" },
     { id: "status", label: "الحالة" },
-    { id: "action", label: "الإجراءات" },
+    { id: "edit", label: "الإجراءات" },
   ];
-  const rows = [];
+  const rows =
+    paymentsData?.data?.map((item) => ({
+      id: item.uuid,
+      project_name: item.project?.name,
+      detail: item.detail?.detail,
+      pending_date: item.pending_date,
+      paid_amount: item.paid_amount,
+      cost: item.cost,
+      remaining_amount: item.remaining_amount,
+      status: parseFloat(item.remaining_amount) === 0 ? "مكتمل" : "غير مكتمل",
+    })) || [];
+  console.log(rows[0]?.status);
+  console.log(rows);
   return (
     <Container className="projects" maxWidth="lg" sx={{ px: 2 }}>
-      {/* <Grid container spacing={4} className="title">
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          //  key={index}
-        >
-          {" "}
-          <Typography
-            fontWeight={700}
-            lineHeight={1.8}
-            className={"Toastify__toast-body"}
-            // onClick={() => navigate(-1)}
-            sx={{
-              fontSize: "var(--main-title-font)",
-              color: "var(--toastify-color-dark);",
-              cursor: "pointer",
-            }}
-          >
-            إضافة عملية مالية{" "}
-          </Typography>
-          <Typography
-            lineHeight={1.8}
-            className={"Toastify__toast-body"}
-            // onClick={() => navigate(-1)}
-            sx={{
-              fontFamily: "-apple-system",
-              fontSize: "var(--body-text)",
-              color: " #7a7a7a",
-              marginBottom: "24px",
-            }}
-          >
-            يمكنك إضافة عملية دفع واحدة فقط للتفصيل خلال اليوم{" "}
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          //  key={index}
-        >
-          <Link to="/content/financial-operations/add" className="btn">
-            <span>إضافة عملية مالية</span>
-            <AddRounded />
-          </Link>
-        </Grid>
-      </Grid> */}
       <Title pageTitle="إدارة العمليات المالية" subtitle="">
         <Link to="/content/financial-operations/add" className="btn">
           <span>إضافة عملية مالية</span>
@@ -142,7 +105,10 @@ export default function FinancialOperations() {
       <PageTable
         columns={columns}
         rows={rows}
-        oageLink="/content/financial-operations"
+        pageLink="/content/financial-operations"
+        onEdit={(uuid) =>
+          navigate(`/content/financial-operations/edit/${uuid}`)
+        }
       />
       {/* <Grid container spacing={4} alignItems="stretch" sx={{ width: "100%" }}>
           {projects.map((project) => (

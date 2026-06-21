@@ -1,33 +1,34 @@
-import { createBrowserRouter } from 'react-router-dom';
-import Auth from '../pages/Auth';
-import Root from '../Root';
-import Dashboard from '../pages/Dashboard';
-import Governments from '../pages/Governments';
-import Cities from '../pages/Cities';
-import Areas from '../pages/Areas';
-import Campaigns from '../pages/Campaigns';
-import AddCampaign from '../pages/AddCampaign';
-import EditCampaign from '../pages/EditCampaign';
-import CampaignsDetails from '../pages/CampaignsDetails';
-import ActiveStepProvider from '../contexts/ActiveStepContext';
-import AddProject from '../pages/AddProject';
-import Projects from '../pages/Projects';
-import ProjectsDetails from '../pages/ProjectsDetails';
-import ProtectedRoute from '../utils/ProtectedRoute';
-import AddProjectAdditionalSteps from '../pages/AddProjectAdditionalSteps';
-import { FiltersProvider } from '../contexts/FilterContext';
-import InKindDonations from '../pages/InKindDonations';
-import InKindDonationDetails from '../pages/InKindDonationDetails';
-import FinancialOperations from '../pages/FinancialOperations';
-import AddFinancialOperations from '../pages/AddFinancialOperations';
-import EditProject from '../pages/EditProject';
-import DonarsStats from '../pages/DonarsStats';
-import Donars from '../pages/Donars';
-import DonarDetails from '../pages/DonarDetails';
+import { createBrowserRouter } from "react-router-dom";
+import Auth from "../pages/Auth";
+import Root from "../Root";
+import Dashboard from "../pages/Dashboard";
+import Governments from "../pages/Governments";
+import Cities from "../pages/Cities";
+import Areas from "../pages/Areas";
+import Campaigns from "../pages/Campaigns";
+import AddCampaign from "../pages/AddCampaign";
+import EditCampaign from "../pages/EditCampaign";
+import CampaignsDetails from "../pages/CampaignsDetails";
+import ActiveStepProvider from "../contexts/ActiveStepContext";
+import AddProject from "../pages/AddProject";
+import Projects from "../pages/Projects";
+import ProjectsDetails from "../pages/ProjectsDetails";
+import ProtectedRoute from "../utils/ProtectedRoute";
+import AddProjectAdditionalSteps from "../pages/AddProjectAdditionalSteps";
+import { FiltersProvider } from "../contexts/FilterContext";
+import InKindDonations from "../pages/InKindDonations";
+import InKindDonationDetails from "../pages/InKindDonationDetails";
+import FinancialOperations from "../pages/FinancialOperations";
+import AddFinancialOperations from "../pages/AddFinancialOperations";
+import EditProject from "../pages/EditProject";
+import DonarsStats from "../pages/DonarsStats";
+import Donars from "../pages/Donars";
+import DonarDetails from "../pages/DonarDetails";
+import EditFinancialOperations from "../components/EditFinancialOperations";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Auth />,
   },
 
@@ -42,41 +43,41 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: '/content',
+        path: "/content",
         element: <Root />,
         children: [
           {
-            path: 'dashboard',
+            path: "dashboard",
             element: <Dashboard />,
           },
           {
-            path: 'governments',
+            path: "governments",
             element: <Governments />,
           },
 
-          { path: 'projects', element: <Projects /> },
-          { path: 'projects/:id', element: <ProjectsDetails /> },
-          { path: 'cities', element: <Cities /> },
-          { path: 'areas', element: <Areas /> },
-          { path: 'campaigns', element: <Campaigns /> },
-          { path: 'campaigns/:id', element: <CampaignsDetails /> },
+          { path: "projects", element: <Projects /> },
+          { path: "projects/:id", element: <ProjectsDetails /> },
+          { path: "cities", element: <Cities /> },
+          { path: "areas", element: <Areas /> },
+          { path: "campaigns", element: <Campaigns /> },
+          { path: "campaigns/:id", element: <CampaignsDetails /> },
 
           {
-            path: 'campaigns/add',
+            path: "campaigns/add",
             element: <AddCampaign />,
           },
 
           {
-            path: 'campaigns/edit/:id',
+            path: "campaigns/edit/:id",
             element: <EditCampaign />,
           },
 
           {
-            path: 'projects/add',
+            path: "projects/add",
             element: <AddProject />,
           },
           {
-            path: 'projects/add/additional/:id',
+            path: "projects/add/additional/:id",
             element: (
               <ActiveStepProvider>
                 <AddProjectAdditionalSteps />
@@ -85,34 +86,38 @@ export const router = createBrowserRouter([
           },
 
           {
-            path: 'projects/edit/:id',
+            path: "projects/edit/:id",
             element: <EditProject />,
           },
 
           {
-            path: 'inKindDonation',
+            path: "inKindDonation",
             element: <InKindDonations />,
           },
           {
-            path: 'inKindDonation/:id',
+            path: "inKindDonation/:id",
             element: <InKindDonationDetails />,
           },
 
           /* Trash */
           {
-            path: 'projects-trash',
+            path: "projects-trash",
             element: <Projects isTrash={true} />,
           },
           {
-            path: 'financial-operations',
+            path: "financial-operations",
             element: <FinancialOperations />,
           },
           {
-            path: 'financial-operations/add',
+            path: "financial-operations/add",
             element: <AddFinancialOperations />,
           },
           {
-            path: 'campaigns-trash',
+            path: "financial-operations/edit/:uuid",
+            element: <EditFinancialOperations />,
+          },
+          {
+            path: "campaigns-trash",
             element: <Campaigns isTrash={true} />,
           },
 
@@ -122,11 +127,11 @@ export const router = createBrowserRouter([
             element: <DonarsStats />,
           }, */
           {
-            path: 'donars',
+            path: "donars",
             element: <Donars />,
           },
           {
-            path: 'donars/:id',
+            path: "donars/:id",
             element: <DonarDetails />,
           },
         ],

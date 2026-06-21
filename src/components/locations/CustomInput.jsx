@@ -64,8 +64,13 @@ const inputsStyles = {
 
   /* ===== DISABLED ===== */
   "& .Mui-disabled": {
-    backgroundColor: "#F5F6F8",
+    backgroundColor: "transparent",
     cursor: "not-allowed",
+  },
+
+  "& .MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: "var(--secondary-color)",
+    color: "#333",
   },
 
   "& .Mui-disabled:before": {
@@ -79,8 +84,8 @@ const inputsStyles = {
   },
 
   "& .MuiSelect-select.Mui-disabled": {
-    color: "#9AA0A6",
-    WebkitTextFillColor: "#9AA0A6",
+    color: "#333",
+    WebkitTextFillColor: "#333",
   },
 
   /* ===== LABEL ===== */
@@ -115,7 +120,14 @@ const pickerStyles = {
     fontFamily: "Cairo",
     padding: "8px 0",
   },
-  "& .Mui-disabled": { backgroundColor: "#F5F6F8", cursor: "not-allowed" },
+  /* ===== DISABLED ===== */
+  "& .Mui-disabled": {
+    backgroundColor: "transparent",
+    cursor: "not-allowed",
+  },
+  "& .MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: "#333",
+  },
   "& .Mui-disabled:before": {
     borderBottomColor: "#DADDE3",
     borderBottomStyle: "solid",
@@ -125,8 +137,8 @@ const pickerStyles = {
     borderBottomStyle: "solid",
   },
   "& .MuiSelect-select.Mui-disabled": {
-    color: "#9AA0A6",
-    WebkitTextFillColor: "#9AA0A6",
+    color: "#333",
+    WebkitTextFillColor: "#333",
   },
   "& .MuiInputLabel-root": { color: "#8c9ea0", fontFamily: "Cairo" },
   "& .MuiInputLabel-root.Mui-focused": { color: "var(--main-color)" },
@@ -229,16 +241,12 @@ export default function CustomInput({
             isRequired={isRequired}
             sx={{
               ...inputsStyles,
-
-              // 🔥 أهم جزء
               "& .MuiInputBase-root": {
                 padding: "6px 0",
               },
-
               "& .MuiAutocomplete-inputRoot": {
                 padding: "6px 0 !important",
               },
-
               "& .MuiInputBase-input": {
                 padding: "8px 0 !important",
               },
@@ -334,6 +342,7 @@ export default function CustomInput({
           <TimePicker
             value={value}
             onChange={(newValue) => setValue(newValue)}
+            disabled={isDisabled}
             slotProps={{
               textField: {
                 variant: "standard",
@@ -356,7 +365,6 @@ export default function CustomInput({
       </FormControl>
 
       {/* 🔹 Helper text */}
-
       {(helperText || errorMsg) && (
         <FormHelperText error={!!errorMsg} sx={{ color: "#9AA0A6" }}>
           {errorMsg || helperText}

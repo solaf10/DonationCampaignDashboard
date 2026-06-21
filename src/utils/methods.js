@@ -1,66 +1,67 @@
 export const formatArabicDate = (dateStr) => {
-  if (!dateStr) return '-';
+  if (!dateStr) return "-";
 
   const date = new Date(dateStr);
 
-  return new Intl.DateTimeFormat('ar-EG', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  return new Intl.DateTimeFormat("ar-EG", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   }).format(date);
 };
 export const formatArabicTime = (timeStr) => {
-  if (!timeStr) return '-';
+  if (!timeStr) return "-";
 
-  const [h, m] = timeStr.split(':');
+  const [h, m] = timeStr.split(":");
 
   const date = new Date();
   date.setHours(h);
   date.setMinutes(m);
 
-  return new Intl.DateTimeFormat('ar-EG', {
-    hour: '2-digit',
-    minute: '2-digit',
+  return new Intl.DateTimeFormat("ar-EG", {
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: true,
   }).format(date);
 };
 /* ----------------------------- Campaigns only ---------------------------- */
 export const getStatusColor = (status) => {
   switch (status) {
-    case 'نشطة':
-    case 'مكتمل':
-    case 'متوافق':
-    case 'مدفوع':
-      return 'success-status';
+    case "نشطة":
+    case "مكتمل":
+    case "متوافق":
+    case "مدفوع":
+      return "success-status";
 
-    case 'جديدة':
-    case 'قيد التنفيذ':
-    case 'تدقيق غير مباشر':
-      return 'draft-status';
+    case "جديدة":
+    case "قيد التنفيذ":
+    case "تدقيق غير مباشر":
+      return "draft-status";
 
-    case 'متوقفة':
-    case 'متوقف':
-    case 'تدقيق مباشر':
-      return 'warning-status';
+    case "متوقفة":
+    case "متوقف":
+    case "تدقيق مباشر":
+      return "warning-status";
 
-    case 'مخطط له':
-    case 'غير مدفوع':
-      return 'completed-status';
+    case "مخطط له":
+    case "غير مدفوع":
+    case "غير مكتمل":
+      return "completed-status";
 
-    case 'منتهية':
-    case 'غير متوافق':
-      return 'error-status';
+    case "منتهية":
+    case "غير متوافق":
+      return "error-status";
 
     default:
-      return 'draft-status';
+      return "draft-status";
   }
 };
 const formatRemainingTime = (days) => {
-  if (days <= 0) return 'اليوم';
+  if (days <= 0) return "اليوم";
 
-  if (days === 1) return 'غداً';
+  if (days === 1) return "غداً";
 
-  if (days === 2) return 'بعد غد';
+  if (days === 2) return "بعد غد";
 
   if (days < 30) {
     return `بعد ${days} أيام`;
@@ -68,9 +69,9 @@ const formatRemainingTime = (days) => {
 
   const months = Math.floor(days / 30);
 
-  if (months === 1) return 'بعد شهر';
+  if (months === 1) return "بعد شهر";
 
-  if (months === 2) return 'بعد شهرين';
+  if (months === 2) return "بعد شهرين";
 
   return `بعد ${months} أشهر`;
 };
@@ -93,43 +94,43 @@ export const getCampaignStatusText = (campaign) => {
   const daysToEnd = Math.floor((end - today) / msPerDay);
 
   switch (campaign.status) {
-    case 'جديدة':
+    case "جديدة":
       return {
-        type: 'upcoming',
+        type: "upcoming",
         text: `تبدأ ${formatRemainingTime(daysToStart)}`,
       };
 
-    case 'نشطة':
+    case "نشطة":
       return {
-        type: 'ongoing',
+        type: "ongoing",
         text:
           daysToEnd <= 0
-            ? 'تنتهي اليوم'
+            ? "تنتهي اليوم"
             : `تنتهي ${formatRemainingTime(daysToEnd)}`,
       };
 
-    case 'متوقفة':
+    case "متوقفة":
       return {
-        type: 'paused',
-        text: 'الحملة متوقفة حالياً',
+        type: "paused",
+        text: "الحملة متوقفة حالياً",
       };
 
-    case 'مكتملة':
+    case "مكتملة":
       return {
-        type: 'finished',
-        text: 'تمت الحملة بنجاح',
+        type: "finished",
+        text: "تمت الحملة بنجاح",
       };
 
-    case 'منتهية':
+    case "منتهية":
       return {
-        type: 'finished',
-        text: 'انتهت الحملة',
+        type: "finished",
+        text: "انتهت الحملة",
       };
 
     default:
       return {
-        type: 'default',
-        text: '',
+        type: "default",
+        text: "",
       };
   }
 };
@@ -141,11 +142,11 @@ export const hasFormData = (formData) => {
       return value.length > 0;
     }
 
-    return value !== '' && value !== null && value !== undefined;
+    return value !== "" && value !== null && value !== undefined;
   });
 };
 
 /* ----------------------------- Donars only ---------------------------- */
 export const getCurrency = (currency) => {
-  return currency === 'SYP' ? 'ل.س' : currency === 'USD' ? '$' : '€';
+  return currency === "SYP" ? "ل.س" : currency === "USD" ? "$" : "€";
 };
