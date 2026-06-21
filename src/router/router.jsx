@@ -146,6 +146,10 @@ export const router = createBrowserRouter([
           },
 
           {
+            path: 'financial-operations/edit/:uuid',
+            element: <EditFinancialOperations />,
+          },
+          {
             path: 'campaigns-trash',
             element: <Campaigns isTrash={true} />,
           },

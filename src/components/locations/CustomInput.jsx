@@ -335,6 +335,7 @@ export default function CustomInput({
           <TimePicker
             value={value}
             onChange={(newValue) => setValue(newValue)}
+            disabled={isDisabled}
             slotProps={{
               textField: {
                 variant: 'standard',
@@ -357,7 +358,6 @@ export default function CustomInput({
       </FormControl>
 
       {/* 🔹 Helper text */}
-
       {(helperText || errorMsg) && (
         <FormHelperText error={!!errorMsg} sx={{ color: '#9AA0A6' }}>
           {errorMsg || helperText}
