@@ -1,4 +1,5 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+
 import Auth from '../pages/Auth';
 import Root from '../Root';
 import Dashboard from '../pages/Dashboard';
@@ -9,18 +10,25 @@ import Campaigns from '../pages/Campaigns';
 import AddCampaign from '../pages/AddCampaign';
 import EditCampaign from '../pages/EditCampaign';
 import CampaignsDetails from '../pages/CampaignsDetails';
+
 import ActiveStepProvider from '../contexts/ActiveStepContext';
 import AddProject from '../pages/AddProject';
 import Projects from '../pages/Projects';
 import ProjectsDetails from '../pages/ProjectsDetails';
+
 import ProtectedRoute from '../utils/ProtectedRoute';
 import AddProjectAdditionalSteps from '../pages/AddProjectAdditionalSteps';
+
 import { FiltersProvider } from '../contexts/FilterContext';
+
 import InKindDonations from '../pages/InKindDonations';
 import InKindDonationDetails from '../pages/InKindDonationDetails';
+
 import FinancialOperations from '../pages/FinancialOperations';
 import AddFinancialOperations from '../pages/AddFinancialOperations';
+
 import EditProject from '../pages/EditProject';
+
 import DonarsStats from '../pages/DonarsStats';
 import Donars from '../pages/Donars';
 import DonarDetails from '../pages/DonarDetails';
@@ -45,6 +53,13 @@ export const router = createBrowserRouter([
         path: '/content',
         element: <Root />,
         children: [
+          
+          // ✅ DEFAULT REDIRECT (FIX FOR BLANK PAGE)
+          {
+            index: true,
+            element: <Navigate to="dashboard" replace />,
+          },
+
           {
             path: 'dashboard',
             element: <Dashboard />,
@@ -53,19 +68,34 @@ export const router = createBrowserRouter([
             path: 'governments',
             element: <Governments />,
           },
-
-          { path: 'projects', element: <Projects /> },
-          { path: 'projects/:id', element: <ProjectsDetails /> },
-          { path: 'cities', element: <Cities /> },
-          { path: 'areas', element: <Areas /> },
-          { path: 'campaigns', element: <Campaigns /> },
-          { path: 'campaigns/:id', element: <CampaignsDetails /> },
-
+          {
+            path: 'projects',
+            element: <Projects />,
+          },
+          {
+            path: 'projects/:id',
+            element: <ProjectsDetails />,
+          },
+          {
+            path: 'cities',
+            element: <Cities />,
+          },
+          {
+            path: 'areas',
+            element: <Areas />,
+          },
+          {
+            path: 'campaigns',
+            element: <Campaigns />,
+          },
+          {
+            path: 'campaigns/:id',
+            element: <CampaignsDetails />,
+          },
           {
             path: 'campaigns/add',
             element: <AddCampaign />,
           },
-
           {
             path: 'campaigns/edit/:id',
             element: <EditCampaign />,
@@ -83,7 +113,6 @@ export const router = createBrowserRouter([
               </ActiveStepProvider>
             ),
           },
-
           {
             path: 'projects/edit/:id',
             element: <EditProject />,
@@ -98,11 +127,11 @@ export const router = createBrowserRouter([
             element: <InKindDonationDetails />,
           },
 
-          /* Trash */
           {
             path: 'projects-trash',
             element: <Projects isTrash={true} />,
           },
+
           {
             path: 'financial-operations',
             element: <FinancialOperations />,
@@ -111,16 +140,12 @@ export const router = createBrowserRouter([
             path: 'financial-operations/add',
             element: <AddFinancialOperations />,
           },
+
           {
             path: 'campaigns-trash',
             element: <Campaigns isTrash={true} />,
           },
 
-          /* Donars */
-          /*  {
-            path: 'donars',
-            element: <DonarsStats />,
-          }, */
           {
             path: 'donars',
             element: <Donars />,
