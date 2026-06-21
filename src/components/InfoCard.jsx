@@ -31,7 +31,7 @@ export default function InfoCard({ icon, title, value, bg, color }) {
         <Box>
           <Typography variant='caption'>{title}</Typography>
 
-          <Typography fontWeight={700}>{value}</Typography>
+          <Typography sx={{ fontWeight: 700 }}>{value}</Typography>
         </Box>
       </Box>
     </Card>

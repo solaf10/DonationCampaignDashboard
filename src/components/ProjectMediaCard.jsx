@@ -27,7 +27,7 @@ const ProjectMediaCard = ({ title, mediaType, mediaItems, altBase }) => {
           mb: 4,
         }}
       >
-        <Typography variant='h5' fontWeight={800}>
+        <Typography variant='h5' sx={{ fontWeight: 800 }}>
           {title}
         </Typography>
 

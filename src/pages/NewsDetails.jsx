@@ -118,11 +118,11 @@ const NewsDetails = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography
-              fontWeight={700}
               onClick={() => navigate(-1)}
               sx={{
                 color: '#C7BFB6',
                 cursor: 'pointer',
+                fontWeight: 700,
               }}
             >
               إدارة المشاريع
@@ -136,9 +136,9 @@ const NewsDetails = () => {
             />
 
             <Typography
-              fontWeight={700}
               sx={{
                 color: 'var(--main-color)',
+                fontWeight: 700,
               }}
             >
               {newsItem?.title}
@@ -232,13 +232,13 @@ const NewsDetails = () => {
 
             <Typography
               variant='h2'
-              fontWeight={700}
               sx={{
                 mb: 2,
                 fontSize: {
                   xs: 26,
                   md: 58,
                 },
+                fontWeight: 700,
                 lineHeight: 1.1,
               }}
             >
@@ -279,14 +279,14 @@ const NewsDetails = () => {
             height: '100%',
           }}
         >
-          <Typography variant='h5' fontWeight={800} sx={{ marginBottom: 3 }}>
+          <Typography variant='h5' sx={{ marginBottom: 3, fontWeight: 800 }}>
             المقال
           </Typography>
 
           <Box
             sx={{
-              height: '272px',
-              overflowY: 'auto',
+              /* height: '272px',
+              overflowY: 'auto', */
               display: 'flex',
               flexDirection: 'column',
               gap: 2,

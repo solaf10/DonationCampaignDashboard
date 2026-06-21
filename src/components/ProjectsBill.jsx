@@ -82,10 +82,10 @@ const ProjectsBill = ({ details, projectID }) => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              mb: 3,
             }}
-            mb={3}
           >
-            <Typography variant='h5' fontWeight={800}>
+            <Typography variant='h5' sx={{ fontWeight: 800 }}>
               التفاصيل
             </Typography>
             <button
@@ -135,11 +135,11 @@ const ProjectsBill = ({ details, projectID }) => {
                       <MoreVertIcon />
                     </IconButton>
 
-                    <Typography fontSize={15}>{item.detail}</Typography>
+                    <Typography sx={{ fontSize: 15 }}>{item.detail}</Typography>
                   </Box>
 
                   {/* PRICE */}
-                  <Typography fontWeight={700} color='#2e7d32'>
+                  <Typography sx={{ fontWeight: 700, color: '#2e7d32' }}>
                     {item.detail_cost}
                   </Typography>
                 </Box>
@@ -175,11 +175,11 @@ const ProjectsBill = ({ details, projectID }) => {
                   📦
                 </Box>
 
-                <Typography fontWeight={600} mb={1}>
+                <Typography sx={{ fontWeight: 600, mb: 1 }}>
                   لا توجد تفاصيل للمشروع حالياً
                 </Typography>
 
-                <Typography fontSize={13} sx={{ px: 4, opacity: 0.8 }}>
+                <Typography sx={{ px: 4, opacity: 0.8, fontSize: 13 }}>
                   يمكنك إضافة تفاصيل توضح احتياجات المشروع وتكاليفها، مثل شراء
                   المعدات أو تنفيذ أعمال التأهيل والصيانة.
                 </Typography>

@@ -5,6 +5,53 @@ import {
   Typography,
 } from '@mui/material';
 
+const defaultStyles = {
+  width: '100%',
+  height: '130px',
+  fontFamily: 'Cairo',
+  /* 🔹 شكل الحقل */
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '8px',
+    backgroundColor: '#fff',
+
+    '& fieldset': {
+      borderColor: '#d1d5db',
+    },
+
+    '&:hover:not(.Mui-error) fieldset': {
+      borderWidth: '2px',
+      borderColor: 'var(--secondary-color)',
+    },
+
+    '&.Mui-focused:not(.Mui-error) fieldset': {
+      borderColor: 'var(--secondary-color)',
+      borderWidth: '2px',
+    },
+
+    /* 🔴 Disabled */
+    '&.Mui-disabled': {
+      backgroundColor: '#F5F6F8',
+    },
+
+    '&.Mui-disabled fieldset': {
+      borderColor: '#DADDE3',
+    },
+  },
+
+  /* 🔹 النص داخل الحقل */
+  '& .MuiInputBase-input': {
+    color: '#374151',
+    fontFamily: 'Cairo',
+  },
+
+  /* 🔹 placeholder */
+  '& .MuiInputBase-input::placeholder': {
+    color: '#9AA0A6',
+    opacity: 1,
+    fontSize: '14px',
+  },
+};
+
 const Textarea = ({
   label,
   placeholder,
@@ -17,51 +64,8 @@ const Textarea = ({
   isRequired = false,
 }) => {
   const customStyles = {
-    width: '100%',
-    height: '130px',
-    fontFamily: 'Cairo',
-    /* 🔹 شكل الحقل */
-    '& .MuiOutlinedInput-root': {
-      borderRadius: '8px',
-      backgroundColor: '#fff',
-
-      '& fieldset': {
-        borderColor: '#d1d5db',
-      },
-
-      '&:hover:not(.Mui-error) fieldset': {
-        borderWidth: '2px',
-        borderColor: 'var(--secondary-color)',
-      },
-
-      '&.Mui-focused:not(.Mui-error) fieldset': {
-        borderColor: 'var(--secondary-color)',
-        borderWidth: '2px',
-      },
-
-      /* 🔴 Disabled */
-      '&.Mui-disabled': {
-        backgroundColor: '#F5F6F8',
-      },
-
-      '&.Mui-disabled fieldset': {
-        borderColor: '#DADDE3',
-      },
-    },
-
-    /* 🔹 النص داخل الحقل */
-    '& .MuiInputBase-input': {
-      color: '#374151',
-      fontFamily: 'Cairo',
-    },
-
-    /* 🔹 placeholder */
-    '& .MuiInputBase-input::placeholder': {
-      color: '#9AA0A6',
-      opacity: 1,
-      fontSize: '14px',
-    },
-    ...styles,
+    ...defaultStyles,
+    ...(styles || {}),
   };
   return (
     <FormControl sx={{ ...customStyles, height: styles?.height ?? '195px' }}>

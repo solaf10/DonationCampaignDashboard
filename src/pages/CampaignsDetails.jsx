@@ -136,11 +136,11 @@ const CampaignsDetails = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography
-              fontWeight={700}
               onClick={() => navigate(-1)}
               sx={{
                 color: '#C7BFB6',
                 cursor: 'pointer',
+                fontWeight: 700,
               }}
             >
               إدارة الحملات
@@ -154,9 +154,9 @@ const CampaignsDetails = () => {
             />
 
             <Typography
-              fontWeight={700}
               sx={{
                 color: 'var(--main-color)',
+                fontWeight: 700,
               }}
             >
               {campaign?.name}
@@ -254,7 +254,6 @@ const CampaignsDetails = () => {
 
             <Typography
               variant='h2'
-              fontWeight={700}
               sx={{
                 mb: 1.5,
                 fontSize: {
@@ -262,6 +261,7 @@ const CampaignsDetails = () => {
                   md: 58,
                 },
                 lineHeight: 1.1,
+                fontWeight: 700,
               }}
             >
               {campaign?.name}

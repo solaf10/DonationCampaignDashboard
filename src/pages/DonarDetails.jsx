@@ -186,7 +186,7 @@ const DonarDetails = () => {
           </Box>
         </Box>
       </Box>
-      <Grid container spacing={2} marginBottom={2}>
+      <Grid container spacing={2} sx={{ mb: 2 }}>
         {infoCards}
       </Grid>
       <PageTable

@@ -12,7 +12,7 @@ const Requirements = ({ secTitle, requirements }) => {
           height: '100%',
         }}
       >
-        <Typography variant='h5' fontWeight={800} mb={3}>
+        <Typography variant='h5' sx={{ fontWeight: 800, mb: 3 }}>
           {secTitle}
         </Typography>
 
@@ -44,7 +44,7 @@ const Requirements = ({ secTitle, requirements }) => {
                 }}
               />
 
-              <Typography lineHeight={1.8}>{item}</Typography>
+              <Typography sx={{ lineHeight: 1.8 }}>{item}</Typography>
             </Box>
           ))}
         </Box>

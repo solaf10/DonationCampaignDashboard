@@ -49,7 +49,7 @@ const CampaignDetailsSkeleton = ({ infos = [1, 2, 3] }) => {
       />
 
       {/* INFOS */}
-      <Grid container spacing={2} mt={3}>
+      <Grid container spacing={2} sx={{ mt: 3 }}>
         {infos.map((i) => (
           <Grid size={4} key={i}>
             <Box
@@ -89,7 +89,7 @@ const CampaignDetailsSkeleton = ({ infos = [1, 2, 3] }) => {
       </Grid>
 
       {/* CONTENT */}
-      <Grid container spacing={3} mt={3}>
+      <Grid container spacing={3} sx={{ mt: 3 }}>
         <Grid size={6}>
           <Box
             sx={{

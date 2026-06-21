@@ -148,11 +148,11 @@ export default function ProjectDetails() {
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography
-              fontWeight={700}
               onClick={() => navigate(-1)}
               sx={{
                 color: '#C7BFB6',
                 cursor: 'pointer',
+                fontWeight: 700,
               }}
             >
               إدارة المشاريع
@@ -166,9 +166,9 @@ export default function ProjectDetails() {
             />
 
             <Typography
-              fontWeight={700}
               sx={{
                 color: 'var(--main-color)',
+                fontWeight: 700,
               }}
             >
               {project?.name}
@@ -293,13 +293,13 @@ export default function ProjectDetails() {
 
             <Typography
               variant='h2'
-              fontWeight={700}
               sx={{
                 mb: 2,
                 fontSize: {
                   xs: 26,
                   md: 58,
                 },
+                fontWeight: 700,
                 lineHeight: 1.1,
               }}
             >
@@ -439,7 +439,7 @@ export default function ProjectDetails() {
         </Grid>
 
         {/* REQUIREMENTS + BILL */}
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{ mt: 4 }}>
           {/* REQUIREMENTS */}
           <Requirements
             secTitle='متطلبات المشروع'
