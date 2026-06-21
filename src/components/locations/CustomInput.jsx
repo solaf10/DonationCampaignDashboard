@@ -13,7 +13,7 @@ import {
   Autocomplete,
 } from '@mui/material';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
-import { useState } from 'react';
+import { Children, useState } from 'react';
 
 const inputsStyles = {
   '& .MuiInputBase-input': {
@@ -206,12 +206,17 @@ export default function CustomInput({
                 );
               }
 
-              const selectedChild = Array.isArray(children)
+              /* const selectedChild = Array.isArray(children)
                 ? children.find((child) => {
                     if (!child?.props) return false;
                     return child.props.value === selected;
                   })
                 : null;
+
+              return selectedChild?.props?.children || selected; */
+              const selectedChild = Children.toArray(children).find(
+                (child) => child?.props?.value === selected,
+              );
 
               return selectedChild?.props?.children || selected;
             }}

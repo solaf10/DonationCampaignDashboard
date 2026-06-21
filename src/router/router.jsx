@@ -35,6 +35,7 @@ import DonarDetails from '../pages/DonarDetails';
 import News from '../pages/News';
 import NewsDetails from '../pages/NewsDetails';
 import AddNewsItem from '../pages/AddNewsItem';
+import EditFinancialOperations from '../components/EditFinancialOperations';
 
 export const router = createBrowserRouter([
   {

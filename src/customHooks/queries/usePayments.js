@@ -1,21 +1,21 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   addPayment,
   editPayment,
   getDetails,
   getPayments,
   getProjects,
-} from "../../services/payments";
+} from '../../services/payments';
 
 export default function usePayments() {
   return useQuery({
-    queryKey: ["pendings/all"],
+    queryKey: ['pendings/all'],
     queryFn: getPayments,
   });
 }
 export function useProjects() {
   return useQuery({
-    queryKey: ["pendings/projects"],
+    queryKey: ['pendings/projects'],
     queryFn: getProjects,
   });
 }
@@ -33,7 +33,7 @@ export function useAddPayment() {
 }
 export function usePaymentById(uuid) {
   return useQuery({
-    queryKey: ["pendings/all", uuid],
+    queryKey: ['pendings/all', uuid],
     queryFn: async () => {
       const res = await getPayments();
       const item = res?.data?.find((p) => p.uuid === uuid);
@@ -46,6 +46,6 @@ export function useEditPayment() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: editPayment,
-    onSuccess: () => queryClient.invalidateQueries(["pendings/all"]),
+    onSuccess: () => queryClient.invalidateQueries(['pendings/all']),
   });
 }
