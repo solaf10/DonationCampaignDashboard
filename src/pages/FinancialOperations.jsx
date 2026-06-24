@@ -35,12 +35,12 @@ export default function FinancialOperations() {
   if (isError) return <p>حدث خطأ: {paymentsError.message}</p>; */
   // const projects = paymentsData?.data || [];
   const columns = [
-    { id: 'project-name', label: 'اسم المشروع' },
-    { id: 'details', label: ' المتطلب' },
-    { id: 'pending-date', label: ' تاريخ الاستحقاق' },
+    { id: 'project_name', label: 'اسم المشروع' },
+    { id: 'detail', label: ' المتطلب' },
+    { id: 'pending_date', label: ' تاريخ الاستحقاق' },
     { id: 'cost', label: ' الكلفة' },
-    { id: 'paid-amount', label: ' المبلغ المدفوع' },
-    { id: 'remaining-amount', label: ' المبلغ المتبقي' },
+    { id: 'paid_amount', label: ' المبلغ المدفوع' },
+    { id: 'remaining_amount', label: ' المبلغ المتبقي' },
     { id: 'status', label: 'الحالة' },
     { id: 'action', label: 'الإجراءات' },
   ];
@@ -55,7 +55,6 @@ export default function FinancialOperations() {
       remaining_amount: item.remaining_amount,
       status: parseFloat(item.remaining_amount) === 0 ? 'مكتمل' : 'غير مكتمل',
     })) || [];
-  console.log(rows[0]?.status);
   console.log(rows);
   return (
     <Container className='projects' maxWidth='lg' sx={{ px: 2 }}>
