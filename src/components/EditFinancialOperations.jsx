@@ -12,7 +12,7 @@ import {
 } from "../customHooks/queries/usePayments";
 import dayjs from "dayjs";
 
-export default function EditFinancialOperations() {
+export default function Editf() {
   const { uuid } = useParams();
   const navigate = useNavigate();
   const styles = { marginBottom: "16px" };

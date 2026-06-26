@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, IconButton } from "@mui/material";
 import { AddRounded, FilterList } from "@mui/icons-material";
@@ -36,26 +36,46 @@ export default function FinancialOperations() {
   //     return;
   //   }
 
-    const search = searchText.trim().toLowerCase();
+  const search = searchText.trim().toLowerCase();
 
-    const matchedProject = projects.find((p) =>
-      p.name.toLowerCase().includes(search),
-    );
+  const matchedProject = projects.find((p) =>
+    p.name.toLowerCase().includes(search),
+  );
 
-    const matchedDetail = allDetails.find((d) =>
-      d.detail.toLowerCase().includes(search),
-    );
+  const matchedDetail = allDetails.find((d) =>
+    d.detail.toLowerCase().includes(search),
+  );
+  console.log("search:", searchText);
+  console.log("projects:", projects);
+  console.log("details:", allDetails);
+  console.log(projectsData);
+  // useEffect(() => {
+  //   const search = searchText.trim().toLowerCase();
 
-    const payload = {};
-    if (matchedProject) payload.project_uuid = matchedProject.uuid;
-    if (matchedDetail) payload.detail_uuid = matchedDetail.uuid;
+  //   if (!search) {
+  //     reset();
+  //     return;
+  //   }
 
-    if (Object.keys(payload).length > 0) {
-      filterPayments(payload);
-    } else {
-      reset();
-    }
-  };
+  //   const matchedProject = projects.find((p) =>
+  //     p.name.toLowerCase().includes(search),
+  //   );
+
+  //   const matchedDetail = allDetails.find((d) =>
+  //     d.detail.toLowerCase().includes(search),
+  //   );
+
+  //   const payload = {};
+
+  //   if (matchedProject) payload.project_uuid = matchedProject.uuid;
+  //   if (matchedDetail) payload.detail_uuid = matchedDetail.uuid;
+
+  //   if (Object.keys(payload).length > 0) {
+  //     filterPayments(payload);
+  //   } else {
+  //     reset();
+  //   }
+  // }, [searchText, projects, allDetails]);
 
   const sourceData = filteredData ? filteredData?.data : paymentsData?.data;
 

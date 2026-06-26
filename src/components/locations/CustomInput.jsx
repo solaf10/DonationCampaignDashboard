@@ -155,7 +155,7 @@ export default function CustomInput({
   maxDate,
 }) {
   const handleChange = (e) => {
-    console.log(e);
+    console.log(e.target.value);
     if (isNestedState) setValue(e);
     else setValue(e.target.value);
   };
