@@ -49,7 +49,7 @@ const CityModalForm = ({ governments, cities }) => {
           }),
         )
       }
-      modalTitle={isEdit ? 'تعديل الحي' : 'إضافة حي'}
+      modalTitle={isEdit ? 'تعديل المدينة' : 'إضافة مدينة'}
       submitBtnTitle={isEdit ? 'تعديل' : 'إضافة'}
       onSubmit={handleSubmit}
       isLoading={isAdding || isEditing}
@@ -80,7 +80,7 @@ const CityModalForm = ({ governments, cities }) => {
 
       <CustomInput
         inputType='input'
-        label='الحي'
+        label='المدينة'
         value={city}
         setValue={(value) => {
           setCity(value);

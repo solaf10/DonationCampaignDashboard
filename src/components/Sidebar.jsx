@@ -48,7 +48,7 @@ const links = [
     ),
     children: [
       { id: 21, href: '/content/governments', label: 'المحافظات' },
-      { id: 22, href: '/content/cities', label: 'الأحياء' },
+      { id: 22, href: '/content/cities', label: 'المدن' },
       { id: 23, href: '/content/areas', label: 'المناطق' },
     ],
   },

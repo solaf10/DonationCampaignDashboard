@@ -11,7 +11,7 @@ import useGetCitiesLogic from '../customHooks/useGetCitiesLogic';
 import PageTable from '../components/PageTable';
 
 const columns = [
-  { id: 'city_name', label: 'الحي' },
+  { id: 'city_name', label: 'المدينة' },
   { id: 'governorate_name', label: 'المحافظة' },
   { id: 'edit', label: 'الإجراءات' },
 ];
@@ -44,14 +44,14 @@ const Cities = () => {
   const nativeSelectStyles = { minWidth: '100px' };
   return (
     <PageContainer>
-      <Title pageTitle='إدارة الموقع(المكان)' subtitle='الأحياء'>
+      <Title pageTitle='إدارة الموقع(المكان)' subtitle='المدن'>
         <button
           onClick={() =>
             dispatch(controlControlLocationModal({ type: 'add', id: null }))
           }
           className='btn'
         >
-          <span>إضافة حي</span>
+          <span>إضافة مدينة</span>
           <AddRounded />
         </button>
       </Title>
@@ -62,7 +62,7 @@ const Cities = () => {
           <div className='input-holder'>
             <CustomInput
               inputType='textField'
-              placeholder='ابحث في الأحياء'
+              placeholder='ابحث في المدن'
               styles={{
                 width: '400px',
                 height: 'auto',
@@ -91,7 +91,7 @@ const Cities = () => {
             </CustomInput>
           </div>
 
-          <p>عدد الأحياء: {rows.length}</p>
+          <p>عدد المدن: {rows.length}</p>
         </div>
         <PageTable
           rows={rows}

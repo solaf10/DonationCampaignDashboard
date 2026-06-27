@@ -121,7 +121,7 @@ const AreaModalForm = ({ governments, areas }) => {
 
       <CustomInput
         inputType='select'
-        label='الحي'
+        label='المدينة'
         value={city}
         setValue={handleCityChange}
         errorMsg={error.city}
@@ -132,7 +132,7 @@ const AreaModalForm = ({ governments, areas }) => {
         }
         helperText={
           isEdit && citiesFetchingError
-            ? 'فشل جلب الأحياء، حاول مرة أخرى'
+            ? 'فشل جلب المدن، حاول مرة أخرى'
             : government === ''
               ? 'يتم تفعيل هذا الحقل بعد اختيار المحافظة'
               : ''
@@ -152,7 +152,9 @@ const AreaModalForm = ({ governments, areas }) => {
         setValue={handleAreaChange}
         errorMsg={error.area}
         isDisabled={city === ''}
-        helperText={city === '' ? 'يتم تفعيل هذا الحقل بعد اختيار الحي' : ''}
+        helperText={
+          city === '' ? 'يتم تفعيل هذا الحقل بعد اختيار المدينةينة' : ''
+        }
       />
     </CustomModal>
   );

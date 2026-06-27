@@ -13,7 +13,7 @@ import PageTable from '../components/PageTable';
 
 const columns = [
   { id: 'district_name', label: 'المنطقة' },
-  { id: 'city_name', label: 'الحي' },
+  { id: 'city_name', label: 'المدينة' },
   { id: 'governorate_name', label: 'المحافظة' },
   { id: 'edit', label: 'الإجراءات' },
 ];
@@ -100,7 +100,7 @@ const Areas = () => {
               ))}
             </CustomInput>
             <CustomInput
-              label='الحي'
+              label='المدينة'
               inputType='nativeSelect'
               styles={nativeSelectStyles}
               value={city}
