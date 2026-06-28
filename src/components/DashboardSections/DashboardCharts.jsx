@@ -14,8 +14,18 @@ const cardStyle = {
 };
 
 const allMonths = [
-  "Jan","Feb","Mar","Apr","May","Jun",
-  "Jul","Aug","Sep","Oct","Nov","Dec",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 const DashboardCharts = ({ charts }) => {
@@ -48,7 +58,7 @@ const DashboardCharts = ({ charts }) => {
 
   const totalDonations = campaignsData.reduce(
     (acc, item) => acc + item.value,
-    0
+    0,
   );
 
   // ================= LINE =================
@@ -71,8 +81,7 @@ const DashboardCharts = ({ charts }) => {
         horizontal: true,
         borderRadius: 3,
         barHeight: "20%",
-          distributed: false,
-    
+        distributed: false,
       },
     },
     colors: [PRIMARY],
@@ -115,17 +124,14 @@ const DashboardCharts = ({ charts }) => {
         gridTemplateColumns: {
           xs: "1fr",
           md: "repeat(3, 1fr)",
-   
-      
         },
         gap: 1,
-        marginTop:4
-       
+        marginTop: 4,
       }}
     >
       {/* LINE */}
       <Paper sx={cardStyle}>
-        <Typography fontWeight={700} fontSize={8} >
+        <Typography fontWeight={700} fontSize={8}>
           التبرعات الشهرية
         </Typography>
 
