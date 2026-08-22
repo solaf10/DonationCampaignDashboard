@@ -18,31 +18,29 @@ export default function DonarDetailsSkeleton() {
           }}
         >
           {/* Avatar */}
-          <Skeleton variant='circular' width={110} height={110} />
+          <Skeleton variant='circular' sx={{ width: 110, height: 110 }} />
 
           {/* Info */}
           <Box sx={{ flex: 1 }}>
             {/* Name */}
-            <Skeleton variant='text' width='40%' height={40} />
+            <Skeleton variant='text' sx={{ width: '40%', height: 40 }} />
 
             {/* Type badge */}
             <Skeleton
               variant='rounded'
-              width={90}
-              height={26}
-              sx={{ borderRadius: 99, mb: 2 }}
+              sx={{ borderRadius: 99, mb: 2, width: 90, height: 26 }}
             />
 
             {/* Contact */}
             <Box sx={{ display: 'flex', gap: 3 }}>
-              <Skeleton variant='text' width='25%' />
-              <Skeleton variant='text' width='25%' />
+              <Skeleton variant='text' sx={{ width: '25%' }} />
+              <Skeleton variant='text' sx={{ width: '25%' }} />
             </Box>
           </Box>
         </Box>
 
         {/* Info Cards */}
-        <Grid container spacing={2} mb={2}>
+        <Grid container spacing={2} sx={{ mb: 2 }}>
           {Array.from(new Array(4)).map((_, i) => (
             <Grid size={3} key={i}>
               <Box
@@ -55,11 +53,11 @@ export default function DonarDetailsSkeleton() {
                   gap: 2,
                 }}
               >
-                <Skeleton variant='circular' width={45} height={45} />
+                <Skeleton variant='circular' sx={{ width: 45, height: 45 }} />
 
                 <Box sx={{ width: '100%' }}>
-                  <Skeleton variant='text' width='60%' />
-                  <Skeleton variant='text' width='40%' height={28} />
+                  <Skeleton variant='text' sx={{ width: '60%' }} />
+                  <Skeleton variant='text' sx={{ width: '40%', height: 28 }} />
                 </Box>
               </Box>
             </Grid>
@@ -90,7 +88,7 @@ export default function DonarDetailsSkeleton() {
                   key={i}
                   sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}
                 >
-                  <Skeleton width='60%' />
+                  <Skeleton sx={{ width: '60%' }} />
                 </Box>
               ))}
             </Box>
@@ -113,7 +111,10 @@ export default function DonarDetailsSkeleton() {
               >
                 {Array.from(new Array(5)).map((_, j) => (
                   <Box key={j} sx={{ flex: 1, textAlign: 'center' }}>
-                    <Skeleton variant='text' width='70%' sx={{ mx: 'auto' }} />
+                    <Skeleton
+                      variant='text'
+                      sx={{ width: '70%', mx: 'auto' }}
+                    />
                   </Box>
                 ))}
 
@@ -121,9 +122,12 @@ export default function DonarDetailsSkeleton() {
                 <Box sx={{ flex: 1, textAlign: 'center' }}>
                   <Skeleton
                     variant='rounded'
-                    width={80}
-                    height={28}
-                    sx={{ mx: 'auto', borderRadius: '99px' }}
+                    sx={{
+                      width: 80,
+                      height: 28,
+                      mx: 'auto',
+                      borderRadius: '99px',
+                    }}
                   />
                 </Box>
               </Box>

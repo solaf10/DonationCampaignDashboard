@@ -14,9 +14,9 @@ const FundingMedia = ({ formData, setFormData, errors, styles }) => {
     <div className='form-holder'>
       <div className='input-holder' style={styles}>
         <CustomInput
-          label='التمويل المستهدف (ل.س)'
+          label='التمويل المستهدف $'
           inputType='input'
-          placeholder='مثال: 50,000,000'
+          placeholder='مثال: 5,000'
           helperText='سيتم عرض المبلغ المجموع تلقائيًا بعد بدء الحملة'
           value={formData.target_amount}
           setValue={(e) => {

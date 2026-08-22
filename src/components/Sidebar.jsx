@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Typography,
 } from '@mui/material';
 import './Sidebar.css';
@@ -246,11 +247,19 @@ const Sidebar = () => {
 
   return (
     <div className='sidebar'>
-      <div className='holder'>
-        <div className='logo'>
-          <img src='/Logo.svg' alt='لوغو' />
-        </div>
+      <div className='logo'>
+        <Box
+          component='img'
+          src='/platformLogo.png'
+          alt='Athar Logo'
+          sx={{
+            width: '80px',
+            filter: 'brightness(0) invert(1)',
+          }}
+        />
+      </div>
 
+      <div className='sidebar-content'>
         <ul>
           {links.map((link) => {
             const isActiveAccordion =
@@ -321,35 +330,34 @@ const Sidebar = () => {
             );
           })}
         </ul>
-      </div>
-
-      <button
-        className='log-out'
-        onClick={() =>
-          dispatch(controlSuccessDialog({ type: 'logout', id: null }))
-        }
-      >
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='24'
-          height='24'
-          viewBox='0 0 24 24'
-          fill='none'
-          className='log-out-icon'
+        <button
+          className='log-out'
+          onClick={() =>
+            dispatch(controlSuccessDialog({ type: 'logout', id: null }))
+          }
         >
-          <path
-            d='M20.3998 20.4H10.7998V22.8H20.3998C21.0363 22.8 21.6468 22.5472 22.0969 22.0971C22.5469 21.647 22.7998 21.0366 22.7998 20.4V3.60005C22.7998 2.96353 22.5469 2.35308 22.0969 1.90299C21.6468 1.4529 21.0363 1.20005 20.3998 1.20005H10.7998V3.60005H20.3998V20.4Z'
-            fill='white'
-          />
-          <path d='M8.4 18V13.2H18V10.8H8.4V6L1.2 12L8.4 18Z' fill='white' />
-        </svg>
-        <span>تسجيل الخروج</span>
-      </button>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
+            fill='none'
+            className='log-out-icon'
+          >
+            <path
+              d='M20.3998 20.4H10.7998V22.8H20.3998C21.0363 22.8 21.6468 22.5472 22.0969 22.0971C22.5469 21.647 22.7998 21.0366 22.7998 20.4V3.60005C22.7998 2.96353 22.5469 2.35308 22.0969 1.90299C21.6468 1.4529 21.0363 1.20005 20.3998 1.20005H10.7998V3.60005H20.3998V20.4Z'
+              fill='white'
+            />
+            <path d='M8.4 18V13.2H18V10.8H8.4V6L1.2 12L8.4 18Z' fill='white' />
+          </svg>
+          <span>تسجيل الخروج</span>
+        </button>
+      </div>
       <SuccessMessageDialog
         type='warning'
         title='تأكيد تسجيل الخروج'
         desc='سيتم إنهاء الجلسة الحالية وإعادة توجيهك إلى صفحة تسجيل الدخول.'
-        btnTitle='حذف'
+        btnTitle='خروج'
         onConfirm={handleLogOut}
         isLoading={isLoggingOut}
         error={logoutError}

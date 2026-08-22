@@ -88,7 +88,7 @@ const DonarsFilterDrawer = ({ refilterDonars, filterDonarsError }) => {
 
       <CustomInput
         inputType='select'
-        label='حالة التحقق'
+        label='حالة التبرع'
         value={donarFilters?.status}
         setValue={(e) =>
           setDonarFilters((prev) => ({

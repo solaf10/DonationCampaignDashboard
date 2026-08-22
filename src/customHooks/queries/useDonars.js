@@ -3,6 +3,7 @@ import {
   filterDonars,
   getDonars,
   getPaycheck,
+  getReasons,
   getSingleDonar,
 } from '../../services/donars';
 import { useSearchParams } from 'react-router-dom';
@@ -33,5 +34,11 @@ export function useGetPaycheck(id) {
   return useQuery({
     queryKey: ['paycheck'],
     queryFn: () => getPaycheck(id),
+  });
+}
+export function useGetReasons() {
+  return useQuery({
+    queryKey: ['decline-reasons'],
+    queryFn: () => getReasons(),
   });
 }

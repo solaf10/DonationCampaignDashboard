@@ -188,3 +188,42 @@
 .sidebar {
   -ms-overflow-style: none;
 }
+/* Logo Fixed */
+.sidebar {
+  width: 240px;
+  position: fixed;
+  height: 100vh;
+  background-color: var(--main-color);
+  border-radius: 15px 0 0 15px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* إخفاء scrollbar */
+.sidebar-content::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar-content {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.log-out {
+  flex-shrink: 0;
+  margin: 20px auto;
+}

@@ -167,7 +167,7 @@ export default function Projects({ isTrash = false }) {
               isNestedState={true}
             />
 
-            <p style={{ fontSize: '14px' }}>عدد الحملات: {projects?.length}</p>
+            <p style={{ fontSize: '14px' }}>عدد المشاريع: {projects?.length}</p>
           </div>
           <IconButton
             onClick={() =>

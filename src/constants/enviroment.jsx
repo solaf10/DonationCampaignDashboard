@@ -2,7 +2,7 @@ const config = {
   baseUrl: 'http://127.0.0.1:8000',
   login: 'login',
   logout: 'logout',
-  dashboard: "dashboard",
+  dashboard: 'dashboard',
   governments: {
     all: 'governorates/all',
     search: 'governorate/search',
@@ -72,6 +72,7 @@ const config = {
       organizations: 'orgnasation/all',
       business: 'bussinessman/all',
     },
+    reasons: 'reasons/show',
     donarDetails: 'donater/show',
     paycheck: 'show/image',
     verify: 'verify',

@@ -2,41 +2,42 @@ import React, { useState } from 'react';
 import CustomModal from './CustomModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
-import { Box, Typography, Divider, Button } from '@mui/material';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import { useGetPaycheck } from '../customHooks/queries/useDonars';
-import config from '../constants/enviroment';
-import { getCurrency } from '../utils/methods';
-import { PaymentsOutlined } from '@mui/icons-material';
+
+import { Box, Typography, Divider, MenuItem } from '@mui/material';
+
+import {
+  useGetPaycheck,
+  useGetReasons,
+} from '../customHooks/queries/useDonars';
+
+import { formatArabicDate, getCurrency } from '../utils/methods';
+
+import { PaymentsOutlined, CalendarMonthOutlined } from '@mui/icons-material';
+
 import { useParams, useSearchParams } from 'react-router-dom';
 import useVerifyPaycheck from '../customHooks/mutations/useVerifyPaycheck';
 import { toast } from 'react-toastify';
 import { useQueryClient } from '@tanstack/react-query';
+
 import ErrorMessage from './Messages/ErrorMessage';
 import Loader from './Skeletons/Loader';
-
-const submitBtnStyles = {
-  minWidth: '85px',
-  borderRadius: '999px',
-  padding: '8px 24px',
-  backgroundColor: '#e8f5e9',
-  color: '#2e7d32',
-  fontWeight: 600,
-  boxShadow: 'none',
-  transition: '0.2s',
-  '&:hover': {
-    backgroundColor: '#d7efda',
-    boxShadow: 'none',
-    transform: 'translateY(-1px)',
-  },
-};
+import config from '../constants/enviroment';
+import CustomInput from './locations/CustomInput';
+import { CalendarIcon } from '@mui/x-date-pickers';
+import PaycheckDecision from './PaycheckDecision';
 
 const PaycheckVerifyModal = () => {
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [formData, setFormData] = useState({
+    status: '',
+    reason: '',
+    remaining_amount: '',
+    on_the_other_hand: '',
+  });
 
   const isOpen = useSelector(
     (state) => state.modalController.isControlLocationModalOpen,
   );
+
   const selectedType = useSelector(
     (state) => state.modalController.controlLocationModalType,
   );
@@ -45,9 +46,12 @@ const PaycheckVerifyModal = () => {
     (state) => state.modalController.selectedLocationID,
   );
 
-  console.log(selectedDonationID);
-
   const params = useParams();
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
+  const [searchParams] = useSearchParams();
+  const locationType = searchParams?.get('type');
 
   const {
     mutate: verify,
@@ -55,35 +59,86 @@ const PaycheckVerifyModal = () => {
     error: verifyError,
   } = useVerifyPaycheck();
 
-  const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-  const [searchParams] = useSearchParams();
-
-  const locationType = searchParams?.get('type');
-
   const {
     data: paycheckData,
-    isFetching,
+    isFetching: isFetchingPaycheck,
     error: paycheckError,
   } = useGetPaycheck(selectedDonationID);
 
-  const paycheck = paycheckData?.data || [];
+  const paycheck = paycheckData?.data || {};
 
-  const close = () =>
-    dispatch(controlControlLocationModal({ type: 'verify', id: null }));
+  const {
+    data: ReasonsData,
+    isFetching: isFetchingReasons,
+    error: reasonsError,
+  } = useGetReasons();
 
-  const handleSubmit = (e, status) => {
+  const isFetching = isFetchingPaycheck || isFetchingReasons;
+
+  const reasons = ReasonsData?.data || [];
+  const isRemaining =
+    formData?.reason ===
+    'عدم التطابق بين المبلغ المدفوع والمبلغ الموجود داخل الملف';
+
+  // =========================
+  // Close Modal
+  // =========================
+  const close = () => {
+    setFormData({
+      status: '',
+      reason: '',
+      remaining_amount: '',
+      on_the_other_hand: '',
+    });
+
+    dispatch(
+      controlControlLocationModal({
+        type: 'verify',
+        id: null,
+      }),
+    );
+  };
+
+  // =========================
+  // Submit
+  // =========================
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setSelectedStatus(status);
-    const data = { status };
+
+    if (!formData.status) {
+      toast.error('يرجى اختيار القرار');
+      return;
+    }
+
+    if (formData.status === 'غير متوافق' && !formData.reason) {
+      toast.error('يرجى اختيار سبب عدم التوافق');
+      return;
+    }
+
+    if (
+      formData.status === 'غير متوافق' &&
+      isRemaining &&
+      !formData.remaining_amount
+    ) {
+      toast.error('يرجى إدخال المبلغ المتبقي');
+      return;
+    }
+
     verify(
-      { id: selectedDonationID, data },
+      {
+        id: selectedDonationID,
+        data: {
+          ...formData,
+        },
+      },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: params?.id ? ['donars', params?.id] : [locationType],
+            queryKey: params?.id ? ['donars', params.id] : [locationType],
           });
-          dispatch(controlControlLocationModal('verify', null));
+
+          close();
+
           toast.success('تم التحقق من الدفع!');
         },
       },
@@ -95,65 +150,69 @@ const PaycheckVerifyModal = () => {
       isOpen={isOpen && selectedType === 'verify'}
       closeHandler={close}
       modalTitle='التحقق من الدفع'
-      submitBtnTitle='متوافق'
-      styles={{ width: 450 }}
-      customSubmitBtnStyles={submitBtnStyles}
-      isLoading={isVerifying && selectedStatus === 'متوافق'}
-      isDisabled={isVerifying}
-      onSubmit={(e) => handleSubmit(e, 'متوافق')}
-      extraActions={
-        <Button
-          type='submit'
-          onClick={(e) => handleSubmit(e, 'غير متوافق')}
-          sx={{
-            ml: 1,
-            minWidth: '85px',
-            borderRadius: '999px',
-            padding: '8px 24px',
-            backgroundColor: '#fdecec',
-            color: '#d32f2f',
-            boxShadow: 'none',
-            transition: '0.2s',
-            fontWeight: 600,
-            '&:hover': {
-              backgroundColor: '#f9d6d6',
-              boxShadow: 'none',
-              transform: 'translateY(-1px)',
-            },
-          }}
-          disabled={isVerifying}
-        >
-          {isVerifying && selectedStatus === 'غير متوافق' ? (
-            <span className='btn-loader'></span>
-          ) : (
-            'غير متوافق'
-          )}
-        </Button>
-      }
+      submitBtnTitle='تأكيد القرار'
+      styles={{
+        width: 450,
+      }}
+      isLoading={isVerifying}
+      isDisabled={isVerifying || !formData.status}
+      onSubmit={handleSubmit}
     >
       {isFetching ? (
-        <Loader styles={{ minHeight: '228px' }} />
+        <Loader
+          styles={{
+            minHeight: '228px',
+          }}
+        />
       ) : (
         <>
-          {' '}
+          {/* =========================
+              Errors
+          ========================= */}
           {(verifyError || paycheckError) && (
-            <ErrorMessage>
+            <ErrorMessage
+              styles={{
+                position: 'sticky',
+                width: '100%',
+                top: '0',
+                margin: '0',
+              }}
+            >
               {paycheckError ? paycheckError?.message : verifyError?.message}
             </ErrorMessage>
           )}
-          {/* IMAGE CARD */}
+
+          {/* =========================
+              NOTE
+          ========================= */}
           <Box
-            component='img'
-            src={`${config?.baseUrl}${paycheck?.image?.url}`}
-            alt='paycheck'
             sx={{
-              width: '100%',
-              height: 'auto',
-              objectFit: 'contain',
+              px: 2,
+              py: 1.5,
+              mb: 2,
               borderRadius: 2,
-              backgroundColor: '#f5f5f5', // يعطي خلفية خفيفة بدل الفراغ
+              backgroundColor: 'rgba(1, 74, 91, 0.04)',
+              border: '1px solid rgba(1, 74, 91, 0.08)',
+              textAlign: 'center',
             }}
-            disabled
+          >
+            <Typography
+              sx={{
+                fontSize: 12.5,
+                color: '#5f6b6d',
+                lineHeight: 1.6,
+              }}
+            >
+              يرجى مراجعة معلومات الدفع والتأكد من صحة الوصل قبل اتخاذ القرار.
+            </Typography>
+          </Box>
+
+          <iframe
+            src={`${config.baseUrl}${paycheck?.file}`}
+            width='100%'
+            height='300px'
+            style={{ border: 'none', borderRadius: '8px', minHeight: '250px' }}
+            title='Payment Receipt'
           />
           {/* AMOUNT CARD */}
           <Box
@@ -173,31 +232,39 @@ const PaycheckVerifyModal = () => {
                 المبلغ
               </Typography>
             </Box>
-
             <Typography fontWeight={700} fontSize={16}>
               {`${paycheck?.contribution_amount} ${getCurrency(paycheck?.currency_type)}`}
             </Typography>
           </Box>
-          {/* NOTE */}
           <Box
             sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               px: 2,
-              py: 2,
-              borderRadius: 2,
-              backgroundColor: 'rgba(1, 74, 91, 0.04)',
-              textAlign: 'center',
+              py: 0.5,
+              borderRadius: 3,
+              backgroundColor: '#f8fafb',
             }}
           >
-            <Typography
-              sx={{
-                fontSize: 12.5,
-                color: '#5f6b6d',
-                lineHeight: 1.6,
-              }}
-            >
-              يرجى التأكد من صحة الوصل قبل الموافقة
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <CalendarIcon sx={{ color: '#014a5b' }} />
+              <Typography fontWeight={600} color='#014a5b'>
+                التاريخ
+              </Typography>
+            </Box>
+
+            <Typography fontWeight={700} fontSize={16}>
+              {formatArabicDate(paycheck?.paiding_date)}
             </Typography>
           </Box>
+          <PaycheckDecision
+            formData={formData}
+            setFormData={setFormData}
+            reasons={reasons}
+            isVerifying={isVerifying}
+            reasonsError={reasonsError}
+          />
         </>
       )}
     </CustomModal>

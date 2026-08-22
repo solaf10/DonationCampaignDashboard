@@ -23,8 +23,18 @@ const warningStyles = {
   lineHeight: 1.6,
 };
 
-const ErrorMessage = ({ children, warning = false }) => {
-  return <Box sx={warning ? warningStyles : errorStyles}>{children}</Box>;
+const ErrorMessage = ({ children, warning = false, styles }) => {
+  return (
+    <Box
+      sx={
+        warning
+          ? { ...warningStyles, ...styles }
+          : { ...errorStyles, ...styles }
+      }
+    >
+      {children}
+    </Box>
+  );
 };
 
 export default ErrorMessage;

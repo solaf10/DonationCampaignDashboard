@@ -103,12 +103,10 @@ export default function AddFinancialOperations() {
     <div>
       <PageContainer className={'title'}>
         {/* حطي الـ Link بس على العنوان أو زر رجوع */}
-        <Link to={'/content/financial-operations'}>
-          <Title
-            pageTitle='إضافة عملية مالية'
-            subtitle='يمكنك إضافة عملية دفع واحدة فقط للتفصيل خلال اليوم'
-          />
-        </Link>
+        <Title
+          pageTitle='إضافة عملية مالية'
+          subtitle='يمكنك إضافة عملية دفع واحدة فقط للتفصيل خلال اليوم'
+        />
         <Box
           sx={{
             flex: 1,

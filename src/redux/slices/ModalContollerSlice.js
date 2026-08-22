@@ -5,6 +5,7 @@ const initialState = {
   isAddBySelectionModalOpen: false,
   isControlLocationModalOpen: false,
   isControlMediaModalOpen: false,
+  isControlDeclineModalOpen: false,
 
   // More Menu
   isMoreInfoMenuShown: false,
@@ -81,6 +82,10 @@ const modalControllerSlice = createSlice({
       state.successDialogType = action.payload.type;
       state.clickedDialogID = action.payload.id;
     },
+    /* ================= Decline Modal ================= */
+    controlDeclineModal: (state) => {
+      state.isControlDeclineModalOpen = !state.isControlDeclineModalOpen;
+    },
   },
 });
 
@@ -88,6 +93,7 @@ export const {
   controlAddProjectDetailModalOpen,
   controlAddBySelectionModal,
   controlControlLocationModal,
+  controlDeclineModal,
 
   // More Menu
   openMoreInfoMenu,

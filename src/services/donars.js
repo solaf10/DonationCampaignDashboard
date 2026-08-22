@@ -16,6 +16,11 @@ export const getPaycheck = async (id) => {
 
   return res.data;
 };
+export const getReasons = async () => {
+  const res = await api.get(`/${config.donars.reasons}`);
+
+  return res.data;
+};
 export const verifyPaycheck = async (id, body) => {
   const res = await api.post(`/${config.donars.verify}/${id}`, body);
 
