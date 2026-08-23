@@ -2,8 +2,6 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import PageContainer from '../components/PageContainer';
 import {
   AccountBalanceWalletOutlined,
-  AddRounded,
-  ArrowBackOutlined,
   CalendarTodayOutlined,
   ChevronLeft,
   Delete,
@@ -15,8 +13,7 @@ import {
   WorkOutlineOutlined,
 } from '@mui/icons-material';
 import './CampaignsDetails.css';
-import { Box, Button, Chip, Grid, Typography } from '@mui/material';
-import AddModal from '../components/AddBySelectionModal';
+import { Box, Chip, Grid, Typography } from '@mui/material';
 import DonorsInfoCard from '../components/DonorsInfoCard';
 import AddBySelectionModal from '../components/AddBySelectionModal';
 import Requirements from '../components/Requirements';
@@ -106,17 +103,6 @@ const CampaignsDetails = () => {
       },
     });
   };
-
-  /* const handleResume = () => {
-    resumeCampaign(undefined, {
-      onSuccess: () => {
-        toast.success('تم استئناف الحملة بنجاح!');
-      },
-      onError: (err) => {
-        toast.error(err?.message || 'حدث خطأ أثناء الاستئناف');
-      },
-    });
-  }; */
 
   const deletedItemUrl = `/${config.campaigns.delete}/${params.id}`;
 

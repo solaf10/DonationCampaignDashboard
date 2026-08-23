@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CustomModal from './CustomModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { controlControlLocationModal } from '../redux/slices/ModalContollerSlice';
 
-import { Box, Typography, Divider, MenuItem } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import {
   useGetPaycheck,

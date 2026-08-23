@@ -5,7 +5,7 @@ const initialState = {
   isAddBySelectionModalOpen: false,
   isControlLocationModalOpen: false,
   isControlMediaModalOpen: false,
-  isControlDeclineModalOpen: false,
+  isControlExchangeModalOpen: false,
 
   // More Menu
   isMoreInfoMenuShown: false,
@@ -83,8 +83,8 @@ const modalControllerSlice = createSlice({
       state.clickedDialogID = action.payload.id;
     },
     /* ================= Decline Modal ================= */
-    controlDeclineModal: (state) => {
-      state.isControlDeclineModalOpen = !state.isControlDeclineModalOpen;
+    controlExchangeModal: (state) => {
+      state.isControlExchangeModalOpen = !state.isControlExchangeModalOpen;
     },
   },
 });
@@ -93,7 +93,7 @@ export const {
   controlAddProjectDetailModalOpen,
   controlAddBySelectionModal,
   controlControlLocationModal,
-  controlDeclineModal,
+  controlExchangeModal,
 
   // More Menu
   openMoreInfoMenu,

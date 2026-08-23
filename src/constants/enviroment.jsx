@@ -93,5 +93,6 @@ const config = {
     restore: 'blogs/restore',
     trash: 'blogs/deleted',
   },
+  finance: { viewExchange: 'exchange_rates/all' },
 };
 export default config;
