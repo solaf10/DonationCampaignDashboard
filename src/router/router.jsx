@@ -24,7 +24,6 @@ import { FiltersProvider } from '../contexts/FilterContext';
 import InKindDonations from '../pages/InKindDonations';
 import InKindDonationDetails from '../pages/InKindDonationDetails';
 
-import FinancialOperations from '../pages/FinancialOperations';
 import AddFinancialOperations from '../pages/AddFinancialOperations';
 
 import EditProject from '../pages/EditProject';
@@ -36,6 +35,7 @@ import News from '../pages/News';
 import NewsDetails from '../pages/NewsDetails';
 import AddNewsItem from '../pages/AddNewsItem';
 import EditFinancialOperations from '../components/EditFinancialOperations';
+import FinancialOperations from '../pages/FinancialOperations';
 
 export const router = createBrowserRouter([
   {

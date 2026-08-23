@@ -7,7 +7,7 @@ import AlertSection from './DashboardSections/AlertsSection';
 import { useEffect, useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
 import { getDashboardData } from '../services/dashboard';
-import config from '../constants/enviroment';
+import { NotificationsNoneOutlined } from '@mui/icons-material';
 
 const Navbar = () => {
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
@@ -56,11 +56,7 @@ const Navbar = () => {
             }}
             onClick={() => setIsProfileDialogOpen(true)}
           >
-            {!user?.profile ? (
-              <PersonIcon sx={{ fontSize: 36 }} />
-            ) : (
-              <img src={`${config.baseUrl}/${user.profile}`} />
-            )}
+            {!user?.profile && <PersonIcon sx={{ fontSize: 36 }} />}
           </Avatar>
 
           <div className='text'>
@@ -91,7 +87,7 @@ const Navbar = () => {
                 },
               }}
             >
-              <NotificationsIcon />
+              <NotificationsNoneOutlined />
             </Badge>
           </IconButton>
         </div>

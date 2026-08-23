@@ -8,17 +8,21 @@ import {
   Stack,
   Typography,
   Badge,
-} from "@mui/material";
+} from '@mui/material';
 
-import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import {
+  NotificationsActiveOutlined,
+  NotificationsOutlined,
+} from '@mui/icons-material';
 
 const AlertSection = ({ open, onClose, alerts = [] }) => {
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      maxWidth="md"
+      maxWidth='md'
       fullWidth
       PaperProps={{
         sx: {
@@ -29,31 +33,27 @@ const AlertSection = ({ open, onClose, alerts = [] }) => {
       {/* HEADER */}
       <DialogTitle
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           px: 3,
           py: 2,
           fontWeight: 700,
-          fontSize: "1.1rem",
+          fontSize: '1.1rem',
         }}
       >
-        <Stack direction="row" spacing={1.2} alignItems="center">
+        <Stack direction='row' spacing={1.2} alignItems='center'>
           <Badge
-            color="error"
-            variant={alerts.length ? "dot" : "standard"}
+            color='error'
+            variant={alerts.length ? 'dot' : 'standard'}
             invisible={alerts.length === 0}
           >
-            <NotificationsActiveRoundedIcon
+            <NotificationsOutlined
               sx={{
-                color: "#1976d2",
-                fontSize: 30,
-                filter: "drop-shadow(0px 3px 8px rgba(25, 118, 210, 0.35))",
-                transition: "0.25s",
-                "&:hover": {
-                  transform: "scale(1.1) rotate(-8deg)",
-                  color: "#0d47a1",
-                },
+                color: '#d32f2f',
+                fontSize: 26,
+                filter: 'drop-shadow(0px 3px 8px rgba(25, 118, 210, 0.35))',
+                transition: '0.25s',
               }}
             />
           </Badge>
@@ -64,11 +64,11 @@ const AlertSection = ({ open, onClose, alerts = [] }) => {
         <IconButton
           onClick={onClose}
           sx={{
-            backgroundColor: "rgba(0,0,0,0.04)",
-            transition: "0.2s",
-            "&:hover": {
-              backgroundColor: "rgba(0,0,0,0.1)",
-              transform: "rotate(90deg)",
+            backgroundColor: 'rgba(0,0,0,0.04)',
+            transition: '0.2s',
+            '&:hover': {
+              backgroundColor: 'rgba(0,0,0,0.1)',
+              transform: 'rotate(90deg)',
             },
           }}
         >
@@ -79,7 +79,7 @@ const AlertSection = ({ open, onClose, alerts = [] }) => {
       {/* CONTENT */}
       <DialogContent>
         {alerts.length === 0 ? (
-          <Typography textAlign="center" color="text.secondary">
+          <Typography textAlign='center' color='text.secondary'>
             لا يوجد تنبيهات
           </Typography>
         ) : (
@@ -87,13 +87,11 @@ const AlertSection = ({ open, onClose, alerts = [] }) => {
             {alerts.map((alert, index) => (
               <Alert
                 key={index}
-                variant="outlined"
-                severity={alert.severity || "warning"}
+                variant='outlined'
+                severity={alert.severity || 'warning'}
                 sx={{ borderRadius: 2 }}
               >
-                <AlertTitle>
-                  {alert.title || "تنبيه"}
-                </AlertTitle>
+                <AlertTitle>{alert.title || 'تنبيه'}</AlertTitle>
 
                 {alert.message || alert}
               </Alert>

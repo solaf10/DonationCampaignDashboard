@@ -4,7 +4,6 @@ import {
   Box,
   Typography,
   Card,
-  Grid,
   Avatar,
   Chip,
   Dialog,
@@ -15,6 +14,9 @@ import {
   Divider,
   Stack,
   Paper,
+  CircularProgress,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 
 import EditIcon from '@mui/icons-material/Edit';
@@ -23,12 +25,9 @@ import PersonIcon from '@mui/icons-material/Person';
 import CategoryIcon from '@mui/icons-material/Category';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
 import IconButton from '@mui/material/IconButton';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
-import BusinessCenterOutlinedIcon from '@mui/icons-material/BusinessCenterOutlined';
 import InKindDonationDetailsSkelton from '../components/Skeletons/InKindDonationDetailsSkelton';
-// import donationsData from '../components/data/InKindDonationData';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CheckCircleOutlineOutlined } from '@mui/icons-material';
@@ -36,13 +35,19 @@ import { CheckCircleOutlineOutlined } from '@mui/icons-material';
 export default function InKindDonationDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [donation, setDonation] = useState(null);
   const [loading, setLoading] = useState(true);
-  // const donation = donationsData.find((item) => item.uuid === Number(id));
   const [lightboxImg, setLightboxImg] = useState(null);
-  const [deliveryStatus, setDeliveryStatus] = useState(
-    donation?.delivery_status || '',
-  );
+  const [deliveryStatus, setDeliveryStatus] = useState('');
+  const [openStatusDialog, setOpenStatusDialog] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
+
   useEffect(() => {
     fetchDonation();
   }, [id]);
@@ -69,18 +74,16 @@ export default function InKindDonationDetails() {
         email: item.user?.email,
         phone: item.user?.phone,
         user_type: item.user?.type,
-
         donation_name: item.name_of_material,
         donation_type: item.type,
         location: item.governorate?.governorate_name,
         quantity: item.amount,
         item_condition: item.status_of_materail,
-
         delivery_status:
           item.status === 'تم استلامه' ? 'تم التسليم' : 'لم يتم التسليم',
-
         images:
           item.images?.map((img) => `http://127.0.0.1:8000${img.url}`) || [],
+        notes: item.notes || '',
       };
 
       setDonation(formatted);
@@ -91,10 +94,47 @@ export default function InKindDonationDetails() {
       setLoading(false);
     }
   };
-  const [openStatusDialog, setOpenStatusDialog] = useState(false);
-  if (loading) {
-    return <InKindDonationDetailsSkelton />;
-  }
+
+  const handleConfirmDelivery = async () => {
+    setStatusLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+
+      await axios.post(
+        `http://127.0.0.1:8000/api/donation/update/${donation.uuid}`,
+        {
+          status: 'تم استلامه',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      setDeliveryStatus('تم التسليم');
+      setOpenStatusDialog(false);
+      setSnackbar({
+        open: true,
+        message: 'تم تحديث حالة التسليم بنجاح',
+        severity: 'success',
+      });
+    } catch (error) {
+      console.error('فشل تحديث الحالة:', error);
+      setSnackbar({
+        open: true,
+        message: 'حدث خطأ أثناء تحديث الحالة',
+        severity: 'error',
+      });
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
+  if (loading) return <InKindDonationDetailsSkelton />;
+
   if (!donation) {
     return (
       <Box p={4}>
@@ -103,70 +143,32 @@ export default function InKindDonationDetails() {
     );
   }
 
-  if (!donation) {
-    return <Typography>لا يوجد بيانات</Typography>;
-  }
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-      }}
-    >
-      <Box
-        sx={{
-          px: { xs: 2, md: 5 },
-          py: 3,
-        }}
-      >
+    <Box sx={{ minHeight: '100vh' }}>
+      <Box sx={{ px: { xs: 2, md: 5 }, py: 3 }}>
         {/* Breadcrumb */}
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-            mb: 3,
-          }}
-        >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
           <Typography
             fontWeight={700}
             onClick={() => navigate(-1)}
-            sx={{
-              color: '#C7BFB6',
-              cursor: 'pointer',
-            }}
+            sx={{ color: '#C7BFB6', cursor: 'pointer' }}
           >
             إدارة التبرعات العينية
           </Typography>
 
-          <ChevronRightIcon
-            sx={{
-              color: '#C7BFB6',
-            }}
-          />
+          <ChevronRightIcon sx={{ color: '#C7BFB6' }} />
 
-          <Typography
-            fontWeight={700}
-            sx={{
-              color: 'var(--main-color)',
-            }}
-          >
+          <Typography fontWeight={700} sx={{ color: 'var(--main-color)' }}>
             {donation.donation_name}
           </Typography>
         </Box>
 
-        {/*   البروفايل + صورة التبرع */}
+        {/* البروفايل + صورة التبرع */}
         <Box
           sx={{
             display: 'flex',
-            flexDirection: {
-              xs: 'column',
-              md: 'row-reverse',
-            },
-            height: {
-              xs: 280,
-              md: '60vh',
-            },
+            flexDirection: { xs: 'column', md: 'row-reverse' },
+            height: { xs: 280, md: '60vh' },
             gap: 2,
             mb: 4,
           }}
@@ -190,12 +192,7 @@ export default function InKindDonationDetails() {
               }}
             />
 
-            <Box
-              sx={{
-                mt: '-50px',
-                textAlign: 'center',
-              }}
-            >
+            <Box sx={{ mt: '-50px', textAlign: 'center' }}>
               <Avatar
                 src={donation.profile_image}
                 sx={{
@@ -207,13 +204,7 @@ export default function InKindDonationDetails() {
                 }}
               />
 
-              <Typography
-                variant='h6'
-                sx={{
-                  mt: 0.5,
-                  fontWeight: 800,
-                }}
-              >
+              <Typography variant='h6' sx={{ mt: 0.5, fontWeight: 800 }}>
                 {donation.donor_name}
               </Typography>
 
@@ -221,7 +212,6 @@ export default function InKindDonationDetails() {
                 label={donation.user_type}
                 size='small'
                 sx={{
-                  // mt: 1,
                   bgcolor: '#E8F5E9',
                   color: 'var(--main-color)',
                   fontWeight: 700,
@@ -243,7 +233,6 @@ export default function InKindDonationDetails() {
                   <Typography variant='caption' color='text.secondary'>
                     رقم الهاتف
                   </Typography>
-
                   <Typography fontWeight={700} mt={0.5}>
                     {donation.phone}
                   </Typography>
@@ -261,13 +250,10 @@ export default function InKindDonationDetails() {
                   <Typography variant='caption' color='text.secondary'>
                     البريد الإلكتروني
                   </Typography>
-
                   <Typography
                     fontWeight={700}
                     mt={0.5}
-                    sx={{
-                      wordBreak: 'break-word',
-                    }}
+                    sx={{ wordBreak: 'break-word' }}
                   >
                     {donation.email}
                   </Typography>
@@ -275,15 +261,13 @@ export default function InKindDonationDetails() {
               </Stack>
             </Box>
           </Card>
+
           {/* صورة الغلاف */}
           <Box
             sx={{
               flex: 1,
               position: 'relative',
-              height: {
-                xs: 280,
-                md: '60vh',
-              },
+              height: { xs: 280, md: '60vh' },
               borderRadius: 5,
               overflow: 'hidden',
             }}
@@ -314,12 +298,7 @@ export default function InKindDonationDetails() {
               }}
             >
               <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1,
-                  mb: 1,
-                }}
+                sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}
               >
                 <Chip
                   label={deliveryStatus}
@@ -337,10 +316,7 @@ export default function InKindDonationDetails() {
                     sx={{
                       bgcolor: 'rgba(255,255,255,.2)',
                       color: '#fff',
-
-                      '&:hover': {
-                        bgcolor: 'rgba(255,255,255,.3)',
-                      },
+                      '&:hover': { bgcolor: 'rgba(255,255,255,.3)' },
                     }}
                   >
                     <EditIcon fontSize='small' />
@@ -354,6 +330,7 @@ export default function InKindDonationDetails() {
             </Box>
           </Box>
         </Box>
+
         {/* المعلومات */}
         <Box
           sx={{
@@ -381,7 +358,7 @@ export default function InKindDonationDetails() {
             },
             {
               icon: <LocationOnIcon />,
-              title: 'الموقع',
+              title: 'المحافظة التي تم التبرع لصالحها',
               value: donation.location,
               iconBg: '#FFF3E0',
               iconColor: '#EF6C00',
@@ -398,7 +375,7 @@ export default function InKindDonationDetails() {
               title: 'حالة المواد',
               value: donation.item_condition,
               iconBg: '#FCE4EC',
-              iconColor: '#D81B60 ',
+              iconColor: '#D81B60',
             },
             {
               icon: <CheckCircleOutlineOutlined />,
@@ -406,7 +383,7 @@ export default function InKindDonationDetails() {
               value: deliveryStatus,
               isDeliveryStatus: true,
               iconBg: '#E8F5E9',
-              iconColor: '  #388E3C',
+              iconColor: '#388E3C',
             },
           ].map((item, i) => (
             <Box
@@ -423,6 +400,68 @@ export default function InKindDonationDetails() {
             </Box>
           ))}
         </Box>
+
+        {/* ملاحظات */}
+        <Card
+          sx={{
+            mt: 4,
+            p: 4,
+            borderRadius: 5,
+            width: '100%',
+            boxShadow: '0 4px 18px rgba(0,0,0,0.07)',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+            <Avatar
+              sx={{
+                width: 44,
+                height: 44,
+                bgcolor: '#EDE7F6',
+                color: '#5E35B1',
+              }}
+            >
+              <StickyNote2OutlinedIcon fontSize='small' />
+            </Avatar>
+            <Typography variant='h5' fontWeight={800}>
+              ملاحظات
+            </Typography>
+          </Box>
+
+          {donation.notes ? (
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                borderRadius: 3,
+                bgcolor: '#F8FAFC',
+                border: '1px solid #EEF2F6',
+                borderRight: '4px solid #5E35B1',
+              }}
+            >
+              <Typography
+                sx={{ fontSize: 15, lineHeight: 1.9, color: '#374151' }}
+              >
+                {donation.notes}
+              </Typography>
+            </Paper>
+          ) : (
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                borderRadius: 3,
+                bgcolor: '#F8FAFC',
+                border: '1px dashed #E0E0E0',
+                textAlign: 'center',
+              }}
+            >
+              <Typography sx={{ fontSize: 14, color: '#9CA3AF' }}>
+                لا توجد ملاحظات لهذا التبرع
+              </Typography>
+            </Paper>
+          )}
+        </Card>
+
         {/* صور التبرع */}
         <Card
           sx={{
@@ -437,13 +476,7 @@ export default function InKindDonationDetails() {
             صور التبرع
           </Typography>
 
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 3,
-              width: '100%',
-            }}
-          >
+          <Box sx={{ display: 'flex', gap: 3, width: '100%' }}>
             {donation.images?.map((img, index) => (
               <Box
                 key={index}
@@ -459,7 +492,6 @@ export default function InKindDonationDetails() {
                   objectFit: 'cover',
                   cursor: 'pointer',
                   transition: '0.3s',
-
                   '&:hover': {
                     transform: 'scale(1.03)',
                     boxShadow: '0 12px 35px rgba(0,0,0,0.2)',
@@ -499,9 +531,11 @@ export default function InKindDonationDetails() {
           )}
         </Card>
       </Box>
+
+      {/* Dialog تأكيد التسليم */}
       <Dialog
         open={openStatusDialog}
-        onClose={() => setOpenStatusDialog(false)}
+        onClose={() => !statusLoading && setOpenStatusDialog(false)}
       >
         <DialogTitle>تأكيد التسليم</DialogTitle>
 
@@ -510,23 +544,47 @@ export default function InKindDonationDetails() {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setOpenStatusDialog(false)}>إلغاء</Button>
+          <Button
+            onClick={() => setOpenStatusDialog(false)}
+            disabled={statusLoading}
+          >
+            إلغاء
+          </Button>
 
           <Button
             variant='contained'
             color='success'
-            onClick={() => {
-              setDeliveryStatus('تم التسليم');
-              setOpenStatusDialog(false);
-            }}
+            onClick={handleConfirmDelivery}
+            disabled={statusLoading}
+            startIcon={
+              statusLoading ? (
+                <CircularProgress size={16} color='inherit' />
+              ) : null
+            }
           >
-            تأكيد
+            {statusLoading ? 'جاري التحديث...' : 'تأكيد'}
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          severity={snackbar.severity}
+          onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
+
 function InfoCard({
   icon,
   title,
@@ -554,40 +612,17 @@ function InfoCard({
           alignItems: 'flex-start',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: 2,
-          }}
-        >
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
           <Avatar
-            sx={{
-              width: 56,
-              height: 56,
-              bgcolor: iconBg,
-              color: iconColor,
-            }}
+            sx={{ width: 56, height: 56, bgcolor: iconBg, color: iconColor }}
           >
             {icon}
           </Avatar>
 
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <Typography
-              sx={{
-                color: '#666',
-                fontSize: 14,
-                mb: 0.5,
-              }}
-            >
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography sx={{ color: '#666', fontSize: 14, mb: 0.5 }}>
               {title}
             </Typography>
-
             <Typography
               sx={{
                 fontWeight: 800,
@@ -601,7 +636,7 @@ function InfoCard({
           </Box>
         </Box>
 
-        {isDeliveryStatus && value === 'لم يتم استلامه بعد' && (
+        {isDeliveryStatus && value === 'لم يتم التسليم' && (
           <IconButton
             onClick={onEdit}
             size='small'
@@ -610,10 +645,7 @@ function InfoCard({
               height: 30,
               bgcolor: '#FCE4EC',
               color: '#D81B60',
-
-              '&:hover': {
-                bgcolor: '#F8BBD0',
-              },
+              '&:hover': { bgcolor: '#F8BBD0' },
             }}
           >
             <EditIcon sx={{ fontSize: 18 }} />
