@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Grid,
@@ -13,7 +13,8 @@ import {
   Select,
   FormControl,
 } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import dayjs from 'dayjs';
+import { ThemeProvider } from '@mui/material/styles';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import React from 'react';
@@ -42,8 +43,8 @@ export default function AddFinancialOperations() {
   });
   const {
     data: projectData,
-    isPending: isFetchingProjectDetails,
-    error: projectDetailsError,
+    // isPending: isFetchingProjectDetails,
+    // error: projectDetailsError,
   } = useProjects();
 
   console.log(projectData);
@@ -91,6 +92,7 @@ export default function AddFinancialOperations() {
     console.log(payload);
     addPayment(payload, {
       onSuccess: () => {
+        console.log('نجح!');
         navigate('/content/financial-operations');
       },
       onError: (error) => {
@@ -102,11 +104,12 @@ export default function AddFinancialOperations() {
   return (
     <div>
       <PageContainer className={'title'}>
-        {/* حطي الـ Link بس على العنوان أو زر رجوع */}
-        <Title
-          pageTitle='إضافة عملية مالية'
-          subtitle='يمكنك إضافة عملية دفع واحدة فقط للتفصيل خلال اليوم'
-        />
+        <Link to={'/content/financial-operations'}>
+          <Title
+            pageTitle='إضافة عملية مالية'
+            subtitle='يمكنك إضافة عملية دفع واحدة فقط للتفصيل خلال اليوم'
+          />
+        </Link>
         <Box
           sx={{
             flex: 1,
@@ -136,7 +139,7 @@ export default function AddFinancialOperations() {
                   اختر المشروع...
                 </MenuItem>
 
-                {projects?.map((project, index) => (
+                {projects?.map((project) => (
                   <MenuItem key={project.uuid} value={project.uuid}>
                     {project.name}
                   </MenuItem>
@@ -150,12 +153,12 @@ export default function AddFinancialOperations() {
                 label='التفاصيل'
                 value={formData.detail}
                 setValue={(value) => {
-                  console.log('detail value:', value); // ← شوفي شو بيوصل
+                  console.log('detail value:', value);
                   const selectedDetail = details.find((d) => d.uuid === value);
                   setFormData((prev) => ({
                     ...prev,
                     detail: value,
-                    detail_name: selectedDetail?.name,
+                    detail_name: selectedDetail?.detail,
                   }));
                 }}
                 disabled={!formData.project || isFetchingDetails}
@@ -174,19 +177,17 @@ export default function AddFinancialOperations() {
                       ? 'لا توجد تفاصيل'
                       : 'اختر التفاصيل...'}
                 </MenuItem>
-                {details.map((detail, index) => (
+                {details.map((detail) => (
                   <MenuItem key={detail.uuid} value={detail.uuid}>
-                    {detail.name}
+                    {detail.detail} {/* ← كان detail.name */}
                   </MenuItem>
                 ))}
               </CustomInput>
             </Grid>
             <Grid size={6}>
               <CustomInput
-                label='تاريخ الدفع'
-                inputType='time'
-                placeholder='مثال: 00:00'
-                styles={styles}
+                label='تاريخ الاستحقاق'
+                inputType='date'
                 value={formData.pending_date || null}
                 setValue={(newValue) =>
                   setFormData((prev) => ({
@@ -195,14 +196,12 @@ export default function AddFinancialOperations() {
                   }))
                 }
                 isNestedState={true}
-                // errorMsg={errors?.start_time || null}
                 isRequired={true}
+                minDate={dayjs().subtract(2, 'year')}
+                maxDate={dayjs()}
               />
             </Grid>
-            <div
-              className='input-holder'
-              // style={styles}
-            >
+            <div className='input-holder'>
               <CustomInput
                 label='الكلفة المقدرة'
                 styles={styles}

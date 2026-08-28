@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Grid, MenuItem, Button } from "@mui/material";
+import { Box, Grid, MenuItem, Button, Typography } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CustomInput from "../components/locations/CustomInput";
 import PageContainer from "../components/PageContainer";
@@ -11,7 +11,8 @@ import {
   usePaymentById,
 } from "../customHooks/queries/usePayments";
 import dayjs from "dayjs";
-export default function EditFinancialOperations() {
+
+export default function Editf() {
   const { uuid } = useParams();
   const navigate = useNavigate();
   const styles = { marginBottom: "16px" };
@@ -25,20 +26,19 @@ export default function EditFinancialOperations() {
     paid_amount: "",
   });
 
-  // جلب بيانات السطر الحالي
+  const [errorMsg, setErrorMsg] = useState("");
+
   const { data: paymentData, isPending: isFetchingPayment } =
     usePaymentById(uuid);
 
-  // جلب المشاريع والتفاصيل (للعرض فقط)
   const { data: projectData } = useProjects();
   const { data: detailsData } = useDetails(formData.project);
-  console.log("paymentData =", paymentData);
+
   const { mutate: editPayment, isPending: isEditing } = useEditPayment();
 
   const projects = projectData?.data || [];
   const details = detailsData?.data || [];
-  //   console.log("paymentData =", paymentData);
-  // لما تجي البيانات، احشي الفورم
+
   useEffect(() => {
     if (paymentData?.data) {
       const item = paymentData.data;
@@ -55,12 +55,18 @@ export default function EditFinancialOperations() {
 
   const handleSubmit = () => {
     const payload = { paid_amount: formData.paid_amount };
+    setErrorMsg("");
 
     editPayment(
       { uuid, payload },
       {
         onSuccess: () => navigate("/content/financial-operations"),
-        onError: (error) => console.log("خطأ:", error),
+        onError: (error) => {
+          const msg =
+            error?.response?.data?.message ||
+            " انتهت مدة الصلاحية على التعديل حاول غداً";
+          setErrorMsg(msg);
+        },
       },
     );
   };
@@ -118,11 +124,11 @@ export default function EditFinancialOperations() {
                 value={formData.pending_date}
                 setValue={() => {}}
                 isDisabled={true}
-                helperText={"لا يمكنك التعديل على التاريخ "}
+                helperText={"لا يمكنك التعديل على التاريخ"}
               />
             </Grid>
 
-            {/* الكلفة - بدون isDisabled */}
+            {/* الكلفة - متاح للتعديل */}
             <Grid size={6}>
               <CustomInput
                 label="الكلفة المقدرة"
@@ -142,7 +148,26 @@ export default function EditFinancialOperations() {
             </Grid>
           </Grid>
 
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              mt: 2,
+              gap: 1,
+            }}
+          >
+            {errorMsg && (
+              <Typography
+                sx={{
+                  color: "var(--error-color)",
+                  fontFamily: "Cairo",
+                  fontSize: "14px",
+                }}
+              >
+                {errorMsg}
+              </Typography>
+            )}
             <Button
               onClick={handleSubmit}
               disabled={!formData.paid_amount || isEditing}

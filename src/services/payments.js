@@ -17,6 +17,14 @@ export const addPayment = async (formData) => {
   return response.data;
 };
 export const editPayment = async ({ uuid, payload }) => {
-  const response = await api.put(`/pending/update/${uuid}`, payload);
+  const response = await api.post(`/pending/update/${uuid}`, payload); // ← PUT صار POST
+  return response.data;
+};
+export const filterPayments = async (filters) => {
+  const response = await api.post("/pendings/filter", filters);
+  return response.data;
+};
+export const getAllDetails = async () => {
+  const response = await api.get("/details/all");
   return response.data;
 };
